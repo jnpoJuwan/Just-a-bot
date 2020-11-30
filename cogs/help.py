@@ -3,6 +3,8 @@ import json
 import discord
 from discord.ext import commands
 
+from .embeds import COLOUR
+
 
 class Help(commands.Cog):
     def __init__(self, bot):
@@ -30,7 +32,9 @@ class Help(commands.Cog):
                                 "written with [discord.py](https://github.com/Rapptz/discord.py) made for playing "
                                 "around with creating a bot for the [Just a chat...](https://aminoapps.com"
                                 "/c/conlang-conscript/home/)-related servers.",
-                    colour=discord.Colour(0x8b0000))
+                    colour=COLOUR)
+                embed.add_field(name="Source Code",
+                                value="https://github.com/jnpoJuwan/just_a_bot")
 
             if section == 1:
                 async with ctx.typing():
@@ -83,7 +87,8 @@ class Help(commands.Cog):
                               f"►`{p}jsyoutube` or (`{p}jsyt`) sends some Just a chat... YouTubers' "
                               f"channels and videos.\n")
             else:
-                raise commands.BadArgument
+                raise ValueError
+
             embed_ext.set_footer(text=f"Requested by {ctx.author.name}", icon_url=ctx.author.avatar_url)
             await ctx.send(embed=embed)
             await ctx.send(embed=embed_ext)
