@@ -1,0 +1,98 @@
+import json
+
+import discord
+from discord.ext import commands
+
+
+class Help(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
+
+    @commands.Cog.listener()
+    async def on_ready(self):
+        print(f"INFO: {__name__} is ready.")
+
+    @commands.command(aliases=["commands", "information"])
+    async def info(self, ctx, section=1):
+        """Send an embed with the Just a bot...'s information and a section of its commands."""
+        if section < 0:
+            raise ValueError
+        else:
+            with open("configs/prefixes.json") as pf:
+                prefixes = json.load(pf)
+                p = prefixes[str(ctx.message.guild.id)]
+
+            async with ctx.typing():
+                embed = discord.Embed(
+                    title="Just a bot...",
+                    description="**Just a bot...** (**JAB**) is a personal [Discord bot]"
+                                "(https://en.wikipedia.org/wiki/Internet_bot) built by <@488828457703309313> "
+                                "written with [discord.py](https://github.com/Rapptz/discord.py) made for playing "
+                                "around with creating a bot for the [Just a chat...](https://aminoapps.com"
+                                "/c/conlang-conscript/home/)-related servers.",
+                    colour=discord.Colour(0x8b0000))
+
+            if section == 1:
+                async with ctx.typing():
+                    embed_ext = discord.Embed(
+                        title="Miscellaneous Misc (1/3)",
+                        description=f"►`{p}info [section]` sends information regarding this bot.\n"
+                                    f"►`{p}8ball [question]` asks the *Magic 8-Ball* for answers.\n"
+                                    f"►`{p}choose [list]` randomly chooses an item of choice.\n"
+                                    f"►`{p}choose_map` (or `{p}map`) randomly chooses an Among Us map.\n"
+                                    f"►`{p}direct_message` (or `!dm`) direct messages you a nice message.\n"
+                                    f"►`{p}echo [message]` (or `{p}say [message]`) echoes the message.\n"
+                                    f"►`{p}penis [@member]` sends a member's dick length.\n"
+                                    f"►`{p}spam [amount] [message]` spams a message an given amount of times.\n"
+                                    f"►`{p}umlaut [message]` sënds yöür sëntëncë wïth ümläüts.\n"
+                                    f"►`{p}ping` Pong.",
+                        colour=discord.Colour(0x8b0000))
+            elif section == 2:
+                async with ctx.typing():
+                    embed_ext = discord.Embed(
+                        title="Administration Misc (2/3)",
+                        description=f"►`{p}ban [@member] (reason)` bans the member.\n"
+                                    f"►`{p}kick [@member] (reason)` kicks the member.\n"
+                                    f"►`{p}change_prefix [prefix]` changes the server's prefix.\n"
+                                    f"►`{p}purge [amount]` (or `{p}clear (num)`) purges the amount of "
+                                    f"messages.\n"
+                                    f"►`{p}unban [user_id]` unbans the user.",
+                        colour=discord.Colour(0x8b0000))
+            elif section == 3:
+                async with ctx.typing():
+                    embed_ext = discord.Embed(
+                        title="Utility Misc (3/3)",
+                        description=f"►`{p}coin_flip [amount]` flips a coin an amount of times.\n"
+                                    f"►`{p}get_prefix` sends the server's prefix.\n"
+                                    f"►`{p}length [message]` sends the message's length.\n"
+                                    f"►`{p}random` sends a fractional random number between 0 and 1.\n"
+                                    f"►`{p}roll [die] [amount]` rolls a die of a input number, "
+                                    f"which is 20 by default, an amount of times.\n"
+                                    f"►`{p}words [message]` sends the number of words in the message.",
+                        colour=discord.Colour(0x8b0000))
+                    embed_ext.add_field(
+                        name="Discord Misc",
+                        value=f"►`{p}member [@member]` sends the member's information.\n"
+                              f"►`{p}pfp [@member]` sends the member's profile picture.\n"
+                              f"►`{p}server` sends the server's information.")
+                    embed_ext.add_field(
+                        name="Just a chat... Misc",
+                        value=f"►`{p}jsdocs` (or `{p}jsd`) sends Just some documents...."
+                              f"►`{p}jsguidelines` (or `{p}jsg`) sends Amino Just some guidelines.\n"
+                              f"►`{p}jstimezones` (or `{p}jstz`) sends JACers' date and times.\n"
+                              f"►`{p}jsyoutube` or (`{p}jsyt`) sends some Just a chat... YouTubers' "
+                              f"channels and videos.\n")
+            else:
+                raise commands.BadArgument
+            embed_ext.set_footer(text=f"Requested by {ctx.author.name}", icon_url=ctx.author.avatar_url)
+            await ctx.send(embed=embed)
+            await ctx.send(embed=embed_ext)
+
+    @info.error
+    async def info_error(self, ctx, error):
+        if isinstance(error, ValueError):
+            await ctx.send("Please insert a positive integer less or equal to 3.")
+
+
+def setup(bot):
+    bot.add_cog(Help(bot))
