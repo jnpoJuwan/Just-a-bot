@@ -1,5 +1,6 @@
 configs/*
 __pycache__/*
 
+*.json
 *.log
 *.pyc
