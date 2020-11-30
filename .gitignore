@@ -1,4 +1,5 @@
 configs/*
+__pycache__/*
 
 *.log
 *.pyc
