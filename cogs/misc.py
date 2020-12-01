@@ -18,9 +18,6 @@ class Misc(commands.Cog):
     # IDEA: _eval(self, ctx, code): Evaluate code.
     # IDEA: is_down(self, ctx, service): Send True if the service is down, False otherwise.
     # IDEA: jankenpon(self, ctx): Play "Rock, Paper, Scissors".
-    # IDEA: lyrics(self, ctx, song): Send an embed with the lyrics of a song.
-    # IDEA: wikipedia(self, ctx, query): Send an embed with the Wikipedia page summary and link of the query.
-    # IDEA: wiktionary(self, ctx, query): Send an embed with the Wiktionary entry of the query.
 
     # cogs/music.py:
     # IDEA: join_voice_channel(self, ctx): Connect into the voice channel that the user is in.
