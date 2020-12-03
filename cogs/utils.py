@@ -10,6 +10,10 @@ class Utils(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
+    @commands.Cog.listener()
+    async def on_ready(self):
+        print(f"INFO: {__name__} is ready.")
+
     @commands.command(aliases=["len"])
     async def length(self, ctx, *, message):
         """Send the length of the message's content"""
@@ -27,7 +31,7 @@ class Utils(commands.Cog):
             raise commands.BadArgument
         else:
             if amount > SPAM_LIMIT:
-                await ctx.send("That's too much. The amount can't exceed {SPAM_LIMIT}.")
+                await ctx.send(f"That's too much. The amount can't exceed {SPAM_LIMIT}.")
             else:
                 for i in range(amount):
                     await ctx.send(f"**{random.randint(1, b)}**")
