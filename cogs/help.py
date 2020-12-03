@@ -27,14 +27,12 @@ class Help(commands.Cog):
             async with ctx.typing():
                 embed = discord.Embed(
                     title="Just a bot...",
-                    description="**Just a bot...** (**JAB**) is a personal [Discord bot]"
-                                "(https://en.wikipedia.org/wiki/Internet_bot) built by <@488828457703309313> "
-                                "written with [discord.py](https://github.com/Rapptz/discord.py) made for playing "
-                                "around with creating a bot for the [Just a chat...](https://aminoapps.com"
-                                "/c/conlang-conscript/home/)-related servers.",
+                    description="**Just a bot...** (**JAB**) is a personal Discord bot built written with "
+                                "[discord.py](https://github.com/Rapptz/discord.py). This bot was developed for "
+                                "playing around with creating a bot for some "
+                                "[Just a chat...](https://aminoapps.com/c/conlang-conscript/home/)-related servers.",
                     colour=COLOUR)
-                embed.add_field(name="Source Code",
-                                value="https://github.com/jnpoJuwan/just_a_bot")
+                embed.add_field(name="Source Code", value="https://github.com/jnpoJuwan/just_a_bot", inline=False)
 
             if section == 1:
                 async with ctx.typing():
@@ -51,6 +49,11 @@ class Help(commands.Cog):
                                     f"►`{p}umlaut [message]` sënds yöür sëntëncë wïth ümläüts.\n"
                                     f"►`{p}ping` Pong.",
                         colour=discord.Colour(0x8b0000))
+                    embed_ext.add_field(name="Action Commands",
+                                        value=f"►`{p}kiss [member]` kisses the member.\n"
+                                              f"►`{p}fuck [member]` fucks the member's arse.\n"
+                                              f"►`{p}poke [member]` pokes the member.\n"
+                                              f"►`{p}slap [member]` slaps the member in the face.")
             elif section == 2:
                 async with ctx.typing():
                     embed_ext = discord.Embed(
@@ -58,8 +61,7 @@ class Help(commands.Cog):
                         description=f"►`{p}ban [@member] (reason)` bans the member.\n"
                                     f"►`{p}kick [@member] (reason)` kicks the member.\n"
                                     f"►`{p}change_prefix [prefix]` changes the server's prefix.\n"
-                                    f"►`{p}purge [amount]` (or `{p}clear (num)`) purges the amount of "
-                                    f"messages.\n"
+                                    f"►`{p}purge [amount]` (or `{p}clear (num)`) purges the amount of messages.\n"
                                     f"►`{p}unban [user_id]` unbans the user.",
                         colour=discord.Colour(0x8b0000))
             elif section == 3:
