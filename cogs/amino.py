@@ -56,18 +56,16 @@ class Amino(commands.Cog):
                                value="Die Regeln von diesem Amino gelten auch hier!\n"
                                      "Schwarzer Humor ist erlaubt, solange keine Menschen verletzt werden.\n"
                                      "Friede und Liebe. Lasst uns hier alle Freunde sein! :D")
-            # Swahili
-            # NOTE: The Swahili translator's has a Comorian dialect,
-            # so the translation may not be entirely accurate in Standard Swahili.
-            natlangs.add_field(name=":flag_tz::flag_km: Kiswahili",
-                               value="Na amino shariyah woe appliquées ici!\n"
-                                     "Humour noiri je autorisé, sha namntsi blessé personne.\n"
-                                     "Amani na kuishi. Sisi marafiki! :D")
+            # Japanese
+            natlangs.add_field(name=":flag_jp: 日本語",
+                               value="「Amino」ガイドラインがここに適用されます！\n"
+                                     "ダークユーモアは許容されます、唯誰かを怒らせないで下さい。\n"
+                                     "平和と愛。ここでみんな友達になりましょう！ :D")
             # Korean
             natlangs.add_field(name=":flag_kr: 한국말",
                                value="아미노의 지침이 여기에 적용됩니다!\n"
-                                     "어두운 유머는 용인되며 누구에게도 화를 내지 마시요.\n"
-                                     "평화와 사랑. 여기서 모두 친구가되자! :D")
+                                     "어두운 유머는 용인되며 누구에게 화를 내지는 마시고.\n"
+                                     "평화와 사랑. 여기서 모두 친구 되자! :D")
             # Italian
             natlangs.add_field(name=":flag_it: Italiano",
                                value="Le regole del Amino si applicano anche qui!\n"
@@ -135,6 +133,13 @@ class Amino(commands.Cog):
                                value="Tá na rialacha an Amino i bhfeidhm anseo!\n"
                                      "Glactar le greann dubh, ach ná cuir múisiam ar dhuine ar bith.\n"
                                      "Suaimhneas agus grá. Lig dúinn go léir a bheith cairde anseo! :D󠁢󠁥󠁮󠁧󠁿")
+            # Comorian
+            # NOTE: The Swahili translator's has a Comorian dialect,
+            # so the translation may not be entirely accurate in Standard Swahili.
+            natlangs.add_field(name=":flag_km::flag_yt: Shikomori",
+                               value="Na amino shariyah woe appliquées ici!\n"
+                                     "Humour noiri je autorisé, sha namntsi blessé personne.\n"
+                                     "Amani na kuishi. Sisi marafiki! :D")
             # Basque
             natlangs.add_field(name="Euskara",
                                value="Aminoaren erregelak hemen ere aplikatuak dira!\n"
@@ -142,16 +147,16 @@ class Amino(commands.Cog):
                                      "Bake eta maite. Lagunak izan! :D")
             # Asturian
             natlangs.add_field(name="Asturianu",
-                               value="Les regles del Amino tamién aplíquense equí!\n"
+                               value="¡Les regles del Amino tamién aplíquense equí!\n"
                                      "L'humor negru está permitíu, pero non ofendáis a naide.\n"
-                                     "Paz y amor. Vamos ser toos amigos equí! :D")
-            # Picard
-            natlangs.add_field(name="Ch'ti Picard",
-                               value="Chès règles del'Amino è s'applique ichi !\n"
-                                     "Ch'noir humour y'est autorisé, faut juste pas faire d'maux à chès gins.\n"
-                                     "L'paix et l'amour ichi. Gu'in sot amiteux tertous ! :D")
+                                     "Paz y amor. ¡Vamos ser toos amigos equí! :D")
 
             natlangs_ext = discord.Embed(title="Just some guidelines... (2/3)", colour=discord.Colour(0x8b0000))
+            # Picard
+            natlangs_ext.add_field(name="Ch'ti Picard",
+                                   value="Chès règles del'Amino è s'applique ichi !\n"
+                                         "Ch'noir humour y'est autorisé, faut juste pas faire d'maux à chès gins.\n"
+                                         "L'paix et l'amour ichi. Gu'in sot amiteux tertous ! :D")
             # Icelandic
             natlangs_ext.add_field(name=":flag_is: Íslenska",
                                    value="Reglur af Amino eiga við öllum í þessum chat!\n"
