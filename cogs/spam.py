@@ -3,7 +3,7 @@ from discord.ext import commands
 from .misc import SPAM_LIMIT
 
 # This module is separate from the 'misc' module
-# for the developers to be able to unload the spam alone, and not break other commands.
+# for the developer to be able to unload the spam alone, and not break other commands.
 
 
 class Spam(commands.Cog):
@@ -24,7 +24,7 @@ class Spam(commands.Cog):
 
     @spam.error
     async def spam_error(self, ctx, error):
-        if isinstance(error, commands.BadArgument):
+        if isinstance(error, ValueError):
             await ctx.send("Insert the spam amount and, optionally, a message, in this order.")
 
 
