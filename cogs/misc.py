@@ -53,7 +53,7 @@ class Misc(commands.Cog):
         await ctx.message.delete()
         await ctx.send(message)
 
-    @commands.command(aliases=["fuck", "fuckyou", "f*ck_you"])
+    @commands.command(aliases=["fuckyou", "f*ck_you"])
     async def fuck_you(self, ctx):
         """Send response to 'fuck you'."""
         await ctx.send("Fuck my robot body yourself, you fucking coward :rage:.", tts=True)
