@@ -20,6 +20,13 @@ class Actions(commands.Cog):
         await member.send(f"{ctx.author.name} kissed you.")
 
     @commands.command()
+    async def fuck(self, ctx, member: discord.Member = None):
+        """Fuck a member."""
+        if member is None:
+            member = choice(ctx.guild.members)
+        await member.send(f"{ctx.author.name} fucking destroyed your fragile asshole.")
+
+    @commands.command()
     async def poke(self, ctx, member: discord.Member = None):
         """Poke a member."""
         if member is None:
