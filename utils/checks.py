@@ -1,6 +1,6 @@
 from discord.ext import commands
 
-from ..utils import exceptions
+from just_a_bot.utils import exceptions
 
 
 async def check_permissions(ctx, perms, *, check=all):
@@ -50,7 +50,7 @@ def is_admin():
     return commands.check(predicate)
 
 
-def is_developer():
+def is_bot_owner():
     async def predicate(ctx):
         return ctx.author.id == 488828457703309313
     return commands.check(predicate)
