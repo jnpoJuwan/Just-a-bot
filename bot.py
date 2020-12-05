@@ -5,25 +5,29 @@ import discord
 from discord.ext import commands
 
 
-COGS = [file for file in os.listdir("cogs") if file.endswith(".py") and not file.startswith("_")]
+COGS = [file for file in os.listdir("./cogs") if file.endswith(".py") and not file.startswith("__")]
 DEFAULT_PREFIX = "!"
 
 
-def _prefix_callable(_bot, message):
-    user_id = bot.user.id
-    base = [f'<@!{user_id}> ', f'<@{user_id}> ']
-    if message.guild is None:
-        base.append(DEFAULT_PREFIX)
-    else:
-        with open("configs/prefixes.json") as pf:
-            prefixes = json.load(pf)
-            base.append(prefixes[str(message.guild.id)])
-    return base
-
-
 class JustABot(commands.Bot):
+    @staticmethod
+    def __prefix_callable(_bot, message):
+        user_id = bot.user.id
+        base = [f'<@!{user_id}> ', f'<@{user_id}> ']
+        if message.guild is None:
+            base.append(DEFAULT_PREFIX)
+        else:
+            with open("configs/prefixes.json") as pf:
+                prefixes = json.load(pf)
+                base.append(prefixes[str(message.guild.id)])
+        return base
+
     def __init__(self):
-        super().__init__(command_prefix=_prefix_callable, case_insensitive=True, owner_id=488828457703309313)
+        super().__init__(
+            command_prefix=self.__prefix_callable,
+            case_insensitive=True,
+            owner_id=488828457703309313
+        )
         self.default_prefix = DEFAULT_PREFIX
 
     async def on_ready(self):
