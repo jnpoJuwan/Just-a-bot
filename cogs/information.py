@@ -4,7 +4,7 @@ from discord.ext import commands
 from just_a_bot.cogs.embeds import COLOUR
 
 
-class Discord(commands.Cog):
+class Information(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
@@ -14,8 +14,6 @@ class Discord(commands.Cog):
 
     # IDEA: channel_info(self, ctx, channel)
     # IDEA: emoji_info(self, ctx, emoji)
-    # IDEA: icon(self, ctx): Send the current server's icon.
-    # IDEA: invite(self, ctx): Send an invite link.
     # IDEA: role_info(self, ctx, role)
 
     @commands.command(aliases=["member"])
@@ -43,18 +41,6 @@ class Discord(commands.Cog):
             embed.set_footer(text=f"Requested by {ctx.author.name}", icon_url=ctx.author.avatar_url)
         await ctx.send(embed=embed)
 
-    @commands.command(aliases=["avatar", "profile_picture"])
-    async def pfp(self, ctx, member: discord.Member = None):
-        """Send the profile picture of a member."""
-        if member is None:
-            member = ctx.author
-
-        async with ctx.typing():
-            embed = discord.Embed(name=f"{member}'s avatar", colour=COLOUR)
-            embed.set_image(url=member.avatar_url)
-            embed.set_footer(text=f"Requested by {ctx.author.name}", icon_url=ctx.author.avatar_url)
-        await ctx.send(embed=embed)
-
     @commands.command(aliases=["guild", "server", "server_info"])
     async def guild_info(self, ctx):
         """Send an embed with the guild's information."""
@@ -74,12 +60,13 @@ class Discord(commands.Cog):
             embed.set_footer(text=f"Requested by {ctx.author.name}", icon_url=ctx.author.avatar_url)
         await ctx.send(embed=embed)
 
+    # Exception Handling.
+
     @member_info.error
-    @pfp.error
     async def member_error(self, ctx, error):
         if isinstance(error, commands.BadArgument):
             await ctx.send("Please @mention a member.")
 
 
 def setup(bot):
-    bot.add_cog(Discord(bot))
+    bot.add_cog(Information(bot))
