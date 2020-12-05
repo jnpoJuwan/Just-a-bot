@@ -1,9 +1,10 @@
+import json
 import random
 
 import discord
 from discord.ext import commands
 
-from .misc import SPAM_LIMIT
+from just_a_bot.cogs.spam import SPAM_LIMIT
 
 
 class Utils(commands.Cog):
@@ -13,6 +14,19 @@ class Utils(commands.Cog):
     @commands.Cog.listener()
     async def on_ready(self):
         print(f"INFO: {__name__} is ready.")
+
+    @commands.command(aliases=["coin_flip", "heads", "tails"])
+    async def flip_coin(self, ctx, amount: int = 1):
+        """Flips a coin of the input amount of times."""
+        for i in range(amount):
+            await ctx.send(f"**{random.choice(['Heads', 'Tails'])}**")
+
+    @commands.command()
+    async def get_prefix(self, ctx):
+        """Send the server's prefix."""
+        with open("configs/prefixes.json") as pf:
+            p = json.load(pf)[str(ctx.message.guild.id)]
+        await ctx.send(f"The server's prefix is `{p}`.")
 
     @commands.command(aliases=["len"])
     async def length(self, ctx, *, message):
@@ -36,7 +50,7 @@ class Utils(commands.Cog):
                 for i in range(amount):
                     await ctx.send(f"**{random.randint(1, b)}**")
 
-    # Exception Handling
+    # Exception Handling.
 
     @roll.error
     async def roll_error(self, ctx, error):
