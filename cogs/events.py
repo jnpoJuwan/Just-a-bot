@@ -40,6 +40,8 @@ class Events(commands.Cog):
             await ctx.send("You're not allowed to use this command.")
         elif isinstance(error, commands.CommandOnCooldown):
             await ctx.send(f"You're using command too much. Try again in {round(error.retry_after)} seconds.")
+        # else:
+        #     await ctx.send("Sorry. An unidentified error has occurred.")
 
     @commands.Cog.listener()
     async def on_guild_join(self, guild):
