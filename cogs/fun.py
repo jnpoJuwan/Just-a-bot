@@ -4,10 +4,7 @@ import discord
 from discord.ext import commands
 
 
-SPAM_LIMIT = 25
-
-
-class Misc(commands.Cog):
+class Fun(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
@@ -22,12 +19,6 @@ class Misc(commands.Cog):
     # cogs/music.py:
     # IDEA: join_voice_channel(self, ctx): Connect into the voice channel that the user is in.
     # IDEA: leave_voice_channel(self, (ctx)
-
-    @commands.command(aliases=["coin_flip", "heads", "tails"])
-    async def flip_coin(self, ctx, amount: int = 1):
-        """Flips a coin of the input amount of times."""
-        for i in range(amount):
-            await ctx.send(f"**{random.choice(['Heads', 'Tails'])}**")
 
     @commands.command()
     async def choose(self, ctx, *args):
@@ -75,22 +66,19 @@ class Misc(commands.Cog):
 
     @commands.command()
     async def ping(self, ctx):
-        """Send 'pong'."""
+        """Send "pong"."""
         await ctx.send("pong")
 
     @commands.command(aliases=["pang", "peng", "pung", "pyng"])
     async def pong(self, ctx):
-        """Send 'ping' (sike)."""
+        """Send "ping" (sike)."""
         await ctx.send("No! This isn't how you're supposed to play the game.")
 
     @commands.command(aliases=["cock", "dick", "peen", "peenis", "pepe", "pp"])
-    async def penis(self, ctx, member=None):
-        """Send a random dick penis size."""
+    async def penis(self, ctx, member: discord.Member = None):
+        """Send a random penis size."""
         if member is None:
             member = ctx.author
-
-        if member == discord.Role:
-            raise commands.BadArgument
 
         await ctx.send(f"This is <@{member.id}>'s penis: **8{'=' * random.randint(0, 9)}D**")
 
@@ -106,7 +94,7 @@ class Misc(commands.Cog):
         """Send the amount of words in the message's content."""
         await ctx.send(f"**{len(text.split())}**")
 
-    # Exception Handling
+    # Exception Handling.
 
     @penis.error
     async def member_error(self, ctx, error):
@@ -115,4 +103,4 @@ class Misc(commands.Cog):
 
 
 def setup(bot):
-    bot.add_cog(Misc(bot))
+    bot.add_cog(Fun(bot))
