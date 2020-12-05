@@ -3,7 +3,7 @@ import json
 import discord
 from discord.ext import commands
 
-from .embeds import COLOUR
+from just_a_bot.cogs.embeds import COLOUR
 
 
 class Help(commands.Cog):
@@ -14,11 +14,13 @@ class Help(commands.Cog):
     async def on_ready(self):
         print(f"INFO: {__name__} is ready.")
 
+    # NOTE: This doesn't substitute the `!help` command.
+    #  FIXME: Add a prettier `help!` command.
     @commands.command(aliases=["commands", "information"])
     async def info(self, ctx, section=1):
         """Send an embed with the Just a bot...'s information and a section of its commands."""
-        if section < 0:
-            raise ValueError
+        if section <= 0:
+            raise commands.BadArgument
         else:
             with open("configs/prefixes.json") as pf:
                 prefixes = json.load(pf)
@@ -37,7 +39,7 @@ class Help(commands.Cog):
             if section == 1:
                 async with ctx.typing():
                     embed_ext = discord.Embed(
-                        title="Miscellaneous Misc (1/3)",
+                        title="Miscellaneous Commands (1/3)",
                         description=f"►`{p}info [section]` sends information regarding this bot.\n"
                                     f"►`{p}8ball [question]` asks the *Magic 8-Ball* for answers.\n"
                                     f"►`{p}choose [list]` randomly chooses an item of choice.\n"
@@ -57,7 +59,7 @@ class Help(commands.Cog):
             elif section == 2:
                 async with ctx.typing():
                     embed_ext = discord.Embed(
-                        title="Administration Misc (2/3)",
+                        title="Administration Commands (2/3)",
                         description=f"►`{p}ban [@member] (reason)` bans the member.\n"
                                     f"►`{p}kick [@member] (reason)` kicks the member.\n"
                                     f"►`{p}change_prefix [prefix]` changes the server's prefix.\n"
@@ -67,7 +69,7 @@ class Help(commands.Cog):
             elif section == 3:
                 async with ctx.typing():
                     embed_ext = discord.Embed(
-                        title="Utility Misc (3/3)",
+                        title="Utility Commands (3/3)",
                         description=f"►`{p}coin_flip [amount]` flips a coin an amount of times.\n"
                                     f"►`{p}get_prefix` sends the server's prefix.\n"
                                     f"►`{p}length [message]` sends the message's length.\n"
@@ -77,29 +79,30 @@ class Help(commands.Cog):
                                     f"►`{p}words [message]` sends the number of words in the message.",
                         colour=discord.Colour(0x8b0000))
                     embed_ext.add_field(
-                        name="Discord Misc",
+                        name="Discord Commands",
                         value=f"►`{p}member [@member]` sends the member's information.\n"
                               f"►`{p}pfp [@member]` sends the member's profile picture.\n"
                               f"►`{p}server` sends the server's information.")
                     embed_ext.add_field(
-                        name="Just a chat... Misc",
+                        name="Just a chat... Commands",
                         value=f"►`{p}jsdocs` (or `{p}jsd`) sends Just some documents...."
                               f"►`{p}jsguidelines` (or `{p}jsg`) sends Amino Just some guidelines.\n"
                               f"►`{p}jstimezones` (or `{p}jstz`) sends JACers' date and times.\n"
                               f"►`{p}jsyoutube` or (`{p}jsyt`) sends some Just a chat... YouTubers' "
                               f"channels and videos.\n")
             else:
-                raise ValueError
+                raise commands.BadArgument
 
             embed_ext.set_footer(text=f"Requested by {ctx.author.name}", icon_url=ctx.author.avatar_url)
             await ctx.send(embed=embed)
             await ctx.send(embed=embed_ext)
 
+    # Exception Handler.
+
     @info.error
     async def info_error(self, ctx, error):
-        if isinstance(error, ValueError):
+        if isinstance(error, commands.BadArgument):
             await ctx.send("Please insert a positive integer less or equal to 3.")
-
 
 def setup(bot):
     bot.add_cog(Help(bot))
