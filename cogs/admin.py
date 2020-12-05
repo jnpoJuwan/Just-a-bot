@@ -1,13 +1,9 @@
 import json
-import os
 
 import discord
 from discord.ext import commands
 
 from just_a_bot.utils import checks
-
-
-COGS = [file for file in os.listdir("cogs") if file.endswith(".py") and not file.startswith("_")]
 
 
 class Admin(commands.Cog):
@@ -28,13 +24,6 @@ class Admin(commands.Cog):
         """Ban the member."""
         await member.ban(reason=reason)
         await ctx.send(f"{member.mention} was banned by {ctx.author.mention}.\n[Reason: {reason}]")
-
-    @commands.command()
-    async def get_prefix(self, ctx):
-        """Send the server's prefix."""
-        with open("configs/prefixes.json") as pf:
-            p = json.load(pf)[str(ctx.message.guild.id)]
-        await ctx.send(f"The server's prefix is `{p}`.")
 
     @commands.command(aliases=["prefix"])
     @commands.guild_only()
@@ -94,81 +83,18 @@ class Admin(commands.Cog):
         await ctx.guild.unban(user)
         await ctx.send(f"{user} was unbanned by {ctx.author.mention}")
 
-    # Bot Developer Misc.
-
-    @commands.command()
-    @checks.is_developer()
-    async def load(self, ctx, cog=None):
-        """Load a cog."""
-        if not cog:
-            for file in COGS:
-                async with ctx.typing():
-                    self.bot.load_extension(f"cogs.{file.lower()[:-3]}")
-                await ctx.send(f"**`cogs.{file.lower()[:-3]}` has been loaded.**")
-        else:
-            file = f"{cog.lower()}.py"
-            if not os.path.exists(f"cogs/{file}"):
-                raise commands.BadArgument
-            elif file.endswith(".py") and not file.startswith("_"):
-                async with ctx.typing():
-                    self.bot.load_extension(f"cogs.{file[:-3]}")
-                await ctx.send(f"**`cogs.{file[:-3]}` has been loaded.**")
-
-    @commands.command()
-    @checks.is_developer()
-    async def unload(self, ctx, cog=None):
-        """Unload a cog."""
-        if not cog:
-            for file in COGS:
-                async with ctx.typing():
-                    self.bot.unload_extension(f"cogs.{file.lower()[:-3]}")
-                await ctx.send(f"**`cogs.{file.lower()[:-3]}` has been unloaded.**")
-        else:
-            file = f"{cog.lower()}.py"
-            if not os.path.exists(f"cogs/{file}"):
-                raise commands.BadArgument
-            elif file.endswith(".py") and not file.startswith("_"):
-                async with ctx.typing():
-                    self.bot.unload_extension(f"cogs.{file[:-3]}")
-                await ctx.send(f"**`cogs.{file[:-3]}` has been unloaded.**")
-
-    @commands.command()
-    @checks.is_developer()
-    async def reload(self, ctx, cog=None):
-        """Reload either a cog or all cogs."""
-        if not cog:
-            for file in COGS:
-                async with ctx.typing():
-                    self.bot.reload_extension(f"cogs.{file.lower()[:-3]}")
-                await ctx.send(f"**`cogs.{file.lower()[:-3]}` has been reloaded.**")
-        else:
-            file = f"{cog.lower()}.py"
-            if not os.path.exists(f"cogs/{file}"):
-                raise commands.BadArgument
-            elif file.endswith(".py") and not file.startswith("_"):
-                async with ctx.typing():
-                    self.bot.reload_extension(f"cogs.{file[:-3]}")
-                await ctx.send(f"**`cogs.{file[:-3]}` has been reloaded.**")
-
-    # Exception Handling
+    # Exception Handling.
 
     @ban.error
     @kick.error
     async def kickban_error(self, ctx, error):
         if isinstance(error, commands.BadArgument):
-            await ctx.send("Please input must be a member mention.")
+            await ctx.send("Please @mention a member.")
 
     @purge.error
     async def purge_error(self, ctx, error):
         if isinstance(error, commands.BadArgument):
             await ctx.send("Please insert a positive integer.")
-
-    @load.error
-    @unload.error
-    @reload.error
-    async def load_cogs_error(self, ctx, error):
-        if isinstance(error, commands.BadArgument):
-            await ctx.send("Sorry. I can't find that cog.")
 
 
 def setup(bot):
