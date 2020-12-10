@@ -22,6 +22,9 @@ class Admin(commands.Cog):
     @checks.is_admin()
     async def ban(self, ctx, member: discord.Member, *, reason=None):
         """Ban the member."""
+        if ctx.author == member:
+            await ctx.send("You can't ban yourself.")
+
         await member.ban(reason=reason)
         await ctx.send(f"{member.mention} was banned by {ctx.author.mention}.\n[Reason: {reason}]")
 
@@ -33,29 +36,26 @@ class Admin(commands.Cog):
         if not prefix:
             prefix = self.bot.default_prefix
 
-        if len(prefix) > 5:
-            await ctx.send("The prefix can't exceed 5 characters in length.")
-        else:
-            with open("configs/prefixes.json") as pf:
-                prefixes = json.load(pf)
-            with open("configs/prefixes.json", "w") as pf:
-                prefixes[str(ctx.guild.id)] = prefix
-                json.dump(prefixes, pf, indent=2)
-            await ctx.send(f"The server's prefix has changed to `{prefix}`.")
+        if len(prefix) > 6:
+            await ctx.send("The prefix can't exceed 6 characters in length.\nShortening...")
+            prefix = prefix[:6]
 
-    @commands.command(aliases=["change_nickname"])
-    @commands.guild_only()
-    @checks.is_admin()
-    async def change_nick(self, ctx, member: discord.Member, nick):
-        """Change the member's nickname."""
-        await member.edit(nick=nick)
-        await ctx.send(f"Their nickname has changed to {nick}.")
+        with open("configs/prefixes.json") as pf:
+            prefixes = json.load(pf)
+        with open("configs/prefixes.json", "w") as pf:
+            prefixes[str(ctx.guild.id)] = prefix
+            json.dump(prefixes, pf, indent=2)
+
+        await ctx.send(f"The server's prefix has changed to `{prefix}`.")
 
     @commands.command()
     @commands.guild_only()
     @checks.is_admin()
     async def kick(self, ctx, member: discord.Member, *, reason=None):
         """Kick the member."""
+        if ctx.author == member:
+            await ctx.send("You can't kick yourself.")
+
         await member.kick(reason=reason)
         await ctx.send(f"{member.mention} was kicked by {ctx.author.mention}.\n[Reason: {reason}]")
 
@@ -67,9 +67,13 @@ class Admin(commands.Cog):
         await self.bot.logout()
 
     @commands.command(aliases=["clear", "delete"])
+    @commands.cooldown(3, 60.0, commands.BucketType.user)
     @checks.is_mod()
-    async def purge(self, ctx, limit: int = 0):
+    async def purge(self, ctx, limit=0):
         """Purge the amount limit of messages."""
+        if limit > 200:
+            await ctx.send("")
+
         await ctx.message.delete()
         await ctx.channel.purge(limit=limit)
         await ctx.send(f"Purged {limit} message(s).", delete_after=2.5)
