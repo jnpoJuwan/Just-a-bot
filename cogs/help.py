@@ -76,20 +76,23 @@ class Help(commands.Cog):
                                     f"►`{p}random` sends a fractional random number between 0 and 1.\n"
                                     f"►`{p}roll [die] [amount]` rolls a die of a input number, "
                                     f"which is 20 by default, an amount of times.\n"
+                                    f"►`{p}poll [question]` creates a poll for a question.\n"
                                     f"►`{p}words [message]` sends the number of words in the message.",
                         colour=discord.Colour(0x8b0000))
                     embed_ext.add_field(
-                        name="Discord Commands",
+                        name="Information Commands",
                         value=f"►`{p}member [@member]` sends the member's information.\n"
                               f"►`{p}pfp [@member]` sends the member's profile picture.\n"
-                              f"►`{p}server` sends the server's information.")
+                              f"►`{p}server` sends the server's information.",
+                        inline=False)
                     embed_ext.add_field(
                         name="Just a chat... Commands",
-                        value=f"►`{p}jsdocs` (or `{p}jsd`) sends Just some documents...."
+                        value=f"►`{p}jsdocs` (or `{p}jsd`) sends Just some documents....\n"
                               f"►`{p}jsguidelines` (or `{p}jsg`) sends Amino Just some guidelines.\n"
                               f"►`{p}jstimezones` (or `{p}jstz`) sends JACers' date and times.\n"
                               f"►`{p}jsyoutube` or (`{p}jsyt`) sends some Just a chat... YouTubers' "
-                              f"channels and videos.\n")
+                              f"channels and videos.\n",
+                        inline=False)
             else:
                 raise commands.BadArgument
 
