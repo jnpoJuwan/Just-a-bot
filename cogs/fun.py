@@ -20,6 +20,17 @@ class Fun(commands.Cog):
     # IDEA: join_voice_channel(self, ctx): Connect into the voice channel that the user is in.
     # IDEA: leave_voice_channel(self, (ctx)
 
+    @commands.command(name="8ball", aliases=["8-ball", "magic_8ball", "magic_8-ball"])
+    async def _8ball(self, ctx, *, question="???"):
+        """Send and choose a random Magic 8-Ball answer."""
+        # SEE: https://en.wikipedia.org/wiki/Magic_8-Ball#Possible_answers
+        outcomes = ["It is certain.", "It is decidedly so.", "Without a doubt.", "Yes - definitely.",
+                    "You may rely on it.", "As I see it, yes.", "Most likely.", "Outlook good.", "Yes.",
+                    "Signs point to yes.", "Reply hazy, try again.", "Ask again later.", "Better not tell you now.",
+                    "Cannot predict now.", "Concentrate and ask again.", "Don't count on it.", "My reply is no.",
+                    "My sources say no.", "Outlook not so good.", "Very doubtful."]
+        await ctx.send(f"> {question}\n**{random.choice(outcomes)}**")
+
     @commands.command()
     async def choose(self, ctx, *args):
         """Send a random choice."""
@@ -53,16 +64,13 @@ class Fun(commands.Cog):
     async def login(self, ctx):
         await ctx.send("Fuck off, <@569435621190270976>.")
 
-    @commands.command(name="8ball", aliases=["8-ball", "ball8", "magic_8-ball"])
-    async def magic_8ball(self, ctx, *, question="???"):
-        """Send and choose a random Magic 8-Ball answer."""
-        # SEE: https://en.wikipedia.org/wiki/Magic_8-Ball#Possible_answers
-        outcomes = ["It is certain.", "It is decidedly so.", "Without a doubt.", "Yes - definitely.",
-                    "You may rely on it.", "As I see it, yes.", "Most likely.", "Outlook good.", "Yes.",
-                    "Signs point to yes.", "Reply hazy, try again.", "Ask again later.", "Better not tell you now.",
-                    "Cannot predict now.", "Concentrate and ask again.", "Don't count on it.", "My reply is no.",
-                    "My sources say no.", "Outlook not so good.", "Very doubtful."]
-        await ctx.send(f"> {question}\n**{random.choice(outcomes)}**")
+    @commands.command(aliases=["cock", "dick", "peen", "peenis", "pepe", "pp"])
+    async def penis(self, ctx, member: discord.Member = None):
+        """Send a random penis size."""
+        if member is None:
+            member = ctx.author
+
+        await ctx.send(f"This is <@{member.id}>'s penis: **8{'=' * random.randint(0, 9)}D**")
 
     @commands.command()
     async def ping(self, ctx):
@@ -73,14 +81,6 @@ class Fun(commands.Cog):
     async def pong(self, ctx):
         """Send "ping" (sike)."""
         await ctx.send("No! This isn't how you're supposed to play the game.")
-
-    @commands.command(aliases=["cock", "dick", "peen", "peenis", "pepe", "pp"])
-    async def penis(self, ctx, member: discord.Member = None):
-        """Send a random penis size."""
-        if member is None:
-            member = ctx.author
-
-        await ctx.send(f"This is <@{member.id}>'s penis: **8{'=' * random.randint(0, 9)}D**")
 
     @commands.command()
     async def umlaut(self, ctx, *, text="None"):
