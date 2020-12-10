@@ -16,16 +16,20 @@ class Utils(commands.Cog):
         print(f"INFO: {__name__} is ready.")
 
     @commands.command(aliases=["coin_flip", "heads", "tails"])
-    async def flip_coin(self, ctx, amount: int = 1):
+    async def flip_coin(self, ctx, amount=1):
         """Flips a coin of the input amount of times."""
-        for i in range(amount):
-            await ctx.send(f"**{random.choice(['Heads', 'Tails'])}**")
+        if amount < SPAM_LIMIT:
+            for i in range(amount):
+                await ctx.send(f"**{random.choice(['Heads', 'Tails'])}**")
+        else:
+            await ctx.send(f"That's too much spam. The amount can't exceed {SPAM_LIMIT}.")
 
     @commands.command()
     async def get_prefix(self, ctx):
         """Send the server's prefix."""
         with open("configs/prefixes.json") as pf:
             p = json.load(pf)[str(ctx.message.guild.id)]
+
         await ctx.send(f"The server's prefix is `{p}`.")
 
     @commands.command(aliases=["len"])
@@ -44,11 +48,11 @@ class Utils(commands.Cog):
         if b < 1:
             raise commands.BadArgument
         else:
-            if amount > SPAM_LIMIT:
-                await ctx.send(f"That's too much. The amount can't exceed {SPAM_LIMIT}.")
-            else:
+            if amount < SPAM_LIMIT:
                 for i in range(amount):
                     await ctx.send(f"**{random.randint(1, b)}**")
+            else:
+                await ctx.send(f"That's too much spam. The amount can't exceed {SPAM_LIMIT}.")
 
     # Exception Handling.
 
