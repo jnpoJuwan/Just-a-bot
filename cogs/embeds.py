@@ -6,7 +6,6 @@ from pytz import timezone, utc
 
 from just_a_bot.utils import checks
 
-
 COLOUR = discord.Colour(0x8b0000)
 
 
@@ -138,6 +137,16 @@ class Embeds(commands.Cog):
             videos.set_footer(text=f"Requested by {ctx.author.name}", icon_url=ctx.author.avatar_url)
         await ctx.send(embed=channels)
         await ctx.send(embed=videos)
+
+    @commands.command()
+    async def poll(self, ctx, *, question):
+        embed = discord.Embed(title="Poll", description=question, colour=COLOUR)
+        embed.set_footer(text=f"Requested by {ctx.author.name}", icon_url=ctx.author.avatar_url)
+        # await ctx.send(embed=embed)
+        message = await ctx.send(embed=embed)
+        await message.add_reaction('👍')
+        await message.add_reaction('👎')
+        await message.add_reaction('🤷')
 
     @commands.command(aliases=["this"])
     async def zen(self, ctx):
