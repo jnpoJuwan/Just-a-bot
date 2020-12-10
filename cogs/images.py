@@ -17,7 +17,6 @@ class Images(commands.Cog):
     @commands.command()
     async def cat(self, ctx):
         """Send a cat picture."""
-        pass
         # async with aiohttp.ClientSession() as cs:
         #     async with cs.get("http://aws.random.cat//meow") as r:
         #         res = await r.json()
@@ -37,6 +36,7 @@ class Images(commands.Cog):
             embed = discord.Embed(title=f"{ctx.guild.name}'s icon", colour=COLOUR)
             embed.set_image(url=ctx.guild.icon_url)
             embed.set_footer(text=f"Requested by {ctx.author.name}", icon_url=ctx.author.avatar_url)
+
         await ctx.send(embed=embed)
 
     @commands.command(aliases=["avatar", "profile_picture"])
@@ -49,6 +49,7 @@ class Images(commands.Cog):
             embed = discord.Embed(title=f"{member}'s avatar", colour=COLOUR)
             embed.set_image(url=member.avatar_url)
             embed.set_footer(text=f"Requested by {ctx.author.name}", icon_url=ctx.author.avatar_url)
+
         await ctx.send(embed=embed)
 
     # Exception Handling.
