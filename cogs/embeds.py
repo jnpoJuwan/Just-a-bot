@@ -103,7 +103,7 @@ class Embeds(commands.Cog):
     @commands.command(aliases=["jyt", "jsyt", "youtube"])
     @checks.is_jsguilds()
     async def jsyoutube(self, ctx):
-        """Send Just a chat... user's YouTube channels."""
+        """Send an embed with some Just a chat... user's YouTube channels."""
         channel_values = {
             "Aurora": "https://www.youtube.com/channel/UCmDE7oQp2wzTLxd7lc4mA9A",
             # "Daniel Lousada": "https://www.youtube.com/channel/UCCIjCbmgxW8XX-bz8viJsSg",
@@ -150,7 +150,7 @@ class Embeds(commands.Cog):
 
     @commands.command(aliases=["this"])
     async def zen(self, ctx):
-        """Send "The Zen of Python", by Tim Peters."""
+        """Send and embed with "The Zen of Python", by Tim Peters."""
         zen = """Beautiful is better than ugly.
                  Explicit is better than implicit.
                  Simple is better than complex.
