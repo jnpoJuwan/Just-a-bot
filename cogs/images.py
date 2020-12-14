@@ -1,9 +1,7 @@
-import aiohttp
-
 import discord
 from discord.ext import commands
 
-from just_a_bot.cogs.embeds import COLOUR
+from .embeds import COLOUR
 
 
 class Images(commands.Cog):
@@ -25,9 +23,10 @@ class Images(commands.Cog):
         #     async with cs.get("https://some-random-api.ml/facts/cat") as r:
         #         res = await r.json()
         #         fact = res["fact"]
-        embed = discord.Embed(title="Kitty!", color=COLOUR)
-        embed.add_field(name="Random Cat Fact", value="{fact}")
-        await ctx.send(embed=embed)
+        #
+        # embed = discord.Embed(title="Kitty!", color=COLOUR)
+        # embed.add_field(name="Random Cat Fact", value="{fact}")
+        # await ctx.send(embed=embed)
 
     @commands.command()
     async def icon(self, ctx):
