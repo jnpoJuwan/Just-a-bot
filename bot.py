@@ -6,15 +6,15 @@ from discord.ext import commands
 
 from just_a_bot.cogs.spam import SPAM_LIMIT
 from just_a_bot.utils import exceptions
-
+from just_a_bot.utils.logger import logger
 
 COGS = [file for file in os.listdir("cogs") if file.endswith(".py") and not file.startswith("__")]
 DEFAULT_PREFIX = "!"
 
 
 def _prefix_callable(_bot, message):
-    _id = bot.user.id
-    base = [f'<@!{_id}> ', f'<@{_id}> ']
+    id_ = bot.user.id
+    base = [f'<@!{id_}> ', f'<@{id_}> ']
     if message.guild is None:
         base.append(DEFAULT_PREFIX)
     else:
@@ -32,30 +32,31 @@ class JustABot(commands.Bot):
         )
         self.default_prefix = DEFAULT_PREFIX
 
-    # Events.
-
     async def on_ready(self):
         activity = discord.Game(name="with Juwan's mental state.")
         await self.change_presence(activity=activity)
+        logger.info(f"Logged on as @{bot.user.name}.")
         print(f"INFO: Logged on as @{bot.user.name}.")
 
     async def on_command_error(self, ctx, error):
         # Server Errors
         if isinstance(error, exceptions.ServerNotFoundError):
             await ctx.send("You're not allowed to use this command in this server.")
-        if isinstance(error, commands.NoPrivateMessage):
+        elif isinstance(error, commands.NoPrivateMessage):
             await ctx.send("You're not allowed to use this commands in private messages.")
         # Command Errors
-        if isinstance(error, commands.CommandNotFound):
+        elif isinstance(error, commands.CommandNotFound):
             await ctx.send("Sorry. I can't find that command.")
-        if isinstance(error, commands.DisabledCommand):
+        elif isinstance(error, commands.DisabledCommand):
             await ctx.send("Sorry. This command is disabled, hence it can't be used.")
-        if isinstance(error, commands.MissingRequiredArgument):
+        elif isinstance(error, commands.MissingRequiredArgument):
             await ctx.send("Please insert all required arguments.")
-        if isinstance(error, commands.CheckFailure):
-            await ctx.send("You're not allowed to use this command.")
-        if isinstance(error, commands.CommandOnCooldown):
+        elif isinstance(error, commands.CheckFailure):
+            await ctx.send(f"You're not allowed to use `{self.command_prefix}{ctx.command}`.")
+        elif isinstance(error, commands.CommandOnCooldown):
             await ctx.send(f"You're using command too much. Try again in {round(error.retry_after)} seconds.")
+        elif isinstance(error, exceptions.SpamError):
+            await ctx.send(f"That's too much spam. The amount can't exceed {SPAM_LIMIT}.")
         # else:
         #     await ctx.send("Sorry. An unidentified error has occurred.")
 
