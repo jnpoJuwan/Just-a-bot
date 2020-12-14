@@ -1,6 +1,5 @@
 import random
 
-import discord
 from discord.ext import commands
 
 
@@ -12,13 +11,8 @@ class Fun(commands.Cog):
     async def on_ready(self):
         print(f"INFO: {__name__} is ready.")
 
-    # IDEA: _eval(self, ctx, code): Evaluate code.
     # IDEA: is_down(self, ctx, service): Send True if the service is down, False otherwise.
     # IDEA: jankenpon(self, ctx): Play "Rock, Paper, Scissors".
-
-    # cogs/music.py:
-    # IDEA: join_voice_channel(self, ctx): Connect into the voice channel that the user is in.
-    # IDEA: leave_voice_channel(self, (ctx)
 
     @commands.command(name="8ball", aliases=["8-ball", "magic_8ball", "magic_8-ball"])
     async def _8ball(self, ctx, *, question="???"):
@@ -52,7 +46,6 @@ class Fun(commands.Cog):
     @commands.command(aliases=["say"])
     async def echo(self, ctx, *, message="echo"):
         """Echo the user's input-message."""
-        await ctx.message.delete()
         await ctx.send(message)
 
     @commands.command(aliases=["fuckyou", "f*ck_you"])
@@ -64,10 +57,10 @@ class Fun(commands.Cog):
     async def login(self, ctx):
         await ctx.send("Fuck off, <@569435621190270976>.")
 
-    @commands.command(aliases=["cock", "dick", "peen", "peenis", "pepe", "pp"])
-    async def penis(self, ctx, member: discord.Member = None):
+    @commands.command(aliases=["cock", "dick", "pepe", "pp"])
+    async def penis(self, ctx, member=None):
         """Send a random penis size."""
-        if member is None:
+        if not member:
             member = ctx.author
 
         await ctx.send(f"This is <@{member.id}>'s penis: **8{'=' * random.randint(0, 9)}D**")
