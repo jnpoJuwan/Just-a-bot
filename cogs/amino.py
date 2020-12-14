@@ -198,9 +198,9 @@ class Amino(commands.Cog):
                                      Gúi-gúi txua llúa xugá ‘áu xuwí. Tuña tidá gúmi ná biú.
                                      Suú muala xugá luwí-luwí. Suú ñúa’á xugá xumí ná nuxu! :D""")
             conlangs.add_field(name="Hilten",
-                               value="""N̄on imsam Amino eque iso fejjo eque!
-                                     Hakari moli citi uquiciti fahan̄, cure on̄dui ato fahan̄ ejci moli.
-                                     Sun̄n̄ura suan̄ moj maru. Rulejci mahu maru fejjo eque! :D""")
+                               value="""N̄on imsam Amino ecue iso fejjo ecue!
+                                     Hakari moli tsiti ucuitsiti fahan̄, tsure on̄dui ato fahan̄ ejtsi moli.
+                                     Sun̄n̄ura suan̄ moj maru. Rulejtsi mahu maru fejjo ecue! :D""")
             conlangs.add_field(name="Hẇv̈",
                                value="""ćq̃ c̈ńṅq d́q̈ d́sqć bỹ!
                                      ċqr̈s ḃv ʋ̌nć, q̃ŕ ćñ śqr̈ ỹsṁꞇ.
