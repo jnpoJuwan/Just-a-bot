@@ -4,6 +4,7 @@ import discord
 from discord.ext import commands
 
 from just_a_bot.utils import checks
+from just_a_bot.utils.logger import logger
 
 
 class Admin(commands.Cog):
@@ -25,8 +26,12 @@ class Admin(commands.Cog):
         if ctx.author == member:
             await ctx.send("You can't ban yourself.")
 
-        await member.ban(reason=reason)
-        await ctx.send(f"{member.mention} was banned by {ctx.author.mention}.\n[Reason: {reason}]")
+        if not reason:
+            await member.ban()
+            await ctx.send(f"{member.mention} was banned by {ctx.author.mention}.")
+        else:
+            await member.ban(reason=reason)
+            await ctx.send(f"{member.mention} was banned by {ctx.author.mention}.\n[Reason: {reason}]")
 
     @commands.command(aliases=["prefix"])
     @commands.guild_only()
@@ -35,9 +40,8 @@ class Admin(commands.Cog):
         """Change the guild's prefix."""
         if not prefix:
             prefix = self.bot.default_prefix
-
         if len(prefix) > 6:
-            await ctx.send("The prefix can't exceed 6 characters in length.\nShortening...")
+            await ctx.send("The prefix can't exceed 6 characters in length.\nShortening prefix...")
             prefix = prefix[:6]
 
         with open("configs/prefixes.json") as pf:
@@ -56,15 +60,27 @@ class Admin(commands.Cog):
         if ctx.author == member:
             await ctx.send("You can't kick yourself.")
 
-        await member.kick(reason=reason)
-        await ctx.send(f"{member.mention} was kicked by {ctx.author.mention}.\n[Reason: {reason}]")
+        if not reason:
+            await member.kick()
+            await ctx.send(f"{member.mention} was kicked by {ctx.author.mention}.")
+        else:
+            await member.kick(reason=reason)
+            await ctx.send(f"{member.mention} was kicked by {ctx.author.mention}.\n[Reason: {reason}]")
 
     @commands.command(aliases=["die", "disconnect", "quit", "sleep"])
     @checks.is_admin()
     async def logout(self, ctx):
         """Logout from the server."""
         await ctx.send("**change da world**\n**my final message. Goodb ye**")
+        logger.critical("Bot has logged out.")
         await self.bot.logout()
+
+    # @commands.command()
+    # @checks.is_mod()
+    # async def mute(self, ctx, member: discord.Member):
+    #     role = discord.utils.get(member.server.roles, name="Muted")
+    #     await ctx.add_roles(member, role)
+    #     await ctx.send(f"{member.mention} was muted by {ctx.author.mention}.")
 
     @commands.command(aliases=["clear", "delete"])
     @commands.cooldown(3, 60.0, commands.BucketType.user)
@@ -72,7 +88,7 @@ class Admin(commands.Cog):
     async def purge(self, ctx, limit=0):
         """Purge the amount limit of messages."""
         if limit > 200:
-            await ctx.send("")
+            await ctx.send("The amount can't exceed 200 messages.")
 
         await ctx.message.delete()
         await ctx.channel.purge(limit=limit)
@@ -81,7 +97,7 @@ class Admin(commands.Cog):
     @commands.command()
     @commands.guild_only()
     @checks.is_admin()
-    async def unban(self, ctx, user_id: int):
+    async def unban(self, ctx, user_id):
         """Unban the user."""
         user = self.bot.get_user(user_id=user_id)
         await ctx.guild.unban(user)
@@ -94,6 +110,14 @@ class Admin(commands.Cog):
     async def kickban_error(self, ctx, error):
         if isinstance(error, commands.BadArgument):
             await ctx.send("Please @mention a member.")
+
+    # @mute.error
+    # async def mute_error(self, ctx, error):
+    #     if isinstance(error, commands.BadArgument):
+    #         await ctx.send("Please @mention a member.")
+    #     elif isinstance(error, AttributeError):
+    #         await ctx.send('Please create a role named "Muted" with no permission to speak.')
+    #         await ctx.send(error)
 
     @purge.error
     async def purge_error(self, ctx, error):
