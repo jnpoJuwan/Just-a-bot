@@ -1,9 +1,8 @@
 import os
 
-import discord
 from discord.ext import commands
 
-from just_a_bot.bot import COGS
+from just_a_bot.configs.constants import COGS
 from just_a_bot.utils import checks
 
 
@@ -15,9 +14,7 @@ class Owner(commands.Cog):
     async def on_ready(self):
         print(f"INFO: {__name__} is ready.")
 
-    # FIXME: Too much repetition.
-
-    @commands.command()
+    @commands.command(hidden=True)
     @checks.is_bot_owner()
     async def load(self, ctx, cog=None):
         """Load a cog."""
@@ -35,7 +32,7 @@ class Owner(commands.Cog):
                     self.bot.load_extension(f"cogs.{file[:-3]}")
                 await ctx.send(f"**`cogs.{file[:-3]}` has been loaded.**")
 
-    @commands.command()
+    @commands.command(hidden=True)
     @checks.is_bot_owner()
     async def unload(self, ctx, cog=None):
         """Unload a cog."""
@@ -53,7 +50,7 @@ class Owner(commands.Cog):
                     self.bot.unload_extension(f"cogs.{file[:-3]}")
                 await ctx.send(f"**`cogs.{file[:-3]}` has been unloaded.**")
 
-    @commands.command()
+    @commands.command(hidden=True)
     @checks.is_bot_owner()
     async def reload(self, ctx, cog=None):
         """Reload either a cog or all cogs."""
