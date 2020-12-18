@@ -49,7 +49,6 @@ class Admin(commands.Cog):
         with open("configs/prefixes.json", "w") as pf:
             prefixes[str(ctx.guild.id)] = prefix
             json.dump(prefixes, pf, indent=2)
-
         await ctx.send(f"The server's prefix has changed to `{prefix}`.")
 
     @commands.command()
