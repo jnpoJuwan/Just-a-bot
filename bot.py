@@ -1,20 +1,16 @@
 import json
-import os
 
 import discord
 from discord.ext import commands
 
-from just_a_bot.cogs.spam import SPAM_LIMIT
+from just_a_bot.configs.constants import COGS, DEFAULT_PREFIX, SPAM_LIMIT
 from just_a_bot.utils import exceptions
 from just_a_bot.utils.logger import logger
-
-COGS = [file for file in os.listdir("cogs") if file.endswith(".py") and not file.startswith("__")]
-DEFAULT_PREFIX = "!"
 
 
 def _prefix_callable(_bot, message):
     id_ = bot.user.id
-    base = [f'<@!{id_}> ', f'<@{id_}> ']
+    base = [f"<@!{id_}> ", f"<@{id_}> "]
     if message.guild is None:
         base.append(DEFAULT_PREFIX)
     else:
@@ -27,10 +23,13 @@ class JustABot(commands.Bot):
     def __init__(self):
         super().__init__(
             command_prefix=_prefix_callable,
+            help_command=None,
             case_insensitive=True,
             owner_id=488828457703309313
         )
         self.default_prefix = DEFAULT_PREFIX
+
+    # Events.
 
     async def on_ready(self):
         activity = discord.Game(name="with Juwan's mental state.")
@@ -78,7 +77,6 @@ class JustABot(commands.Bot):
         if message.author.bot:
             return
         await self.process_commands(message)
-
 
 bot = JustABot()
 
