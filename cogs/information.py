@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 
-from .embeds import COLOUR
+from just_a_bot.configs.constants import COLOUR
 
 FMT = "%A, %B %d %H:%M UTC"
 
