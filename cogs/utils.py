@@ -5,7 +5,7 @@ import random
 import discord
 from discord.ext import commands
 
-from .spam import SPAM_LIMIT
+from just_a_bot.configs.constants import SPAM_LIMIT
 from just_a_bot.utils import exceptions
 
 
@@ -33,19 +33,13 @@ class Utils(commands.Cog):
         print(f"INFO: {__name__} is ready.")
 
     # This command can be used for malicious purposes.
+    # CREDIT: @nitros12 (GitHub)
     @commands.command(name="eval")
     # @checks.is_bot_owner()
     async def eval_(self, ctx, *, cmd):
         """Evaluate the input.
         Input is interpreted as newline separated statements.
         If the last statement is an expression, that is the return value.
-
-        Usable globals:
-          - `bot`: the bot instance
-          - `discord`: the discord module
-          - `commands`: the discord.ext.commands module
-          - `ctx`: the invocation context
-          - `__import__`: the builtin `__import__` function
 
         Such that `!eval 1 + 1` gives `2` as the result.
         The following invocation will cause the bot to send the text '9'
@@ -72,11 +66,11 @@ class Utils(commands.Cog):
         insert_returns(body)
 
         env = {
-            'bot': ctx.bot,
-            'ctx': ctx,
-            'commands': commands,
-            'discord': discord,
-            '__import__': __import__
+            "bot": ctx.bot,
+            "ctx": ctx,
+            "commands": commands,
+            "discord": discord,
+            "__import__": __import__
         }
 
         exec(compile(parsed, filename="<ast>", mode="exec"), env)
@@ -97,7 +91,6 @@ class Utils(commands.Cog):
         """Send the server's prefix."""
         with open("configs/prefixes.json") as pf:
             p = json.load(pf)[str(ctx.message.guild.id)]
-
         await ctx.send(f"The server's prefix is `{p}`.")
 
     @commands.command(aliases=["len"])
@@ -126,7 +119,8 @@ class Utils(commands.Cog):
 
     @eval_.error
     async def eval_error(self, ctx, error):
-        pass
+        if not isinstance(error, commands.UserInputError):
+            await ctx.send(error)
 
     @roll.error
     async def roll_error(self, ctx, error):
