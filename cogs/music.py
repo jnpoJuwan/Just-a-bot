@@ -6,7 +6,7 @@ class Music(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
     
-    # Fuck off, MΛGNVS. I'm *trying* to understand this.
+    # Fuck off, MΛGNVS. I can't to understand this at all.
 
 
 def setup(bot):
