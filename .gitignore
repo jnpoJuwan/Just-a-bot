@@ -1,7 +1,5 @@
 # Byte-compiled files
 __pycache__/
 
-# Configurations
-configs/
-.json
+# Logs
 .log
