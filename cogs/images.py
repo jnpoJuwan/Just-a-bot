@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 
-from .embeds import COLOUR
+from just_a_bot.configs.constants import COLOUR
 
 
 class Images(commands.Cog):
@@ -11,22 +11,6 @@ class Images(commands.Cog):
     @commands.Cog.listener()
     async def on_ready(self):
         print(f"INFO: {__name__} is ready.")
-
-    @commands.command()
-    async def cat(self, ctx):
-        """Send a cat picture."""
-        # async with aiohttp.ClientSession() as cs:
-        #     async with cs.get("http://aws.random.cat//meow") as r:
-        #         res = await r.json()
-        #         image = res["file"]
-        # async with aiohttp.ClientSession() as cs:
-        #     async with cs.get("https://some-random-api.ml/facts/cat") as r:
-        #         res = await r.json()
-        #         fact = res["fact"]
-        #
-        # embed = discord.Embed(title="Kitty!", color=COLOUR)
-        # embed.add_field(name="Random Cat Fact", value="{fact}")
-        # await ctx.send(embed=embed)
 
     @commands.command()
     async def icon(self, ctx):
