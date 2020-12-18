@@ -1,6 +1,6 @@
 # Byte-compiled files
 __pycache__/
 
-# Logs & Prefixes
+# Logs / prefixes
 prefixes.json
 *.log
