@@ -4,9 +4,8 @@ import discord
 from discord.ext import commands
 from pytz import timezone, utc
 
+from just_a_bot.configs.constants import COLOUR
 from just_a_bot.utils import checks
-
-COLOUR = discord.Colour(0x8b0000)
 
 
 class Embeds(commands.Cog):
@@ -42,8 +41,6 @@ class Embeds(commands.Cog):
             embed = discord.Embed(title="Credits", description="Made by <@488828457703309313>", colour=COLOUR)
             embed.set_footer(text=f"Requested by {ctx.author.name}", icon_url=ctx.author.avatar_url)
         await ctx.send(embed=embed)
-
-    # NOTE: "js" here is the abbreviation "Just some", not "JavaScript".
 
     @commands.command(aliases=["jd", "jt", "jsd", "jst", "just_some_documents", "just_some_texts"])
     @checks.is_jsguilds()
