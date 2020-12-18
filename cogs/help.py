@@ -3,7 +3,7 @@ import json
 import discord
 from discord.ext import commands
 
-from .embeds import COLOUR
+from just_a_bot.configs.constants import COLOUR
 
 
 class Help(commands.Cog):
@@ -19,13 +19,13 @@ class Help(commands.Cog):
     @commands.command(aliases=["commands", "information"])
     async def info(self, ctx, section=1):
         """Send an embed with the Just a bot...'s information and a section of its commands."""
+        with open("configs/prefixes.json") as pf:
+            prefixes = json.load(pf)
+            p = prefixes[str(ctx.message.guild.id)]
+
         if section <= 0:
             raise commands.BadArgument
         else:
-            with open("configs/prefixes.json") as pf:
-                prefixes = json.load(pf)
-                p = prefixes[str(ctx.message.guild.id)]
-
             async with ctx.typing():
                 embed = discord.Embed(
                     title="Just a bot...",
