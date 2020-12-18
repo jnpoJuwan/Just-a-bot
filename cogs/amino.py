@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 
-from just_a_bot.cogs.embeds import COLOUR
+from just_a_bot.configs.constants import COLOUR
 from just_a_bot.utils import checks
 
 
@@ -13,7 +13,7 @@ class Amino(commands.Cog):
     async def on_ready(self):
         print(f"INFO: {__name__} is ready.")
 
-    # NOTE: "js" is the abbreviation "Just some", not "JavaScript".
+    # GLOSS: "js" means "Just some", not "JavaScript".
 
     @commands.command(aliases=["jg", "jsg", "amino_guidelines", "ag"])
     @checks.is_jsguilds()
