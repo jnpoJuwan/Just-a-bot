@@ -3,14 +3,14 @@ import json
 import discord
 from discord.ext import commands
 
-from just_a_bot.configs.constants import COGS, DEFAULT_PREFIX, SPAM_LIMIT
-from just_a_bot.utils import exceptions
-from just_a_bot.utils.logger import logger
+from .configs.constants import COGS, DEFAULT_PREFIX, SPAM_LIMIT
+from .utils import exceptions
+from .utils.logger import logger
 
 
 def _prefix_callable(_bot, message):
-    id_ = bot.user.id
-    base = [f"<@!{id_}> ", f"<@{id_}> "]
+    _id = bot.user.id
+    base = [f"<@!{_id}> ", f"<@{_id}> "]
     if message.guild is None:
         base.append(DEFAULT_PREFIX)
     else:
@@ -23,7 +23,7 @@ class JustABot(commands.Bot):
     def __init__(self):
         super().__init__(
             command_prefix=_prefix_callable,
-            help_command=None,
+            # help_command=None,
             case_insensitive=True,
             owner_id=488828457703309313
         )
@@ -57,7 +57,8 @@ class JustABot(commands.Bot):
         elif isinstance(error, exceptions.SpamError):
             await ctx.send(f"That's too much spam. The amount can't exceed {SPAM_LIMIT}.")
         # else:
-        #     await ctx.send("Sorry. An unidentified error has occurred.")
+        #     await ctx.send("Sorry. An unidentified error has occurred.\n"
+        #                    f"Details: `{error.__class_.__name__}: {error}`")
 
     async def on_guild_join(self, guild):
         with open("configs/prefixes.json") as pf:

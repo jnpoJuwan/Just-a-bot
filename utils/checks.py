@@ -1,6 +1,6 @@
 from discord.ext import commands
 
-from just_a_bot.utils import exceptions
+from ..utils import exceptions
 
 
 async def check_permissions(ctx, perms, *, check=all):
@@ -64,8 +64,6 @@ def is_in_guilds(*guild_ids):
         return guild.id in guild_ids
     return commands.check(predicate)
 
-
-# NOTE: "js" is the abbreviation "Just some", not "JavaScript".
 
 def is_jsguilds():
     return is_in_guilds(750863262911954964, 764107035926593576)

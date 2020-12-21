@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 
-from just_a_bot.configs.constants import COLOUR
+from ..configs.constants import COLOUR
 
 FMT = "%A, %B %d %H:%M UTC"
 
@@ -14,10 +14,12 @@ class Information(commands.Cog):
     async def on_ready(self):
         print(f"INFO: {__name__} is ready.")
 
-    @commands.command(aliases=["emoji"])
-    async def emoji_info(self, ctx, emoji):
+    @commands.command()
+    async def credits(self, ctx):
+        """Send an embed with the credits for the bot."""
         async with ctx.typing():
-            embed = discord.Embed(title=f"{str(emoji)} {emoji.name}", colour=COLOUR)
+            embed = discord.Embed(title="Credits", description="Made by <@488828457703309313>", colour=COLOUR)
+            embed.set_footer(text=f"Requested by {ctx.author.name}", icon_url=ctx.author.avatar_url)
         await ctx.send(embed=embed)
 
     @commands.command(aliases=["member"])
@@ -61,7 +63,7 @@ class Information(commands.Cog):
 
     @commands.command(aliases=["source"])
     async def source_code(self, ctx):
-        """Send the bot's source code."""
+        """Send an embed with the bot's source code."""
         embed = discord.Embed(title="Source Code",
                               description="https://github.com/jnpoJuwan/just_a_bot",
                               colour=COLOUR)

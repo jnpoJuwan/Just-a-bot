@@ -3,10 +3,11 @@ import json
 import random
 
 import discord
+import googletrans
 from discord.ext import commands
 
-from just_a_bot.configs.constants import SPAM_LIMIT
-from just_a_bot.utils import exceptions
+from ..configs.constants import SPAM_LIMIT
+from ..utils import exceptions
 
 
 def insert_returns(body):
@@ -27,10 +28,13 @@ def insert_returns(body):
 class Utils(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.translator = googletrans.Translator()
 
     @commands.Cog.listener()
     async def on_ready(self):
         print(f"INFO: {__name__} is ready.")
+
+    # IDEA: is_down(self, ctx, service): Send True if the service is down, False otherwise.
 
     # This command can be used for malicious purposes.
     # CREDIT: @nitros12 (GitHub)
@@ -52,6 +56,18 @@ class Utils(commands.Cog):
         a
         ```
         """
+
+        env = {
+            "__import__": __import__,
+            "author": ctx.author,
+            "bot": ctx.bot,
+            "ctx": ctx,
+            "commands": commands,
+            "discord": discord,
+            "guild": ctx.guild,
+            "message": ctx.message,
+        }
+
         fn_name = "_eval_expr"
         cmd = cmd.strip("` ")
 
@@ -64,14 +80,6 @@ class Utils(commands.Cog):
         body = parsed.body[0].body
 
         insert_returns(body)
-
-        env = {
-            "bot": ctx.bot,
-            "ctx": ctx,
-            "commands": commands,
-            "discord": discord,
-            "__import__": __import__
-        }
 
         exec(compile(parsed, filename="<ast>", mode="exec"), env)
         result = (await eval(f"{fn_name}()", env))
@@ -114,6 +122,19 @@ class Utils(commands.Cog):
                     await ctx.send(f"**{random.randint(1, b)}**")
             else:
                 raise exceptions.SpamError
+
+    # @commands.command()
+    # async def translate(self, ctx, src, dest, *, text: commands.clean_content):
+    #     translation = self.translator.translate(src=src, dest=dest, text=text)
+    #     embed = discord.Embed(title="Google Translate", description="", colour=COLOUR)
+    #     embed.add_field(name=f"{googletrans.LANGUAGES[src].title()}", value=translation.origin)
+    #     embed.add_field(name=f"{googletrans.LANGUAGES[dest].title()}", value=translation.text)
+    #     await ctx.send(embed=embed)
+
+    @commands.command()
+    async def words(self, ctx, *, text):
+        """Send the amount of words in the message's content."""
+        await ctx.send(f"**{len(text.split())}**")
 
     # Exception Handling.
 

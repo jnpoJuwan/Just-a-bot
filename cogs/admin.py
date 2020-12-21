@@ -3,8 +3,8 @@ import json
 import discord
 from discord.ext import commands
 
-from just_a_bot.utils import checks
-from just_a_bot.utils.logger import logger
+from ..utils import checks
+from ..utils.logger import logger
 
 
 class Admin(commands.Cog):

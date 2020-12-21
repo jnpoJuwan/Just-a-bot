@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 
-from just_a_bot.configs.constants import COLOUR
+from ..configs.constants import COLOUR
 
 
 class Images(commands.Cog):
@@ -19,7 +19,6 @@ class Images(commands.Cog):
             embed = discord.Embed(title=f"{ctx.guild.name}'s icon", colour=COLOUR)
             embed.set_image(url=ctx.guild.icon_url)
             embed.set_footer(text=f"Requested by {ctx.author.name}", icon_url=ctx.author.avatar_url)
-
         await ctx.send(embed=embed)
 
     @commands.command(aliases=["avatar", "profile_picture"])
@@ -32,7 +31,6 @@ class Images(commands.Cog):
             embed = discord.Embed(title=f"{member}'s avatar", colour=COLOUR)
             embed.set_image(url=member.avatar_url)
             embed.set_footer(text=f"Requested by {ctx.author.name}", icon_url=ctx.author.avatar_url)
-
         await ctx.send(embed=embed)
 
     # Exception Handling.

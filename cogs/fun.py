@@ -1,6 +1,9 @@
 import random
 
+import discord
 from discord.ext import commands
+
+from ..configs.constants import COLOUR
 
 
 class Fun(commands.Cog):
@@ -11,7 +14,6 @@ class Fun(commands.Cog):
     async def on_ready(self):
         print(f"INFO: {__name__} is ready.")
 
-    # IDEA: is_down(self, ctx, service): Send True if the service is down, False otherwise.
     # IDEA: jankenpon(self, ctx): Play "Rock, Paper, Scissors".
 
     @commands.command(name="8ball", aliases=["8-ball", "magic_8ball", "magic_8-ball"])
@@ -25,11 +27,30 @@ class Fun(commands.Cog):
                     "My sources say no.", "Outlook not so good.", "Very doubtful."]
         await ctx.send(f"> {question}\n**{random.choice(outcomes)}**")
 
+    @commands.command(aliases=["cock_and_ball_torture"])
+    async def cbt(self, ctx):
+        """Send an embed with the summary for the Wikipedia page of "Cock and ball torture"."""
+        # SEE: https://en.wikipedia.org/wiki/Cock_and_ball_torture
+        async with ctx.typing():
+            summary = "**Cock and ball torture** (**CBT**), penis torture or dick torture is a sexual activity " \
+                      "involving application of pain or constriction to the penis or testicles." \
+                      "This may involve directly painful activities, such as genital piercing, wax play, genital " \
+                      "spanking, squeezing, ball-busting, genital flogging, urethral play, tickle torture, erotic " \
+                      "electrostimulation, kneeing or kicking. The recipient of such activities may receive direct " \
+                      "physical pleasure via masochism, or emotional pleasure through erotic humiliation, " \
+                      "or knowledge that the play is pleasing to a sadistic dominant. " \
+                      "Many of these practices carry significant health risks."
+
+            embed = discord.Embed(title="Cock and ball torture", description=summary, colour=COLOUR)
+            embed.add_field(name="External Link", value="https://en.wikipedia.org/wiki/Cock_and_ball_torture")
+            embed.set_footer(text=f"Requested by {ctx.author.name}", icon_url=ctx.author.avatar_url)
+        await ctx.send(embed=embed)
+
     @commands.command()
     async def choose(self, ctx, *args):
         """Send a random choice."""
         for arg in args:
-            arg.replace(",", " ")
+            arg.strip(",")
         await ctx.send(f"**{random.choice(args)}**")
 
     @commands.command(aliases=["map", "random_map"])
@@ -44,18 +65,14 @@ class Fun(commands.Cog):
         await ctx.author.send("**pong pong, motherpinger.**")
 
     @commands.command(aliases=["say"])
-    async def echo(self, ctx, *, message="echo"):
+    async def echo(self, ctx, *, text="echo"):
         """Echo the user's input-message."""
-        await ctx.send(message)
+        await ctx.send(text)
 
     @commands.command(aliases=["fuckyou", "f*ck_you"])
     async def fuck_you(self, ctx):
         """Send response to 'fuck you'."""
-        await ctx.send("Fuck my robot body yourself, you fucking coward :rage:.", tts=True)
-
-    @commands.command(aliases=["unsleep", "wakeupyouuselessbot"])
-    async def login(self, ctx):
-        await ctx.send("Fuck off, <@569435621190270976>.")
+        await ctx.send("Fuck my robot body yourself, you fucking coward :rage:.")
 
     @commands.command(aliases=["cock", "dick", "pepe", "pp"])
     async def penis(self, ctx, member=None):
@@ -70,6 +87,16 @@ class Fun(commands.Cog):
         """Send "pong"."""
         await ctx.send("pong")
 
+    @commands.command()
+    async def poll(self, ctx, *, question):
+        """Create a basic poll."""
+        embed = discord.Embed(title="Poll", description=question, colour=COLOUR)
+        embed.set_footer(text=f"Requested by {ctx.author.name}", icon_url=ctx.author.avatar_url)
+        message = await ctx.send(embed=embed)
+        await message.add_reaction('👍')
+        await message.add_reaction('👎')
+        await message.add_reaction('🤷')
+
     @commands.command(aliases=["pang", "peng", "pung", "pyng"])
     async def pong(self, ctx):
         """Send "ping" (sike)."""
@@ -80,12 +107,8 @@ class Fun(commands.Cog):
         """Add an umlaut to every vowel in the message."""
         for vowel in "aeiouyAEIOUY":
             text = text.replace(vowel, vowel + "\u0308")
-        await ctx.send(text)
 
-    @commands.command()
-    async def words(self, ctx, *, text):
-        """Send the amount of words in the message's content."""
-        await ctx.send(f"**{len(text.split())}**")
+        await ctx.send(text)
 
     # Exception Handling.
 

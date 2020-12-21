@@ -1,8 +1,8 @@
 import discord
 from discord.ext import commands
 
-from just_a_bot.configs.constants import COLOUR
-from just_a_bot.utils import checks
+from ..configs.constants import COLOUR
+from ..utils import checks
 
 
 class Amino(commands.Cog):

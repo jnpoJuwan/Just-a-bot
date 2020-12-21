@@ -3,7 +3,7 @@ import json
 import discord
 from discord.ext import commands
 
-from just_a_bot.configs.constants import COLOUR
+from ..configs.constants import COLOUR
 
 
 class Help(commands.Cog):
@@ -15,7 +15,7 @@ class Help(commands.Cog):
         print(f"INFO: {__name__} is ready.")
 
     # NOTE: This doesn't substitute the `!help` command.
-    #  FIXME: Add a prettier `help!` command.
+    #  FIXME: Add a prettier `!help` command.
     @commands.command(aliases=["commands", "information"])
     async def info(self, ctx, section=1):
         """Send an embed with the Just a bot...'s information and a section of its commands."""
@@ -41,6 +41,7 @@ class Help(commands.Cog):
                         title="Miscellaneous Commands (1/3)",
                         description=f"►`{p}info [section]` sends information regarding this bot.\n"
                                     f"►`{p}8ball [question]` asks the *Magic 8-Ball* for answers.\n"
+                                    f"►`{p}cbt` sends the Wikipedia summary and page for Cock and Ball Torture."
                                     f"►`{p}choose [list]` randomly chooses an item of choice.\n"
                                     f"►`{p}choose_map` (or `{p}map`) randomly chooses an Among Us map.\n"
                                     f"►`{p}direct_message` (or `!dm`) direct messages you a nice message.\n"
@@ -60,8 +61,9 @@ class Help(commands.Cog):
                     embed_ext = discord.Embed(
                         title="Administration Commands (2/3)",
                         description=f"►`{p}ban <@member> (reason)` bans the member.\n"
-                                    f"►`{p}kick <@member> (reason)` kicks the member.\n"
                                     f"►`{p}change_prefix [prefix]` changes the server's prefix.\n"
+                                    f"►`{p}kick <@member> (reason)` kicks the member.\n"
+                                    f"►`{p}logout` logouts the bot.\n"
                                     f"►`{p}purge [amount]` (or `{p}clear (num)`) purges the amount of messages.\n"
                                     f"►`{p}unban <user_id>` unbans the user.",
                         colour=COLOUR)
