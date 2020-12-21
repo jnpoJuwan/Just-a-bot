@@ -1,7 +1,7 @@
 from discord.ext import commands
 
-from ..configs.constants import SPAM_LIMIT
-from ..utils import exceptions
+from ._utils.constants import SPAM_LIMIT
+from ._utils import exceptions
 
 # This module is separate from the 'fun' module
 # for the bot owners to be able to unload the spam alone, and not break other commands.

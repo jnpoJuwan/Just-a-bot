@@ -6,8 +6,8 @@ import discord
 import googletrans
 from discord.ext import commands
 
-from ..configs.constants import SPAM_LIMIT
-from ..utils import exceptions
+from ._utils.constants import SPAM_LIMIT
+from ._utils import exceptions
 
 
 def insert_returns(body):

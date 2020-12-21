@@ -3,7 +3,7 @@ import random
 import discord
 from discord.ext import commands
 
-from ..configs.constants import COLOUR
+from ._utils.constants import COLOUR
 
 
 class Fun(commands.Cog):

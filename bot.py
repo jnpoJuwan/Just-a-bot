@@ -3,9 +3,9 @@ import json
 import discord
 from discord.ext import commands
 
-from .configs.constants import COGS, DEFAULT_PREFIX, SPAM_LIMIT
-from .utils import exceptions
-from .utils.logger import logger
+from cogs._utils.constants import COGS, DEFAULT_PREFIX, SPAM_LIMIT
+from cogs._utils import exceptions
+from cogs._utils.logger import logger
 
 
 def _prefix_callable(_bot, message):

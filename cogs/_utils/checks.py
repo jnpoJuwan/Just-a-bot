@@ -1,6 +1,6 @@
 from discord.ext import commands
 
-from ..utils import exceptions
+from .._utils import exceptions
 
 
 async def check_permissions(ctx, perms, *, check=all):

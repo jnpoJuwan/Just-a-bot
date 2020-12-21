@@ -2,8 +2,8 @@ import os
 
 from discord.ext import commands
 
-from ..configs.constants import COGS
-from ..utils import checks
+from ._utils.constants import COGS
+from ._utils import checks
 
 
 class Owner(commands.Cog):

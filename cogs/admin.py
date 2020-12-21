@@ -3,8 +3,8 @@ import json
 import discord
 from discord.ext import commands
 
-from ..utils import checks
-from ..utils.logger import logger
+from ._utils import checks
+from ._utils.logger import logger
 
 
 class Admin(commands.Cog):
@@ -77,7 +77,7 @@ class Admin(commands.Cog):
     # @commands.command()
     # @checks.is_mod()
     # async def mute(self, ctx, member: discord.Member):
-    #     role = discord.utils.get(member.server.roles, name="Muted")
+    #     role = discord._utils.get(member.server.roles, name="Muted")
     #     await ctx.add_roles(member, role)
     #     await ctx.send(f"{member.mention} was muted by {ctx.author.mention}.")
 
