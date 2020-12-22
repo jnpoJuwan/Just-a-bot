@@ -19,7 +19,6 @@ Create a JSON file in the `configs` directory `secrets.json` with the setup belo
 3. Install the [dependencies](requirements.txt).
 
 ## Built With
-
 * [discord.py](https://github.com/Rapptz/discord.py)
 
 ## License
