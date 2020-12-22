@@ -278,7 +278,7 @@ class Amino(commands.Cog):
                                      酸笑者寛容愔、怒不命人或。
                                      平和及愛。我全友是命! :D""")
             conlangs.add_field(name="강서말",
-                               value="""아미노워 왕추미 죵댠!\n"
+                               value="""아미노워 왕추미 죵댠!\n
                                      운엥 유민 햐샌디, 걍 단 인간 환다메 학 마드레 망세비.
                                      픙대아 앙. 울 믇 치가 디쟈! :D""")
             conlangs.set_footer(text=f"Requested by {ctx.author.name}", icon_url=ctx.author.avatar_url)

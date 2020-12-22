@@ -74,8 +74,13 @@ class Fun(commands.Cog):
         """Send response to 'fuck you'."""
         await ctx.send("Fuck my robot body yourself, you fucking coward :rage:.")
 
+    @commands.command(aliases=["hi"])
+    async def hello(self, ctx):
+        """Send "Hello!"."""
+        await ctx.send("Hello!")
+
     @commands.command(aliases=["cock", "dick", "pepe", "pp"])
-    async def penis(self, ctx, member=None):
+    async def penis(self, ctx, member: discord.Member = None):
         """Send a random penis size."""
         if not member:
             member = ctx.author
