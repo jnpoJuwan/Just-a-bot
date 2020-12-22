@@ -85,6 +85,8 @@ if __name__ == "__main__":
     for cog in COGS:
         bot.load_extension(f"cogs.{cog[:-3]}")
 
-    with open("configs/secrets.json") as cf:
-        token = json.load(cf)["token"]
-    bot.run(token)
+    try:
+        with open("configs/secrets.json") as cf:
+            token = json.load(cf)["token"]
+    finally:
+        bot.run(token)
