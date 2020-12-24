@@ -1,6 +1,7 @@
 import random
 
 import discord
+import wikipediaapi
 from discord.ext import commands
 
 from ._utils.constants import COLOUR
@@ -9,6 +10,7 @@ from ._utils.constants import COLOUR
 class Fun(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.wiki_wiki = wikipediaapi.Wikipedia()
 
     @commands.Cog.listener()
     async def on_ready(self):
@@ -32,16 +34,8 @@ class Fun(commands.Cog):
         """Send an embed with the summary for the Wikipedia page of "Cock and ball torture"."""
         # SEE: https://en.wikipedia.org/wiki/Cock_and_ball_torture
         async with ctx.typing():
-            summary = "**Cock and ball torture** (**CBT**), penis torture or dick torture is a sexual activity " \
-                      "involving application of pain or constriction to the penis or testicles." \
-                      "This may involve directly painful activities, such as genital piercing, wax play, genital " \
-                      "spanking, squeezing, ball-busting, genital flogging, urethral play, tickle torture, erotic " \
-                      "electrostimulation, kneeing or kicking. The recipient of such activities may receive direct " \
-                      "physical pleasure via masochism, or emotional pleasure through erotic humiliation, " \
-                      "or knowledge that the play is pleasing to a sadistic dominant. " \
-                      "Many of these practices carry significant health risks."
-
-            embed = discord.Embed(title="Cock and ball torture", description=summary, colour=COLOUR)
+            page = self.wiki_wiki.page("Cock_and_ball_torture")
+            embed = discord.Embed(title="Cock and ball torture", description=page.summary, colour=COLOUR)
             embed.add_field(name="External Link", value="https://en.wikipedia.org/wiki/Cock_and_ball_torture")
             embed.set_footer(text=f"Requested by {ctx.author.name}", icon_url=ctx.author.avatar_url)
         await ctx.send(embed=embed)
@@ -76,8 +70,10 @@ class Fun(commands.Cog):
 
     @commands.command(aliases=["hi"])
     async def hello(self, ctx):
-        """Send "Hello!"."""
-        await ctx.send("Hello!")
+        """Greet the author."""
+        greetings = ["G'day!", "Good afternoon!", "Good evening!", "Good morning!", "Hello!", "Hey!", "Hey, you!",
+                     "Hey, you. You're finally awake.", "Hey~! ;)", "Hi!", "How are you?", "Howdy!", "What's up?"]
+        await ctx.send(random.choice(greetings))
 
     @commands.command(aliases=["cock", "dick", "pepe", "pp"])
     async def penis(self, ctx, member: discord.Member = None):
@@ -85,7 +81,7 @@ class Fun(commands.Cog):
         if not member:
             member = ctx.author
 
-        await ctx.send(f"This is <@{member.id}>'s penis: **8{'=' * random.randint(0, 9)}D**")
+        await ctx.send(f"This is {member.mention}'s penis: **8{'=' * random.randint(0, 9)}D**")
 
     @commands.command()
     async def ping(self, ctx):

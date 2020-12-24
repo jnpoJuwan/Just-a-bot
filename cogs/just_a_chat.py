@@ -49,7 +49,6 @@ class JustAChat(commands.Cog):
         async with ctx.typing():
             dt = datetime.datetime.now(tz=utc)
             fmt = "%A, %B %d **%H:%M** UTC%z"
-            # FIXME: Too time inefficient.
             tz_values = {
                 ":flag_mx: Mexico (Pacific)": timezone("Mexico/BajaSur"),
                 ":flag_um: USA (Mountain)": timezone("US/Mountain"),

@@ -5,7 +5,7 @@ from discord.ext import commands
 
 from cogs._utils.constants import COGS, DEFAULT_PREFIX, SPAM_LIMIT
 from cogs._utils import exceptions
-from cogs._utils.logger import logger
+# from cogs._utils.logger import logger
 
 
 def _prefix_callable(_bot, message):
@@ -23,7 +23,6 @@ class JustABot(commands.Bot):
     def __init__(self):
         super().__init__(
             command_prefix=_prefix_callable,
-            # help_command=None,
             case_insensitive=True,
             owner_id=488828457703309313
         )
@@ -31,10 +30,11 @@ class JustABot(commands.Bot):
 
     # Events.
 
+    # I have a logging system, *but* I don't know what to do with it.
     async def on_ready(self):
         activity = discord.Game(name="with Juwan's mental state.")
         await self.change_presence(activity=activity)
-        logger.info(f"Logged on as @{bot.user.name}.")
+        # logger.info(f"Logged on as @{bot.user.name}.")
         print(f"INFO: Logged on as @{bot.user.name}.")
 
     async def on_command_error(self, ctx, error):
@@ -56,9 +56,6 @@ class JustABot(commands.Bot):
             await ctx.send(f"You're using command too much. Try again in {round(error.retry_after)} seconds.")
         elif isinstance(error, exceptions.SpamError):
             await ctx.send(f"That's too much spam. The amount can't exceed {SPAM_LIMIT}.")
-        # else:
-        #     await ctx.send("Sorry. An unidentified error has occurred.\n"
-        #                    f"Details: `{error.__class_.__name__}: {error}`")
 
     async def on_guild_join(self, guild):
         with open("configs/prefixes.json") as pf:

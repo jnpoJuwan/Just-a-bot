@@ -48,6 +48,7 @@ class Help(commands.Cog):
                                     ►`{p}penis [@member]` sends a member's dick length.
                                     ►`{p}spam [amount] [message]` spams a message an given amount of times.
                                     ►`{p}umlaut [message]` sënds yöür sëntëncë wïth ümläüts.
+                                    ►`{p}hello` Hi!
                                     ►`{p}ping` Pong.""",
                         colour=COLOUR)
                     embed_ext.add_field(name="Action Commands",

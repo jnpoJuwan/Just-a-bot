@@ -19,7 +19,7 @@ class Actions(commands.Cog):
             member = choice(ctx.guild.members)
 
         await member.send(f"{ctx.author.name} kissed you.")
-        await ctx.send(f"You kissed {member},")
+        await ctx.send(f"You kissed {member.mention},")
 
     @commands.command()
     async def fuck(self, ctx, member: discord.Member = None):
@@ -28,7 +28,7 @@ class Actions(commands.Cog):
             member = choice(ctx.guild.members)
 
         await member.send(f"{ctx.author.name} fucking destroyed your fragile asshole.")
-        await ctx.send(f"You fucking destroyed {member}'s fragile asshole.")
+        await ctx.send(f"You fucking destroyed {member.mention}'s fragile asshole.")
 
     @commands.command()
     async def poke(self, ctx, member: discord.Member = None):
@@ -37,7 +37,7 @@ class Actions(commands.Cog):
             member = choice(ctx.guild.members)
 
         await member.send(f"{ctx.author.name} poked you.")
-        await ctx.send(f"You poked {member},")
+        await ctx.send(f"You poked {member.mention},")
 
     @commands.command()
     async def slap(self, ctx, member: discord.Member = None):
@@ -46,7 +46,7 @@ class Actions(commands.Cog):
             member = choice(ctx.guild.members)
 
         await member.send(f"{ctx.author.name} slapped you.")
-        await ctx.send(f"You slapped {member},")
+        await ctx.send(f"You slapped {member.mention},")
 
     @kiss.error
     @fuck.error

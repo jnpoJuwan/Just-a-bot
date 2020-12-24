@@ -3,7 +3,6 @@ import json
 import random
 
 import discord
-import googletrans
 from discord.ext import commands
 
 from ._utils.constants import SPAM_LIMIT
@@ -28,7 +27,6 @@ def insert_returns(body):
 class Utils(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.translator = googletrans.Translator()
 
     @commands.Cog.listener()
     async def on_ready(self):
@@ -102,9 +100,9 @@ class Utils(commands.Cog):
         await ctx.send(f"The server's prefix is `{p}`.")
 
     @commands.command(aliases=["len"])
-    async def length(self, ctx, *, message):
+    async def length(self, ctx, *, text):
         """Send the length of the message's content"""
-        await ctx.send(f"**{len(message)}**")
+        await ctx.send(f"**{len(text)}**")
 
     @commands.command()
     async def random(self, ctx):
@@ -122,14 +120,6 @@ class Utils(commands.Cog):
                     await ctx.send(f"**{random.randint(1, b)}**")
             else:
                 raise exceptions.SpamError
-
-    # @commands.command()
-    # async def translate(self, ctx, src, dest, *, text: commands.clean_content):
-    #     translation = self.translator.translate(src=src, dest=dest, text=text)
-    #     embed = discord.Embed(title="Google Translate", description="", colour=COLOUR)
-    #     embed.add_field(name=f"{googletrans.LANGUAGES[src].title()}", value=translation.origin)
-    #     embed.add_field(name=f"{googletrans.LANGUAGES[dest].title()}", value=translation.text)
-    #     await ctx.send(embed=embed)
 
     @commands.command()
     async def words(self, ctx, *, text):
