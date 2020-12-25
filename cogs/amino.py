@@ -281,7 +281,7 @@ class Amino(commands.Cog):
                                value="""아미노워 왕추미 죵댠!\n
                                      운엥 유민 햐샌디, 걍 단 인간 환다메 학 마드레 망세비.
                                      픙대아 앙. 울 믇 치가 디쟈! :D""")
-            conlangs.set_footer(text=f"Requested by {ctx.author.name}", icon_url=ctx.author.avatar_url)
+            conlangs.set_footer(text=f"Requested by {ctx.author.display_name}", icon_url=ctx.author.avatar_url)
             await ctx.send(embed=natlangs)
             await ctx.send(embed=natlangs_ext)
             await ctx.send(embed=conlangs)

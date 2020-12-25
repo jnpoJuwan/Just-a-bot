@@ -1,6 +1,7 @@
 import discord
 from discord.ext import commands
 
+from ._utils import exceptions
 from ._utils.constants import COLOUR
 
 
@@ -16,9 +17,9 @@ class Images(commands.Cog):
     async def icon(self, ctx):
         """Send the server's icon."""
         async with ctx.typing():
-            embed = discord.Embed(title=f"{ctx.guild.name}'s icon", colour=COLOUR)
+            embed = discord.Embed(title=f"Icon of {ctx.guild.name}", colour=COLOUR)
             embed.set_image(url=ctx.guild.icon_url)
-            embed.set_footer(text=f"Requested by {ctx.author.name}", icon_url=ctx.author.avatar_url)
+            embed.set_footer(text=f"Requested by {ctx.author.display_name}", icon_url=ctx.author.avatar_url)
         await ctx.send(embed=embed)
 
     @commands.command(aliases=["avatar", "profile_picture"])
@@ -28,17 +29,17 @@ class Images(commands.Cog):
             member = ctx.author
 
         async with ctx.typing():
-            embed = discord.Embed(title=f"{member}'s avatar", colour=COLOUR)
+            embed = discord.Embed(title=f"{member.display_name}'s avatar", colour=COLOUR)
             embed.set_image(url=member.avatar_url)
-            embed.set_footer(text=f"Requested by {ctx.author.name}", icon_url=ctx.author.avatar_url)
+            embed.set_footer(text=f"Requested by {ctx.author.display_name}", icon_url=ctx.author.avatar_url)
         await ctx.send(embed=embed)
 
     # Exception Handling.
 
     @pfp.error
-    async def member_error(self, ctx, error):
+    async def member_error(self, error):
         if isinstance(error, commands.BadArgument):
-            await ctx.send("Please @mention a member.")
+            raise exceptions.MemberNotFoundError
 
 
 def setup(bot):

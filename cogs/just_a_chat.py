@@ -104,7 +104,7 @@ class JustAChat(commands.Cog):
             videos = discord.Embed(name="Just some videos...", colour=COLOUR)
             for k, v in video_values.items():
                 videos.add_field(name=k, value=v, inline=False)
-            videos.set_footer(text=f"Requested by {ctx.author.name}", icon_url=ctx.author.avatar_url)
+            videos.set_footer(text=f"Requested by {ctx.author.display_name}", icon_url=ctx.author.avatar_url)
         await ctx.send(embed=channels)
         await ctx.send(embed=videos)
 

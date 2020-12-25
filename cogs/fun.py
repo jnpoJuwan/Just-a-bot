@@ -37,7 +37,7 @@ class Fun(commands.Cog):
             page = self.wiki_wiki.page("Cock_and_ball_torture")
             embed = discord.Embed(title="Cock and ball torture", description=page.summary, colour=COLOUR)
             embed.add_field(name="External Link", value="https://en.wikipedia.org/wiki/Cock_and_ball_torture")
-            embed.set_footer(text=f"Requested by {ctx.author.name}", icon_url=ctx.author.avatar_url)
+            embed.set_footer(text=f"Requested by {ctx.author.display_name}", icon_url=ctx.author.avatar_url)
         await ctx.send(embed=embed)
 
     @commands.command()

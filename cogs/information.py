@@ -19,7 +19,7 @@ class Information(commands.Cog):
         """Send an embed with the credits for the bot."""
         async with ctx.typing():
             embed = discord.Embed(title="Credits", description="Made by <@488828457703309313>", colour=COLOUR)
-            embed.set_footer(text=f"Requested by {ctx.author.name}", icon_url=ctx.author.avatar_url)
+            embed.set_footer(text=f"Requested by {ctx.author.display_name}", icon_url=ctx.author.avatar_url)
         await ctx.send(embed=embed)
 
     @commands.command(aliases=["member"])
@@ -40,7 +40,7 @@ class Information(commands.Cog):
             embed.add_field(name="Member ID", value=member.id)
             embed.add_field(name="Member Hash", value=str(hash(member)))
             embed.set_thumbnail(url=member.avatar_url)
-            embed.set_footer(text=f"Requested by {ctx.author.name}", icon_url=ctx.author.avatar_url)
+            embed.set_footer(text=f"Requested by {ctx.author.display_name}", icon_url=ctx.author.avatar_url)
         await ctx.send(embed=embed)
 
     @commands.command(aliases=["guild", "server", "server_info"])
@@ -58,7 +58,7 @@ class Information(commands.Cog):
             embed.add_field(name="Server ID", value=guild.id)
             embed.add_field(name="Server Hash", value=str(hash(guild)))
             embed.set_thumbnail(url=guild.icon_url)
-            embed.set_footer(text=f"Requested by {ctx.author.name}", icon_url=ctx.author.avatar_url)
+            embed.set_footer(text=f"Requested by {ctx.author.display_name}", icon_url=ctx.author.avatar_url)
         await ctx.send(embed=embed)
 
     @commands.command(aliases=["source"])
@@ -67,7 +67,7 @@ class Information(commands.Cog):
         embed = discord.Embed(title="Source Code",
                               description="https://github.com/jnpoJuwan/just_a_bot",
                               colour=COLOUR)
-        embed.set_footer(text=f"Requested by {ctx.author.name}", icon_url=ctx.author.avatar_url)
+        embed.set_footer(text=f"Requested by {ctx.author.display_name}", icon_url=ctx.author.avatar_url)
         await ctx.send(embed=embed)
 
     # Exception Handling.

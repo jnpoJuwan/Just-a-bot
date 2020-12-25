@@ -3,6 +3,8 @@ from random import choice
 import discord
 from discord.ext import commands
 
+from ._utils import exceptions
+
 
 class Actions(commands.Cog):
     def __init__(self, bot):
@@ -48,13 +50,15 @@ class Actions(commands.Cog):
         await member.send(f"{ctx.author.name} slapped you.")
         await ctx.send(f"You slapped {member.mention},")
 
+    # Exception Handling.
+
     @kiss.error
     @fuck.error
     @poke.error
     @slap.error
-    async def action_error(self, ctx, error):
+    async def action_error(self, error):
         if isinstance(error, commands.BadArgument):
-            await ctx.send("Please @mention a member.")
+            raise exceptions.MemberNotFoundError
 
 
 def setup(bot):
