@@ -68,7 +68,7 @@ class Fun(commands.Cog):
         """Send response to 'fuck you'."""
         await ctx.send("Fuck my robot body yourself, you fucking coward :rage:.")
 
-    @commands.command(aliases=["hi"])
+    @commands.command(aliases=["hey", "hi"])
     async def hello(self, ctx):
         """Greet the author."""
         greetings = ["G'day!", "Good afternoon!", "Good evening!", "Good morning!", "Hello!", "Hey!", "Hey, you!",
