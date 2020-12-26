@@ -15,9 +15,6 @@ class Admin(commands.Cog):
     async def on_ready(self):
         print(f"INFO: {__name__} is ready.")
 
-    # IDEA: mute(self, ctx, member)
-    # IDEA: unmute(self, ctx, member)
-
     @commands.command()
     @commands.guild_only()
     @checks.is_admin()
@@ -74,13 +71,6 @@ class Admin(commands.Cog):
         logger.critical("Bot has logged out.")
         await self.bot.logout()
 
-    # @commands.command()
-    # @checks.is_mod()
-    # async def mute(self, ctx, member: discord.Member):
-    #     role = discord._utils.get(member.server.roles, name="Muted")
-    #     await ctx.add_roles(member, role)
-    #     await ctx.send(f"{member.mention} was muted by {ctx.author.mention}.")
-
     @commands.command(aliases=["clear", "delete"])
     @commands.cooldown(3, 60.0, commands.BucketType.user)
     @checks.is_mod()
@@ -88,7 +78,6 @@ class Admin(commands.Cog):
         """Purge the amount limit of messages."""
         if limit > 200:
             await ctx.send("The amount can't exceed 200 messages.")
-
         await ctx.message.delete()
         await ctx.channel.purge(limit=limit)
         await ctx.send(f"Purged {limit} message(s).", delete_after=2.5)
@@ -109,14 +98,6 @@ class Admin(commands.Cog):
     async def kickban_error(self, ctx, error):
         if isinstance(error, commands.BadArgument):
             await ctx.send("Please @mention a member.")
-
-    # @mute.error
-    # async def mute_error(self, ctx, error):
-    #     if isinstance(error, commands.BadArgument):
-    #         await ctx.send("Please @mention a member.")
-    #     elif isinstance(error, AttributeError):
-    #         await ctx.send('Please create a role named "Muted" with no permission to speak.')
-    #         await ctx.send(error)
 
     @purge.error
     async def purge_error(self, ctx, error):

@@ -24,6 +24,7 @@ def insert_returns(body):
     if isinstance(body[-1], ast.With):
         insert_returns(body[-1].body)
 
+
 class Utils(commands.Cog):
     def __init__(self, bot):
         self.bot = bot

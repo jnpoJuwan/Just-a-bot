@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 
 from ._utils.constants import COLOUR
+from ._utils import exceptions
 
 FMT = "%A, %B %d %H:%M UTC"
 
@@ -64,8 +65,7 @@ class Information(commands.Cog):
     @commands.command(aliases=["source"])
     async def source_code(self, ctx):
         """Send an embed with the bot's source code."""
-        embed = discord.Embed(title="Source Code",
-                              description="https://github.com/jnpoJuwan/just_a_bot",
+        embed = discord.Embed(title="Source Code", description="https://github.com/jnpoJuwan/just_a_bot",
                               colour=COLOUR)
         embed.set_footer(text=f"Requested by {ctx.author.display_name}", icon_url=ctx.author.avatar_url)
         await ctx.send(embed=embed)
@@ -75,7 +75,7 @@ class Information(commands.Cog):
     @member_info.error
     async def member_error(self, ctx, error):
         if isinstance(error, commands.BadArgument):
-            await ctx.send("Please @mention a member.")
+            raise exceptions.MemberNotFoundError
 
 
 def setup(bot):

@@ -1,7 +1,6 @@
 import random
 
 import discord
-import wikipediaapi
 from discord.ext import commands
 
 from ._utils.constants import COLOUR
@@ -10,7 +9,6 @@ from ._utils.constants import COLOUR
 class Fun(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.wiki_wiki = wikipediaapi.Wikipedia()
 
     @commands.Cog.listener()
     async def on_ready(self):
@@ -108,7 +106,6 @@ class Fun(commands.Cog):
         """Add an umlaut to every vowel in the message."""
         for vowel in "aeiouyAEIOUY":
             text = text.replace(vowel, vowel + "\u0308")
-
         await ctx.send(text)
 
     # Exception Handling.

@@ -20,8 +20,7 @@ class Help(commands.Cog):
     async def info(self, ctx, section=1):
         """Send an embed with the Just a bot...'s information and a section of its commands."""
         with open("configs/prefixes.json") as pf:
-            prefixes = json.load(pf)
-            p = prefixes[str(ctx.message.guild.id)]
+            p = json.load(pf)[str(ctx.message.guild.id)]
 
         if section <= 0:
             raise commands.BadArgument
