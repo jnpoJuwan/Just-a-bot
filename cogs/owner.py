@@ -16,57 +16,44 @@ class Owner(commands.Cog):
 
     @commands.command(hidden=True)
     @checks.is_bot_owner()
-    async def load(self, ctx, cog=None):
-        """Load a cog."""
-        if not cog:
-            for file in COGS:
-                async with ctx.typing():
-                    self.bot.load_extension(f"cogs.{file.lower()[:-3]}")
-                await ctx.send(f"**`cogs.{file.lower()[:-3]}` has been loaded.**")
+    async def load(self, ctx, module):
+        """Load a module."""
+        try:
+            self.bot.load_extension(module)
+        except commands.ExtensionError as e:
+            await ctx.send(f'{e.__class__.__name__}: {e}')
         else:
-            file = f"{cog.lower()}.py"
-            if not os.path.exists(f"cogs/{file}"):
-                raise commands.BadArgument
-            elif file.endswith(".py") and not file.startswith("__"):
-                async with ctx.typing():
-                    self.bot.load_extension(f"cogs.{file[:-3]}")
-                await ctx.send(f"**`cogs.{file[:-3]}` has been loaded.**")
+            await ctx.send(f"`{module}` has been loaded.")
 
     @commands.command(hidden=True)
     @checks.is_bot_owner()
-    async def unload(self, ctx, cog=None):
-        """Unload a cog."""
-        if not cog:
-            for file in COGS:
-                async with ctx.typing():
-                    self.bot.unload_extension(f"cogs.{file.lower()[:-3]}")
-                await ctx.send(f"**`cogs.{file.lower()[:-3]}` has been unloaded.**")
+    async def unload(self, ctx, module):
+        """Unload a module."""
+        try:
+            self.bot.unload_extension(module)
+        except commands.ExtensionError as e:
+            await ctx.send(f'{e.__class__.__name__}: {e}')
         else:
-            file = f"{cog.lower()}.py"
-            if not os.path.exists(f"cogs/{file}"):
-                raise commands.BadArgument
-            elif file.endswith(".py") and not file.startswith("__"):
-                async with ctx.typing():
-                    self.bot.unload_extension(f"cogs.{file[:-3]}")
-                await ctx.send(f"**`cogs.{file[:-3]}` has been unloaded.**")
+            await ctx.send(f"`{module}` has been unloaded.")
 
-    @commands.command(hidden=True)
+    @commands.group(hidden=True)
     @checks.is_bot_owner()
-    async def reload(self, ctx, cog=None):
-        """Reload either a cog or all cogs."""
-        if not cog:
-            for file in COGS:
-                async with ctx.typing():
-                    self.bot.reload_extension(f"cogs.{file.lower()[:-3]}")
-                await ctx.send(f"**`cogs.{file.lower()[:-3]}` has been reloaded.**")
+    async def reload(self, ctx, module):
+        """Reload a module."""
+        try:
+            self.bot.reload_extension(module)
+        except commands.ExtensionError as e:
+            await ctx.send(f'{e.__class__.__name__}: {e}')
         else:
-            file = f"{cog.lower()}.py"
-            if not os.path.exists(f"cogs/{file}"):
-                raise commands.BadArgument
-            elif file.endswith(".py") and not file.startswith("__"):
-                async with ctx.typing():
-                    self.bot.reload_extension(f"cogs.{file[:-3]}")
-                await ctx.send(f"**`cogs.{file[:-3]}` has been reloaded.**")
+            await ctx.send(f"`{module}` has been reloaded.")
+
+    @reload.command(name="all", hidden=True)
+    async def reload_all(self, ctx):
+        """Reload all cogs."""
+        async with ctx.typing():
+            for module in COGS:
+                await self.bot.reload_extension(module)
+        await ctx.send("All cogs have been reloaded.")
 
     # Exception Handling.
 
