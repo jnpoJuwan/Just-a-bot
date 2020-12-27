@@ -36,7 +36,7 @@ class Utils(commands.Cog):
     # IDEA: is_down(self, ctx, service): Send True if the service is down, False otherwise.
 
     # This command can be used for malicious purposes.
-    # CREDIT: @nitros12 (GitHub)
+    # CREDIT: @nitros12 (GitHub [https://gist.github.com/nitros12/2c3c265813121492655bc95aa54da6b9])
     @commands.command(name="eval")
     # @checks.is_bot_owner()
     async def eval_(self, ctx, *, cmd):
