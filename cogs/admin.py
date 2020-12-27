@@ -64,6 +64,7 @@ class Admin(commands.Cog):
             await ctx.send(f"{member.mention} was kicked by {ctx.author.mention}.\n[Reason: {reason}]")
 
     @commands.command(aliases=["die", "disconnect", "quit", "sleep"])
+    @commands.guild_only()
     @checks.is_admin()
     async def logout(self, ctx):
         """Logout from the server."""

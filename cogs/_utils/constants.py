@@ -2,8 +2,7 @@ import os
 
 import discord
 
-
 COLOUR = discord.Colour(0x8b0000)
-COGS = [file for file in os.listdir("cogs") if file.endswith(".py") and not file.startswith("__")]
+COGS = [module for module in os.listdir("cogs") if module.endswith(".py") and not module.startswith("_")]
 DEFAULT_PREFIX = "!"
 SPAM_LIMIT = 25
