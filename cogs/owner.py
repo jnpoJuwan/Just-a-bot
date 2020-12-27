@@ -2,7 +2,6 @@ import os
 
 from discord.ext import commands
 
-from ._utils.constants import COGS
 from ._utils import checks
 
 
@@ -14,6 +13,7 @@ class Owner(commands.Cog):
     async def on_ready(self):
         print(f"INFO: {__name__} is ready.")
 
+    # CREDIT: @Rapptz (GitHub [https://github.com/Rapptz/RoboDanny/blob/rewrite/cogs/admin.py])
     @commands.command(hidden=True)
     @checks.is_bot_owner()
     async def load(self, ctx, module):
@@ -21,7 +21,7 @@ class Owner(commands.Cog):
         try:
             self.bot.load_extension(module)
         except commands.ExtensionError as e:
-            await ctx.send(f'{e.__class__.__name__}: {e}')
+            await ctx.send(f"{e.__class__.__name__}: {e}")
         else:
             await ctx.send(f"`{module}` has been loaded.")
 
@@ -32,28 +32,20 @@ class Owner(commands.Cog):
         try:
             self.bot.unload_extension(module)
         except commands.ExtensionError as e:
-            await ctx.send(f'{e.__class__.__name__}: {e}')
+            await ctx.send(f"{e.__class__.__name__}: {e}")
         else:
             await ctx.send(f"`{module}` has been unloaded.")
 
-    @commands.group(hidden=True)
+    @commands.command(hidden=True)
     @checks.is_bot_owner()
     async def reload(self, ctx, module):
         """Reload a module."""
         try:
             self.bot.reload_extension(module)
         except commands.ExtensionError as e:
-            await ctx.send(f'{e.__class__.__name__}: {e}')
+            await ctx.send(f"{e.__class__.__name__}: {e}")
         else:
             await ctx.send(f"`{module}` has been reloaded.")
-
-    @reload.command(name="all", hidden=True)
-    async def reload_all(self, ctx):
-        """Reload all cogs."""
-        async with ctx.typing():
-            for module in COGS:
-                await self.bot.reload_extension(module)
-        await ctx.send("All cogs have been reloaded.")
 
     # Exception Handling.
 
