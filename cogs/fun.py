@@ -104,7 +104,7 @@ class Fun(commands.Cog):
     @commands.command()
     async def umlaut(self, ctx, *, text="None"):
         """Add an umlaut to every vowel in the message."""
-        for vowel in "aeiouyAEIOUY":
+        for vowel in "aeiouwyAEIOUWY":
             text = text.replace(vowel, vowel + "\u0308")
         await ctx.send(text)
 
