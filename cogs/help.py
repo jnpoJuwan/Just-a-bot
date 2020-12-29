@@ -36,8 +36,8 @@ class Help(commands.Cog):
             if section == 1:
                 async with ctx.typing():
                     embed_ext = discord.Embed(
-                        title="Miscellaneous Commands (1/3)",
-                        description=f"""►`{p}info [section]` sends information regarding this bot.
+                        title="Miscellaneous Commands",
+                        description=f"""►`{p}info [page]` sends information regarding this bot.
                                     ►`{p}8ball [question]` asks the *Magic 8-Ball* for answers.
                                     ►`{p}cbt` sends the Wikipedia summary and page for Cock and Ball Torture.
                                     ►`{p}choose [list]` randomly chooses an item of choice.
@@ -45,20 +45,22 @@ class Help(commands.Cog):
                                     ►`{p}direct_message` (or `!dm`) direct messages you a nice message.
                                     ►`{p}echo [message]` (or `{p}say [message]`) echoes the message.
                                     ►`{p}penis [@member]` sends a member's dick length.
-                                    ►`{p}spam [amount] [message]` spams a message an given amount of times.
                                     ►`{p}umlaut [message]` sënds yöür sëntëncë wïth ümläüts.
                                     ►`{p}hello` Hi!
                                     ►`{p}ping` Pong.""",
                         colour=COLOUR)
-                    embed_ext.add_field(name="Action Commands",
-                                        value=f"""►`{p}kiss [member]` kisses the member.
-                                              ►`{p}fuck [member]` fucks the member's arse.
-                                              ►`{p}poke [member]` pokes the member.
-                                              ►`{p}slap [member]` slaps the member in the face.""")
+                    embed_ext.add_field(
+                        name="Action Commands",
+                        value=f"""►`{p}kiss [member]` kisses the member.
+                              ►`{p}fuck [member]` fucks the member's arse.
+                              ►`{p}poke [member]` pokes the member.
+                              ►`{p}slap [member]` slaps the member in the face.""")
+                    embed_ext.set_footer(text=f"Requested by {ctx.author.name} | Page 1/3",
+                                         icon_url=ctx.author.avatar_url)
             elif section == 2:
                 async with ctx.typing():
                     embed_ext = discord.Embed(
-                        title="Administration Commands (2/3)",
+                        title="Administration Commands",
                         description=f"""►`{p}ban <@member> (reason)` bans the member.
                                     ►`{p}change_prefix [prefix]` changes the server's prefix.
                                     ►`{p}kick <@member> (reason)` kicks the member.
@@ -66,11 +68,13 @@ class Help(commands.Cog):
                                     ►`{p}purge [amount]` (or `{p}clear (num)`) purges the amount of messages.
                                     ►`{p}unban <user_id>` unbans the user.""",
                         colour=COLOUR)
+                    embed_ext.set_footer(text=f"Requested by {ctx.author.name} | Page 2/3",
+                                         icon_url=ctx.author.avatar_url)
             elif section == 3:
                 async with ctx.typing():
                     embed_ext = discord.Embed(
                         title="Utility Commands (3/3)",
-                        description=f"""►`{p}coin_flip [amount]` flips a coin an amount of times.\
+                        description=f"""►`{p}coin_flip [amount]` flips a coin an amount of times.
                                     ►`{p}eval [command]` evaluates the Python code.
                                     ►`{p}get_prefix` sends the server's prefix.
                                     ►`{p}length [message]` sends the message's length.
@@ -93,10 +97,10 @@ class Help(commands.Cog):
                               ►`{p}jstimezones` (or `{p}jstz`) sends JACers' date and times.
                               ►`{p}jsyoutube` or (`{p}jsyt`) sends Just a chat... YouTubers' channels and videos.""",
                         inline=False)
+                    embed_ext.set_footer(text=f"Requested by {ctx.author.name} | Page 3/3",
+                                         icon_url=ctx.author.avatar_url)
             else:
                 raise commands.BadArgument
-
-            embed_ext.set_footer(text=f"Requested by {ctx.author.name}", icon_url=ctx.author.avatar_url)
             await ctx.send(embed=embed)
             await ctx.send(embed=embed_ext)
 
