@@ -19,13 +19,16 @@ class Information(commands.Cog):
     async def credits(self, ctx):
         """Send an embed with the credits for the bot."""
         async with ctx.typing():
-            embed = discord.Embed(title="Credits", description="Made by <@488828457703309313>", colour=COLOUR)
+            embed = discord.Embed(title="Credits", description="Made by @jnpoJuwan#4463", colour=COLOUR)
             embed.set_footer(text=f"Requested by {ctx.author.display_name}", icon_url=ctx.author.avatar_url)
         await ctx.send(embed=embed)
 
     @commands.command(aliases=["member"])
     async def member_info(self, ctx, member: discord.Member = None):
-        """Send an embed with the member's information."""
+        """Send an embed with the given member's information.
+
+        If no member is specified, send an embed with the author's information.
+        """
         if member is None:
             member = ctx.author
 

@@ -3,6 +3,7 @@ import random
 import discord
 from discord.ext import commands
 
+from ._utils import exceptions
 from ._utils.constants import COLOUR
 
 
@@ -18,7 +19,7 @@ class Fun(commands.Cog):
 
     @commands.command(name="8ball", aliases=["8-ball", "magic_8ball", "magic_8-ball"])
     async def _8ball(self, ctx, *, question="???"):
-        """Send and choose a random Magic 8-Ball answer."""
+        """Choose a random answer from the Magic 8-Ball."""
         # SEE: https://en.wikipedia.org/wiki/Magic_8-Ball#Possible_answers
         outcomes = ["It is certain.", "It is decidedly so.", "Without a doubt.", "Yes - definitely.",
                     "You may rely on it.", "As I see it, yes.", "Most likely.", "Outlook good.", "Yes.",
@@ -31,29 +32,32 @@ class Fun(commands.Cog):
     async def cbt(self, ctx):
         """Send an embed with the summary for the Wikipedia page of "Cock and ball torture"."""
         # SEE: https://en.wikipedia.org/wiki/Cock_and_ball_torture
+        with open("cbt.txt") as cf:
+            text = cf.read()
+
         async with ctx.typing():
-            page = self.wiki_wiki.page("Cock_and_ball_torture")
-            embed = discord.Embed(title="Cock and ball torture", description=page.summary, colour=COLOUR)
+            embed = discord.Embed(title="Cock and ball torture", description=text, colour=COLOUR)
             embed.add_field(name="External Link", value="https://en.wikipedia.org/wiki/Cock_and_ball_torture")
             embed.set_footer(text=f"Requested by {ctx.author.display_name}", icon_url=ctx.author.avatar_url)
         await ctx.send(embed=embed)
 
     @commands.command()
     async def choose(self, ctx, *args):
-        """Send a random choice."""
+        """Choose a random element from the given arguments."""
         for arg in args:
             arg.strip(",")
         await ctx.send(f"**{random.choice(args)}**")
 
     @commands.command(aliases=["map", "random_map"])
     async def choose_map(self, ctx):
-        """Send a random Among Us map."""
+        """Choose a random Among Us map."""
         outcomes = "The Skeld", "MIRA HQ", "Polus"
         await ctx.send(f"You should play in **{random.choice(outcomes)}.**")
 
+    # IDEA: Make !direct_message a utility command(?)
     @commands.command(aliases=["dm", "pm", "private_message"])
     async def direct_message(self, ctx):
-        """Send a nice private message."""
+        """Send a private message."""
         await ctx.author.send("**pong pong, motherpinger.**")
 
     @commands.command(aliases=["say"])
@@ -70,16 +74,16 @@ class Fun(commands.Cog):
     async def hello(self, ctx):
         """Greet the author."""
         greetings = ["G'day!", "Good afternoon!", "Good evening!", "Good morning!", "Hello!", "Hey!", "Hey, you!",
-                     "Hey, you. You're finally awake.", "Hey~! ;)", "Hi!", "How are you?", "Howdy!", "What's up?"]
+                     "Hey, you. You're finally awake.", "*Hey~* ;)", "Hi!", "How are you?", "Howdy!", "What's up?"]
         await ctx.send(random.choice(greetings))
 
     @commands.command(aliases=["cock", "dick", "pepe", "pp"])
     async def penis(self, ctx, member: discord.Member = None):
-        """Send a random penis size."""
+        """Send a random penis size between [0, 13]."""
         if not member:
             member = ctx.author
 
-        await ctx.send(f"This is {member.mention}'s penis: **8{'=' * random.randint(0, 9)}D**")
+        await ctx.send(f"This is {member.mention}'s penis: **8{'=' * random.randint(0, 13)}D**")
 
     @commands.command()
     async def ping(self, ctx):
@@ -101,9 +105,9 @@ class Fun(commands.Cog):
         """Send "ping" (sike)."""
         await ctx.send("No! This isn't how you're supposed to play the game.")
 
-    @commands.command()
+    @commands.command(aliases=["diaeresis"])
     async def umlaut(self, ctx, *, text="None"):
-        """Add an umlaut to every vowel in the message."""
+        """Send the given text with umlauted vowels."""
         for vowel in "aeiouwyAEIOUWY":
             text = text.replace(vowel, vowel + "\u0308")
         await ctx.send(text)
@@ -113,7 +117,7 @@ class Fun(commands.Cog):
     @penis.error
     async def member_error(self, ctx, error):
         if isinstance(error, commands.BadArgument):
-            await ctx.send("Please @mention a member.")
+            raise exceptions.MemberNotFoundError
 
 
 def setup(bot):

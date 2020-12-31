@@ -4,6 +4,7 @@ import discord
 from discord.ext import commands
 
 from ._utils import checks
+from ._utils.constants import DEFAULT_PREFIX
 from ._utils.logger import logger
 
 
@@ -19,7 +20,7 @@ class Admin(commands.Cog):
     @commands.guild_only()
     @checks.is_admin()
     async def ban(self, ctx, member: discord.Member, *, reason=None):
-        """Ban the member."""
+        """Ban the given member."""
         if ctx.author == member:
             await ctx.send("You can't ban yourself.")
 
@@ -34,9 +35,12 @@ class Admin(commands.Cog):
     @commands.guild_only()
     @checks.is_admin()
     async def change_prefix(self, ctx, prefix=None):
-        """Change the guild's prefix."""
+        """Change the guild's prefix.
+
+        If no prefix is specified, change the prefix to the bot's default prefix.
+        """
         if not prefix:
-            prefix = self.bot.default_prefix
+            prefix = DEFAULT_PREFIX
         if len(prefix) > 6:
             await ctx.send("The prefix can't exceed 6 characters in length.\nShortening prefix...")
             prefix = prefix[:6]
@@ -52,7 +56,7 @@ class Admin(commands.Cog):
     @commands.guild_only()
     @checks.is_admin()
     async def kick(self, ctx, member: discord.Member, *, reason=None):
-        """Kick the member."""
+        """Kick the given member."""
         if ctx.author == member:
             await ctx.send("You can't kick yourself.")
 
@@ -64,10 +68,9 @@ class Admin(commands.Cog):
             await ctx.send(f"{member.mention} was kicked by {ctx.author.mention}.\n[Reason: {reason}]")
 
     @commands.command(aliases=["die", "disconnect", "quit", "sleep"])
-    @commands.guild_only()
     @checks.is_admin()
     async def logout(self, ctx):
-        """Logout from the server."""
+        """Logout from Discord."""
         await ctx.send("**change da world**\n**my final message. Goodb ye**")
         logger.critical("Bot has logged out.")
         await self.bot.logout()
@@ -76,7 +79,7 @@ class Admin(commands.Cog):
     @commands.cooldown(3, 60.0, commands.BucketType.user)
     @checks.is_mod()
     async def purge(self, ctx, limit=0):
-        """Purge the amount limit of messages."""
+        """Purge the given amount of messages."""
         if limit > 200:
             await ctx.send("The amount can't exceed 200 messages.")
         await ctx.message.delete()
@@ -87,10 +90,10 @@ class Admin(commands.Cog):
     @commands.guild_only()
     @checks.is_admin()
     async def unban(self, ctx, user_id):
-        """Unban the user."""
+        """Unban the given user."""
         user = self.bot.get_user(user_id=user_id)
         await ctx.guild.unban(user)
-        await ctx.send(f"{user} was unbanned by {ctx.author.mention}")
+        await ctx.send(f"{user} was unbanned by {ctx.author.mention}.")
 
     # Exception Handling.
 

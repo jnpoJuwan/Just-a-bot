@@ -15,7 +15,7 @@ class Images(commands.Cog):
 
     @commands.command()
     async def icon(self, ctx):
-        """Send the server's icon."""
+        """Send the guild's icon."""
         async with ctx.typing():
             embed = discord.Embed(title=f"Icon of {ctx.guild.name}", colour=COLOUR)
             embed.set_image(url=ctx.guild.icon_url)
@@ -24,7 +24,10 @@ class Images(commands.Cog):
 
     @commands.command(aliases=["avatar", "profile_picture"])
     async def pfp(self, ctx, member: discord.Member = None):
-        """Send the profile picture of a member. Send the author's profile picture if no member is specified."""
+        """Send the profile picture of the given member.
+
+        If no member is specified, send an embed with the author's profile picture.
+        """
         if member is None:
             member = ctx.author
 
