@@ -15,7 +15,7 @@ class Help(commands.Cog):
         print(f"INFO: {__name__} is ready.")
 
     # NOTE: This doesn't substitute the `!help` command.
-    #  FIXME: Add a prettier `!help` command.
+    #  FIXME: Add a prettier !help command.
     @commands.command(aliases=["commands", "information"])
     async def info(self, ctx, section=1):
         """Send an embed with the Just a bot...'s information and a section of its commands."""
