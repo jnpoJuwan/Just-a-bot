@@ -215,7 +215,7 @@ class Amino(commands.Cog):
             conlangs.add_field(name="Lirin",
                                value="Libiim Aminoermet kamamt dare\n"
                                      "Imiem tashfem mhort nihdir, na n'eblesh neam.\n"
-                                     "Imildesh Fash ne hish, berost! :D")
+                                     "Imildesh Fash ne hish, berostem! :D")
             conlangs.add_field(name="Ndu Biliva",
                                value="Bularu Vamimu mi rula lurawa bu ndu ba!\n"
                                      "Ndima munli ramba wuva ba. Wuva bularu li ba.\n"
