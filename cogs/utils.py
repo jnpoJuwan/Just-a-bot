@@ -38,22 +38,15 @@ class Utils(commands.Cog):
     # This command can be used for malicious purposes.
     # CREDIT: @nitros12 (GitHub [https://gist.github.com/nitros12/2c3c265813121492655bc95aa54da6b9])
     @commands.command(name="eval")
+    # checks.is_mod()
     # @checks.is_bot_owner()
     async def eval_(self, ctx, *, cmd):
-        """Evaluate the input.
+        """Evaluate the given source.
+
         Input is interpreted as newline separated statements.
         If the last statement is an expression, that is the return value.
 
         Such that `!eval 1 + 1` gives `2` as the result.
-        The following invocation will cause the bot to send the text '9'
-        to the channel of invocation and return '3' as the result of evaluating
-
-        !eval ```
-        a = 1 + 2
-        b = a * 2
-        await ctx.send(a + b)
-        a
-        ```
         """
 
         env = {
@@ -86,7 +79,7 @@ class Utils(commands.Cog):
 
     @commands.command(aliases=["coin_flip", "heads", "tails"])
     async def flip_coin(self, ctx, amount=1):
-        """Flips a coin of the input amount of times."""
+        """Flip a coin of the given amount of times."""
         if amount <= SPAM_LIMIT:
             for i in range(amount):
                 await ctx.send(f"**{random.choice(['Heads', 'Tails'])}**")
@@ -95,14 +88,14 @@ class Utils(commands.Cog):
 
     @commands.command()
     async def get_prefix(self, ctx):
-        """Send the server's prefix."""
+        """Get the server's prefix."""
         with open("configs/prefixes.json") as pf:
             p = json.load(pf)[str(ctx.message.guild.id)]
         await ctx.send(f"The server's prefix is `{p}`.")
 
     @commands.command(aliases=["len"])
     async def length(self, ctx, *, text):
-        """Send the length of the message's content"""
+        """Send the length of the given text."""
         await ctx.send(f"**{len(text)}**")
 
     @commands.command()
@@ -114,7 +107,7 @@ class Utils(commands.Cog):
     async def roll(self, ctx, *, b=20, amount=1):
         """Send a random integer in range [1, b], including both end points, an amount of times."""
         if b < 1:
-            raise commands.BadArgument
+            await ctx.send("Please input a positive integer (Use `!random` for rationals).")
         else:
             if amount <= SPAM_LIMIT:
                 for i in range(amount):
@@ -133,11 +126,6 @@ class Utils(commands.Cog):
     async def eval_error(self, ctx, error):
         if not isinstance(error, commands.UserInputError):
             await ctx.send(error)
-
-    @roll.error
-    async def roll_error(self, ctx, error):
-        if isinstance(error, commands.BadArgument):
-            await ctx.send("Please input a positive integer (Use `!random` for rationals).")
 
 
 def setup(bot):
