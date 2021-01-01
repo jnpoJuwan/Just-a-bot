@@ -38,12 +38,12 @@ class JustABot(commands.Bot):
         print(f"INFO: Logged on as @{bot.user.name}.")
 
     async def on_command_error(self, ctx, error):
-        # Server Errors
+        # Server Errors.
         if isinstance(error, exceptions.ServerNotFoundError):
             await ctx.send("You're not allowed to use this command in this server.")
         elif isinstance(error, commands.NoPrivateMessage):
             await ctx.send("You're not allowed to use this commands in private messages.")
-        # Command Errors
+        # Command Errors.
         elif isinstance(error, commands.CommandNotFound):
             await ctx.send("Sorry. I can't find that command.")
         elif isinstance(error, commands.DisabledCommand):
