@@ -22,9 +22,12 @@ class JustAChat(commands.Cog):
         """Send an embed with the Just some documents...."""
         async with ctx.typing():
             embed_values = {
+                "Just a bot...": "https://github.com/jnpoJuwan/Just-a-bot",
                 "Just a map...": "https://goo.gl/maps/Z3VDj5JkwpVrDUSd7",
                 "Just a (fuck-able) ages...":
                     "https://docs.google.com/document/d/1xeAlaHXVZ4PfFm_BrOuAxXrO-0SBZZZvZndCpI0rkDc/edit?usp=sharing",
+                "Just some guidelines...":
+                    "https://docs.google.com/document/d/1NAH6GZNC0UNFHdBmAd0u9U5keGhAgnxY-vqiRaATL8c/edit?usp=sharing",
                 "Just some penises...":
                     "https://docs.google.com/document/d/1gUoTqg4uzdSG_0eqoERcbMBFBrWdIEw6IBy_L3OrRnQ/edit?usp=sharing",
                 "Just some stories...":
@@ -51,10 +54,10 @@ class JustAChat(commands.Cog):
             fmt = "%A, %B %d **%H:%M** UTC%z"
             tz_values = {
                 ":flag_mx: Mexico (Pacific)": timezone("Mexico/BajaSur"),
-                ":flag_um: USA (Mountain)": timezone("US/Mountain"),
+                ":flag_um: US (Mountain)": timezone("US/Mountain"),
                 ":flag_mx: Mexico (Central)": timezone("Mexico/General"),
                 ":flag_us: US (Central)": timezone("US/Central"),
-                ":flag_um: USA (Eastern)": timezone("US/Eastern"),
+                ":flag_um: US (Eastern)": timezone("US/Eastern"),
                 ":flag_py: Paraguay": timezone("America/Asuncion"),
                 ":flag_br: Brazil (Brasília)": timezone("Brazil/East"),
                 ":flag_eu: Europe (Western)": timezone("Europe/London"),
