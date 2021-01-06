@@ -187,6 +187,10 @@ class Amino(commands.Cog):
                            value="Ze zodeoti Amino anei menotoledes!\n"
                                  "Mir'adaetu critimobru dorvodes, sco ciniomenote meci'so geigertico.\n"
                                  "Cimmorr o chomae. Chozenes anei essi! :D")
+        conlangs.add_field(name="aUI",
+                           value="jwYzn Ub aMINo fag tsYv-tvev!\n"
+                                 "yim rOvU cEv o-dYvQ, YvYdrOrv Ymu.\n"
+                                 "brU Ib brO. fnu fag drYv cEv bru! :D")
         conlangs.add_field(name="Baleñero",
                            value="O leyas de Amino se aplikan aki!\n"
                                  "E nero humor esa toleradi, to no offendan o otros.\n"
@@ -262,7 +266,7 @@ class Amino(commands.Cog):
         conlangs.add_field(name="Ūareo Travi",
                            value="Zhiyuneoda \"Amino\" do'ohokoanei!\n"
                                  "Oraseisatodaneiweá', neizhodan'aīe!\n"
-                                 "Haòyeao'e'ai'oha, Yaikunako'itoyeaokoanei! :D")
+                                 "Haòyeao'e'ai'oha. Yaikunako'itoyeaokoanei! :D")
         conlangs.add_field(name="Vinlandic",
                            value="De lága Aminoar framr he!\n"
                                  "Svártlátr em beþólet, þó ney miska fólk.\n"
@@ -275,18 +279,21 @@ class Amino(commands.Cog):
                            value="¡Ⲗαs ρиɣⲗαs Ⲇ̃ εⲗ Αⲙиⲛo S̃ απⲗиϧαⲛ ακи ταнεⲙ!\n"
                                  "Ⲙoz ταⲙиⲗαⲙos εⲗ uⲙoρ ⲇαϧκⲛo, soⲗo ⲛo ιραинεs ⲛατα.\n"
                                  "Sуⲗⲙα uε ⲙαuⲇα. ¡sεαⲙos τoⲇos αⲙεκos! :D")
-        conlangs.add_field(name="新国語",
-                           value="「Amino」拥法文此処在振用前!\n"
-                                 "酸笑者寛容愔、怒不命人或。\n"
-                                 "平和及愛。我全友是命! :D")
-        conlangs.add_field(name="강서말",
-                           value="아미노워 왕추미 죵댠!\n"
-                                 "운엥 유민 햐샌디, 걍 단 인간 환다메 학 마드레 망세비.\n"
-                                 "픙대아 앙. 울 믇 치가 디쟈! :D")
-        conlangs.set_footer(text=f"Requested by {ctx.author.display_name}", icon_url=ctx.author.avatar_url)
+
+        conlangs_ext = discord.Embed(title="Just some guidelines...", colour=COLOUR)
+        conlangs_ext.add_field(name="新国語",
+                               value="「Amino」拥法文此処在振用前!\n"
+                                     "酸笑者寛容愔、怒不命人或。\n"
+                                     "平和及愛。我全友是命! :D")
+        conlangs_ext.add_field(name="강서말",
+                               value="아미노워 왕추미 죵댠!\n"
+                                     "운엥 유민 햐샌디, 걍 단 인간 환다메 학 마드레 망세비.\n"
+                                     "픙대아 앙. 울 믇 치가 디쟈! :D")
+        conlangs_ext.set_footer(text=f"Requested by {ctx.author.display_name}", icon_url=ctx.author.avatar_url)
         await ctx.send(embed=natlangs)
         await ctx.send(embed=natlangs_ext)
         await ctx.send(embed=conlangs)
+        await ctx.send(embed=conlangs_ext)
 
 
 def setup(bot):
