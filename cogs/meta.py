@@ -1,13 +1,15 @@
+import json
+
 import discord
 from discord.ext import commands
 
-from ._utils.constants import COLOUR
-from ._utils import exceptions
+from ._utils import checks, exceptions
+from ._utils.constants import COLOUR, DEFAULT_PREFIX
 
 FMT = "%A, %B %d %H:%M UTC"
 
 
-class Information(commands.Cog):
+class Meta(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
@@ -16,22 +18,9 @@ class Information(commands.Cog):
         print(f"INFO: {__name__} is ready.")
 
     @commands.command()
-    async def credits(self, ctx):
-        """Send an embed with the credits for the bot."""
-        async with ctx.typing():
-            embed = discord.Embed(title="Credits", description="Made by @jnpoJuwan#4463", colour=COLOUR)
-            embed.set_footer(text=f"Requested by {ctx.author.display_name}", icon_url=ctx.author.avatar_url)
-        await ctx.send(embed=embed)
-
-    @commands.command(aliases=["member"])
     async def member_info(self, ctx, member: discord.Member = None):
-        """Send an embed with the given member's information.
-
-        If no member is specified, send an embed with the author's information.
-        """
-        if member is None:
-            member = ctx.author
-
+        """Send an embed with the given member's information."""
+        member = member or ctx.author
         roles = [role for role in member.roles]
 
         async with ctx.typing():
@@ -39,15 +28,15 @@ class Information(commands.Cog):
             embed.add_field(name="Nickname", value=member.display_name)
             embed.add_field(name="Top Role", value=member.top_role.mention)
             embed.add_field(name=f"Roles ({len(roles)})", value="\n".join([role.mention for role in roles]))
-            embed.add_field(name="Account Created at:", value=member.created_at.strftime(FMT))
-            embed.add_field(name="Joined at:", value=member.joined_at.strftime(FMT))
+            embed.add_field(name="Created", value=member.created_at.strftime(FMT))
+            embed.add_field(name="Joined", value=member.joined_at.strftime(FMT))
             embed.add_field(name="Member ID", value=member.id)
             embed.add_field(name="Member Hash", value=str(hash(member)))
             embed.set_thumbnail(url=member.avatar_url)
             embed.set_footer(text=f"Requested by {ctx.author.display_name}", icon_url=ctx.author.avatar_url)
         await ctx.send(embed=embed)
 
-    @commands.command(aliases=["guild", "server", "server_info"])
+    @commands.command(aliases=["server_info"])
     async def guild_info(self, ctx):
         """Send an embed with the guild's information."""
         guild = ctx.guild
@@ -65,6 +54,26 @@ class Information(commands.Cog):
             embed.set_footer(text=f"Requested by {ctx.author.display_name}", icon_url=ctx.author.avatar_url)
         await ctx.send(embed=embed)
 
+    @commands.command()
+    async def icon(self, ctx):
+        """Send the guild's icon."""
+        async with ctx.typing():
+            embed = discord.Embed(title=f"Icon of {ctx.guild.name}", colour=COLOUR)
+            embed.set_image(url=ctx.guild.icon_url)
+            embed.set_footer(text=f"Requested by {ctx.author.display_name}", icon_url=ctx.author.avatar_url)
+        await ctx.send(embed=embed)
+
+    @commands.command(aliases=["avatar", "profile_picture"])
+    async def pfp(self, ctx, member: discord.Member = None):
+        """Send the profile picture of the given member."""
+        member = member or ctx.author
+
+        async with ctx.typing():
+            embed = discord.Embed(title=f"{member.display_name}'s avatar", colour=COLOUR)
+            embed.set_image(url=member.avatar_url)
+            embed.set_footer(text=f"Requested by {ctx.author.display_name}", icon_url=ctx.author.avatar_url)
+        await ctx.send(embed=embed)
+
     @commands.command(aliases=["source"])
     async def source_code(self, ctx):
         """Send an embed with the bot's source code."""
@@ -72,6 +81,25 @@ class Information(commands.Cog):
                               colour=COLOUR)
         embed.set_footer(text=f"Requested by {ctx.author.display_name}", icon_url=ctx.author.avatar_url)
         await ctx.send(embed=embed)
+
+    @commands.group()
+    async def settings(self, ctx):
+        pass
+
+    @settings.command(aliases=["prefix"])
+    @commands.guild_only()
+    @checks.is_admin()
+    async def change_prefix(self, ctx, prefix=None):
+        """Change the guild's prefix."""
+        prefix = prefix or DEFAULT_PREFIX
+        path = "configs/prefixes.json"
+
+        with open(path) as f:
+            prefixes = json.load(f)
+        with open(path, "w") as f:
+            prefixes[str(ctx.guild.id)] = prefix
+            json.dump(prefixes, f, indent=2, sort_keys=True)
+        await ctx.send(f"The server's prefix has been changed to `{prefix}`.")
 
     # Exception Handling.
 
@@ -82,4 +110,4 @@ class Information(commands.Cog):
 
 
 def setup(bot):
-    bot.add_cog(Information(bot))
+    bot.add_cog(Meta(bot))

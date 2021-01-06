@@ -38,8 +38,7 @@ class Utils(commands.Cog):
     # This command can be used for malicious purposes.
     # CREDIT: @nitros12 (GitHub [https://gist.github.com/nitros12/2c3c265813121492655bc95aa54da6b9])
     @commands.command(name="eval")
-    # checks.is_mod()
-    # @checks.is_bot_owner()
+    # checks.is_admin()
     async def eval_(self, ctx, *, cmd):
         """Evaluate the given source.
 
@@ -48,7 +47,6 @@ class Utils(commands.Cog):
 
         Such that `!eval 1 + 1` gives `2` as the result.
         """
-
         env = {
             "__import__": __import__,
             "author": ctx.author,
@@ -80,15 +78,15 @@ class Utils(commands.Cog):
     @commands.command(aliases=["coin_flip", "heads", "tails"])
     async def flip_coin(self, ctx, amount=1):
         """Flip a coin of the given amount of times."""
-        if amount <= SPAM_LIMIT:
-            for i in range(amount):
-                await ctx.send(f"**{random.choice(['Heads', 'Tails'])}**")
-        else:
+        if amount >= SPAM_LIMIT:
             raise exceptions.SpamError
+        else:
+            for _ in range(amount):
+                await ctx.send(f"**{random.choice(['Heads', 'Tails'])}**")
 
     @commands.command()
     async def get_prefix(self, ctx):
-        """Get the server's prefix."""
+        """Get the guild's prefix."""
         with open("configs/prefixes.json") as pf:
             p = json.load(pf)[str(ctx.message.guild.id)]
         await ctx.send(f"The server's prefix is `{p}`.")
@@ -109,11 +107,11 @@ class Utils(commands.Cog):
         if b < 1:
             await ctx.send("Please input a positive integer (Use `!random` for rationals).")
         else:
-            if amount <= SPAM_LIMIT:
-                for i in range(amount):
-                    await ctx.send(f"**{random.randint(1, b)}**")
-            else:
+            if amount >= SPAM_LIMIT:
                 raise exceptions.SpamError
+            else:
+                for _ in range(amount):
+                    await ctx.send(f"**{random.randint(1, b)}**")
 
     @commands.command()
     async def words(self, ctx, *, text):

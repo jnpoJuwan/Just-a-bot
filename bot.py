@@ -5,19 +5,20 @@ from discord.ext import commands
 
 from cogs._utils.constants import COGS, DEFAULT_PREFIX, SPAM_LIMIT
 from cogs._utils import exceptions
-# from cogs._utils.logger import logger
 
 
+# CREDIT: Rapptz (GitHub [https://github.com/Rapptz/RoboDanny/blob/rewrite/bot.py#L44])
 def _prefix_callable(_bot, message):
     _id = bot.user.id
     base = [f"<@!{_id}> ", f"<@{_id}> "]
     if message.guild is None:
         base.append(DEFAULT_PREFIX)
     else:
-        with open("configs/prefixes.json") as pf:
-            prefixes = json.load(pf)
+        with open("configs/prefixes.json") as f:
+            prefixes = json.load(f)
             base.append(prefixes[str(message.guild.id)])
     return base
+
 
 class JustABot(commands.Bot):
     def __init__(self):
@@ -30,11 +31,9 @@ class JustABot(commands.Bot):
 
     # Events.
 
-    # I have a logging system, *but* I don't know what to do with it.
     async def on_ready(self):
         activity = discord.Game(name="with Juwan's mental state.")
         await self.change_presence(activity=activity)
-        # logger.info(f"Logged on as @{bot.user.name}.")
         print(f"INFO: Logged on as @{bot.user.name}.")
 
     async def on_command_error(self, ctx, error):
@@ -53,9 +52,9 @@ class JustABot(commands.Bot):
         elif isinstance(error, exceptions.MemberNotFoundError):
             await ctx.send("Please @mention a member.")
         elif isinstance(error, commands.CheckFailure):
-            await ctx.send(f"You're not allowed to use `{self.command_prefix}{ctx.command}`.")
+            await ctx.send("You don't have permission to use that command.")
         elif isinstance(error, commands.CommandOnCooldown):
-            await ctx.send(f"You're using command too much. Try again in {round(error.retry_after)} seconds.")
+            await ctx.send(f"You're using this command too much. Try again in {round(error.retry_after)} seconds.")
         elif isinstance(error, exceptions.SpamError):
             await ctx.send(f"That's too much spam. The amount can't exceed {SPAM_LIMIT}.")
 
@@ -77,6 +76,7 @@ class JustABot(commands.Bot):
         if message.author.bot:
             return
         await self.process_commands(message)
+
 
 bot = JustABot()
 

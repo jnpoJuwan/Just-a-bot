@@ -11,7 +11,7 @@ class Owner(commands.Cog):
     async def on_ready(self):
         print(f"INFO: {__name__} is ready.")
 
-    # CREDIT: @Rapptz (GitHub [https://github.com/Rapptz/RoboDanny/blob/rewrite/cogs/admin.py])
+    # CREDIT: @Rapptz (GitHub [https://github.com/Rapptz/RoboDanny/blob/rewrite/cogs/admin.py#L116])
     @commands.command(hidden=True)
     @checks.is_bot_owner()
     async def load(self, ctx, module):
@@ -44,15 +44,6 @@ class Owner(commands.Cog):
             await ctx.send(f"**{e.__class__.__name__}:** {e}")
         else:
             await ctx.send(f"`{module}` has been reloaded.")
-
-    # Exception Handling.
-
-    @load.error
-    @unload.error
-    @reload.error
-    async def load_cogs_error(self, ctx, error):
-        if isinstance(error, commands.BadArgument):
-            await ctx.send("Sorry. I can't find that cog.")
 
 
 def setup(bot):
