@@ -96,7 +96,7 @@ class Actions(commands.Cog):
     @slap.error
     async def action_error(self, ctx, error):
         if isinstance(error, commands.BadArgument):
-            raise exceptions.MemberNotFoundError
+            await ctx.send("Please @mention a member.")
 
 
 def setup(bot):

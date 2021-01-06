@@ -1,3 +1,4 @@
+import json
 import random
 
 import discord
@@ -22,10 +23,10 @@ class Fun(commands.Cog):
 		"""Choose a random answer from the Magic 8-Ball."""
 		# SEE: https://en.wikipedia.org/wiki/Magic_8-Ball#Possible_answers
 		outcomes = ("It is certain.", "It is decidedly so.", "Without a doubt.", "Yes - definitely.",
-					"You may rely on it.", "As I see it, yes.", "Most likely.", "Outlook good.", "Yes.",
-					"Signs point to yes.", "Reply hazy, try again.", "Ask again later.", "Better not tell you now.",
-					"Cannot predict now.", "Concentrate and ask again.", "Don't count on it.", "My reply is no.",
-					"My sources say no.", "Outlook not so good.", "Very doubtful.")
+		            "You may rely on it.", "As I see it, yes.", "Most likely.", "Outlook good.", "Yes.",
+		            "Signs point to yes.", "Reply hazy, try again.", "Ask again later.", "Better not tell you now.",
+		            "Cannot predict now.", "Concentrate and ask again.", "Don't count on it.", "My reply is no.",
+		            "My sources say no.", "Outlook not so good.", "Very doubtful.")
 		await ctx.send(f"> {question}\n**{random.choice(outcomes)}**")
 
 	@commands.command(aliases=["cock_and_ball_torture"])
@@ -73,17 +74,24 @@ class Fun(commands.Cog):
 	async def hello(self, ctx):
 		"""Greet the author."""
 		greetings = ["G'day!", "Good afternoon!", "Good evening!", "Good morning!", "Hello!", "Hey!", "Hey, you!",
-					 "Hey, you. You're finally awake.", "*Hey~* ;)", "Hi!", "How are you?", "Howdy!", "What's up?"]
+		             "Hey, you. You're finally awake.", "*Hey~* ;)", "Hi!", "How are you?", "Howdy!", "What's up?"]
 		await ctx.send(random.choice(greetings))
 
-	@commands.command(aliases=["cock", "dick", "pepe", "pp"])
+	@commands.command(aliases=["cock", "dick", "schlong"])
+	@commands.cooldown(3, 60.0, commands.BucketType.user)
 	async def penis(self, ctx, member: discord.Member = None):
-		"""Send a random penis size between [0, 13]."""
+		"""Send a random penis size between [0, 30] cm."""
 		member = member or ctx.author
-		n = random.randint(0, 13)
-		if member == self.bot.get_user(320325816712167426):    # @PD6#1510
+		n = random.randint(0, 30)
+		if member == self.bot.get_user(320325816712167426):  # @PD6#1510
 			n = 0
-		await ctx.send(f"{member.mention}'s penis is {n} inches long: **8{'=' * n}D**")
+
+		if n < 5:
+			await ctx.send(f"{member.mention}'s micropenis is {n} cm long: **8{'=' * n}D**")
+		elif n < 20:
+			await ctx.send(f"{member.mention}'s penis is {n} cm long: **8{'=' * n}D**")
+		else:
+			await ctx.send(f"{member.mention}'s hard monster cock is {n} cm long: **8{'=' * n}D**")
 
 	@commands.command()
 	async def ping(self, ctx):
@@ -106,8 +114,17 @@ class Fun(commands.Cog):
 		await ctx.send("No! This isn't how you're supposed to play the game.")
 
 	@commands.command()
+	async def scream(self, ctx):
+		"""Scream."""
+		with open("cogs/_utils/images/scream.jpg", "rb") as f:
+			picture = discord.File(f)
+		await ctx.send(file=picture)
+
+	@commands.command()
 	async def spam(self, ctx):
-		await ctx.send("I've already told you `?spam` isn't an available command anymore.")
+		with open("configs/prefixes.json") as f:
+			p = json.load(f)[str(ctx.message.guild.id)]
+		await ctx.send(f"I've already told you `{p}spam` isn't an available command anymore.")
 
 	@commands.command(aliases=["diaeresis"])
 	async def umlaut(self, ctx, *, text="None"):
@@ -121,7 +138,7 @@ class Fun(commands.Cog):
 	@penis.error
 	async def member_error(self, ctx, error):
 		if isinstance(error, commands.BadArgument):
-			raise exceptions.MemberNotFoundError
+			await ctx.send("Please @mention a member.")
 
 
 def setup(bot):

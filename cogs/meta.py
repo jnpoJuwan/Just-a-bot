@@ -21,17 +21,17 @@ class Meta(commands.Cog):
     async def member_info(self, ctx, member: discord.Member = None):
         """Send an embed with the given member's information."""
         member = member or ctx.author
-        roles = [role for role in member.roles]
+        roles = [role.mention for role in member.roles]
 
         async with ctx.typing():
             embed = discord.Embed(title=str(member), colour=COLOUR)
             embed.add_field(name="Nickname", value=member.display_name)
             embed.add_field(name="Top Role", value=member.top_role.mention)
-            embed.add_field(name=f"Roles ({len(roles)})", value="\n".join([role.mention for role in roles]))
+            embed.add_field(name=f"Roles ({len(roles)})", value="\n".join(roles))
             embed.add_field(name="Created", value=member.created_at.strftime(FMT))
             embed.add_field(name="Joined", value=member.joined_at.strftime(FMT))
-            embed.add_field(name="Member ID", value=member.id)
-            embed.add_field(name="Member Hash", value=str(hash(member)))
+            embed.add_field(name="User ID", value=member.id)
+            # embed.add_field(name="User Hash", value=str(hash(member)))
             embed.set_thumbnail(url=member.avatar_url)
             embed.set_footer(text=f"Requested by {ctx.author.display_name}", icon_url=ctx.author.avatar_url)
         await ctx.send(embed=embed)
@@ -47,7 +47,7 @@ class Meta(commands.Cog):
             embed.add_field(name="Server Owner", value=f"<@{guild.owner_id}>")
             embed.add_field(name="Server Region", value=str(guild.region).title())
             embed.add_field(name="Member Count", value=str(ctx.guild.member_count))
-            embed.add_field(name="Created at:", value=guild.created_at.strftime(FMT))
+            embed.add_field(name="Created", value=guild.created_at.strftime(FMT))
             embed.add_field(name="Server ID", value=guild.id)
             embed.add_field(name="Server Hash", value=str(hash(guild)))
             embed.set_thumbnail(url=guild.icon_url)
@@ -69,7 +69,7 @@ class Meta(commands.Cog):
         member = member or ctx.author
 
         async with ctx.typing():
-            embed = discord.Embed(title=f"{member.display_name}'s avatar", colour=COLOUR)
+            embed = discord.Embed(title=f"{member.display_name}'s profile picture", colour=COLOUR)
             embed.set_image(url=member.avatar_url)
             embed.set_footer(text=f"Requested by {ctx.author.display_name}", icon_url=ctx.author.avatar_url)
         await ctx.send(embed=embed)
@@ -96,8 +96,8 @@ class Meta(commands.Cog):
 
         with open(path) as f:
             prefixes = json.load(f)
-        with open(path, "w") as f:
             prefixes[str(ctx.guild.id)] = prefix
+        with open(path, "w") as f:
             json.dump(prefixes, f, indent=2, sort_keys=True)
         await ctx.send(f"The server's prefix has been changed to `{prefix}`.")
 
@@ -106,7 +106,7 @@ class Meta(commands.Cog):
     @member_info.error
     async def member_error(self, ctx, error):
         if isinstance(error, commands.BadArgument):
-            raise exceptions.MemberNotFoundError
+            await ctx.send("Please @mention a member.")
 
 
 def setup(bot):

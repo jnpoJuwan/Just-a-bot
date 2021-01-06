@@ -49,8 +49,6 @@ class JustABot(commands.Bot):
             await ctx.send("Sorry. This command is disabled, hence it can't be used.")
         elif isinstance(error, commands.MissingRequiredArgument):
             await ctx.send("Please insert all required arguments.")
-        elif isinstance(error, exceptions.MemberNotFoundError):
-            await ctx.send("Please @mention a member.")
         elif isinstance(error, commands.CheckFailure):
             await ctx.send("You don't have permission to use that command.")
         elif isinstance(error, commands.CommandOnCooldown):

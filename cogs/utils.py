@@ -87,8 +87,8 @@ class Utils(commands.Cog):
     @commands.command()
     async def get_prefix(self, ctx):
         """Get the guild's prefix."""
-        with open("configs/prefixes.json") as pf:
-            p = json.load(pf)[str(ctx.message.guild.id)]
+        with open("configs/prefixes.json") as f:
+            p = json.load(f)[str(ctx.message.guild.id)]
         await ctx.send(f"The server's prefix is `{p}`.")
 
     @commands.command(aliases=["len"])
