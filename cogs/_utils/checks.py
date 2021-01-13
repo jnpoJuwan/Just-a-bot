@@ -1,3 +1,5 @@
+import json
+
 from discord.ext import commands
 
 from . import exceptions
@@ -66,4 +68,6 @@ def is_in_guilds(*guild_ids):
 
 
 def is_jsguilds():
-    return is_in_guilds(750863262911954964, 764107035926593576)
+    with open('configs/jsservers.json') as f:
+        servers = json.load(f)
+    return is_in_guilds(*servers)

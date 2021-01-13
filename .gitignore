@@ -1,6 +1,14 @@
 # Byte-compiled files
 __pycache__/
 
-#  JSON files /Logs
-*.json
+# Configurations
+configs/*
+
+# Logs
 *.log
+
+# Environments
+.env
+.venv
+env/
+venv/

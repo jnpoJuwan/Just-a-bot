@@ -1,3 +1,5 @@
+import json
+
 from discord.ext import commands
 
 from ._utils import checks
@@ -9,7 +11,19 @@ class Owner(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        print(f"INFO: {__name__} is ready.")
+        print(f'INFO: {__name__} is ready.')
+
+    @commands.command()
+    @checks.is_bot_owner()
+    async def add_server(self, ctx):
+        guild = ctx.guild
+
+        with open('configs/jsservers.json') as f:
+            servers = json.load(f)
+        with open('configs/jsservers.json', 'w') as f:
+            json.dump(servers.append(guild.id), f, indent=2, sort_keys=True)
+
+        await ctx.send(f'{guild.name} has been added to the list of Just a chat... servers.')
 
     # CREDIT: @Rapptz (GitHub [https://github.com/Rapptz/RoboDanny/blob/rewrite/cogs/admin.py#L116])
     @commands.command(hidden=True)
@@ -19,9 +33,9 @@ class Owner(commands.Cog):
         try:
             self.bot.load_extension(module)
         except commands.ExtensionError as e:
-            await ctx.send(f"**{e.__class__.__name__}:** {e}")
+            await ctx.send(f'**{e.__class__.__name__}:** {e}')
         else:
-            await ctx.send(f"`{module}` has been loaded.")
+            await ctx.send(f'`{module}` has been loaded.')
 
     @commands.command(hidden=True)
     @checks.is_bot_owner()
@@ -30,9 +44,9 @@ class Owner(commands.Cog):
         try:
             self.bot.unload_extension(module)
         except commands.ExtensionError as e:
-            await ctx.send(f"**{e.__class__.__name__}:** {e}")
+            await ctx.send(f'**{e.__class__.__name__}:** {e}')
         else:
-            await ctx.send(f"`{module}` has been unloaded.")
+            await ctx.send(f'`{module}` has been unloaded.')
 
     @commands.command(hidden=True)
     @checks.is_bot_owner()
@@ -41,9 +55,9 @@ class Owner(commands.Cog):
         try:
             self.bot.reload_extension(module)
         except commands.ExtensionError as e:
-            await ctx.send(f"**{e.__class__.__name__}:** {e}")
+            await ctx.send(f'**{e.__class__.__name__}:** {e}')
         else:
-            await ctx.send(f"`{module}` has been reloaded.")
+            await ctx.send(f'`{module}` has been reloaded.')
 
 
 def setup(bot):
