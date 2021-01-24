@@ -1,3 +1,4 @@
-aiohttp
-discord.py
-pytz
+aiohttp>=3.6.0
+discord>=1.0.1
+pytz>=2020.1
+wikipedia>=1.4.0

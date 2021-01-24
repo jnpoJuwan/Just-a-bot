@@ -16,6 +16,8 @@ class Fun(commands.Cog):
 	async def on_ready(self):
 		print(f'INFO: {__name__} is ready.')
 
+	# TODO: ?uwu command.
+
 	@commands.command(name='8ball', aliases=['8-ball'])
 	async def _8ball(self, ctx, *, question='???'):
 		"""Choose a random answer from the Magic 8-Ball."""
@@ -25,9 +27,9 @@ class Fun(commands.Cog):
 		            'Signs point to yes.', 'Reply hazy, try again.', 'Ask again later.', 'Better not tell you now.',
 		            'Cannot predict now.', 'Concentrate and ask again.', 'Don\'t count on it.', 'My reply is no.',
 		            'My sources say no.', 'Outlook not so good.', 'Very doubtful.')
-		await ctx.send(f'> {question}\n**{random.choice(outcomes)}**')
+		await ctx.send(f'> {question}\n{random.choice(outcomes)}')
 
-	@commands.command(aliases=['cock_and_ball_torture'])
+	@commands.command()
 	async def cbt(self, ctx):
 		"""Send an embed with the summary for the Wikipedia page of 'Cock and ball torture'."""
 		# SEE: https://en.wikipedia.org/wiki/Cock_and_ball_torture
@@ -38,12 +40,6 @@ class Fun(commands.Cog):
 			embed.set_footer(text=f'Requested by {ctx.author.display_name} | Summary by Wikipedia',
 			                 icon_url=ctx.author.avatar_url)
 		await ctx.send(embed=embed)
-
-	@commands.command(aliases=['map', 'random_map'])
-	async def choose_map(self, ctx):
-		"""Choose a random Among Us map."""
-		outcomes = 'The Skeld', 'MIRA HQ', 'Polus'
-		await ctx.send(f'You should play in **{random.choice(outcomes)}.**')
 
 	@commands.command(aliases=['say'])
 	async def echo(self, ctx, *, text='echo'):
@@ -62,14 +58,15 @@ class Fun(commands.Cog):
 		             'Hey, you. You\'re finally awake.', '*Hey~* ;)', 'Hi!', 'How are you?', 'Howdy!', 'What\'s up?']
 		await ctx.send(random.choice(greetings))
 
-	@commands.command(aliases=['cock', 'dick'])
+	@commands.command(aliases=['cock', 'dick', 'peen', 'pp', 'schlong'])
 	@commands.cooldown(3, 60.0, commands.BucketType.user)
 	async def penis(self, ctx, member: discord.Member = None):
 		"""Send a random penis size between [0, 30] cm."""
 		member = member or ctx.author
-		n = random.randint(0, 30)
 		if member == self.bot.get_user(320325816712167426):  # @PD6#1510
 			n = 0
+		else:
+			n = random.randint(0, 30)
 
 		if n < 5:
 			await ctx.send(f'{member.mention}\'s micropenis is {n} cm long: **8{"=" * n}D**')
@@ -77,6 +74,11 @@ class Fun(commands.Cog):
 			await ctx.send(f'{member.mention}\'s penis is {n} cm long: **8{"=" * n}D**')
 		else:
 			await ctx.send(f'{member.mention}\'s hard monster cock is {n} cm long: **8{"=" * n}D**')
+
+	@penis.error
+	async def member_error(self, ctx, error):
+		if isinstance(error, commands.BadArgument):
+			await ctx.send('Please @mention a member.')
 
 	@commands.command()
 	async def ping(self, ctx):
@@ -105,18 +107,11 @@ class Fun(commands.Cog):
 		await ctx.send(f'I\'ve already told you `{p}spam` isn\'t an available command anymore.')
 
 	@commands.command(aliases=['diaeresis'])
-	async def umlaut(self, ctx, *, text='None'):
-		"""Send the given text with umlauted vowels."""
+	async def umlaut(self, ctx, *, text='text'):
+		"""Send the text with umlauted vowels."""
 		for vowel in 'aeiouwyAEIOUWY':
 			text = text.replace(vowel, vowel + '\u0308')
 		await ctx.send(text)
-
-	# Exception Handling.
-
-	@penis.error
-	async def member_error(self, ctx, error):
-		if isinstance(error, commands.BadArgument):
-			await ctx.send('Please @mention a member.')
 
 
 def setup(bot):

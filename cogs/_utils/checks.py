@@ -65,9 +65,3 @@ def is_in_guilds(*guild_ids):
             raise exceptions.ServerNotFoundError
         return guild.id in guild_ids
     return commands.check(predicate)
-
-
-def is_jsguilds():
-    with open('configs/jsservers.json') as f:
-        servers = json.load(f)
-    return is_in_guilds(*servers)

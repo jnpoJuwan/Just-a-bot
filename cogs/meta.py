@@ -34,6 +34,11 @@ class Meta(commands.Cog):
         embed.set_footer(text=f'Requested by {ctx.author.display_name}', icon_url=ctx.author.avatar_url)
         await ctx.send(embed=embed)
 
+    @member_info.error
+    async def member_error(self, ctx, error):
+        if isinstance(error, commands.BadArgument):
+            await ctx.send('Please @mention a member.')
+
     @commands.command(name='server_info', aliases=['server'])
     async def guild_info(self, ctx):
         """Send an embed with the guild's information."""
@@ -63,7 +68,11 @@ class Meta(commands.Cog):
         """Send the profile picture of the given member."""
         member = member or ctx.author
 
-        embed = discord.Embed(title=f'{member.display_name}\'s profile picture', colour=COLOUR)
+        if member.display_name.endswith('s') or member.display_name.endswith('S'):
+            embed = discord.Embed(title=f'{member.display_name}\' profile picture', colour=COLOUR)
+        else:
+            embed = discord.Embed(title=f'{member.display_name}\'s profile picture', colour=COLOUR)
+
         embed.set_image(url=member.avatar_url)
         embed.set_footer(text=f'Requested by {ctx.author.display_name}', icon_url=ctx.author.avatar_url)
         await ctx.send(embed=embed)
@@ -89,18 +98,12 @@ class Meta(commands.Cog):
 
         with open('configs/prefixes.json') as f:
             prefixes = json.load(f)
-        with open('configs/prefixes.json', 'w') as f:
             prefixes[str(ctx.guild.id)] = prefix
+
+        with open('configs/prefixes.json', 'w') as f:
             json.dump(prefixes, f, indent=2, sort_keys=True)
 
         await ctx.send(f'The server\'s prefix has been changed to `{prefix}`.')
-
-    # Exception Handling.
-
-    @member_info.error
-    async def member_error(self, ctx, error):
-        if isinstance(error, commands.BadArgument):
-            await ctx.send('Please @mention a member.')
 
 
 def setup(bot):

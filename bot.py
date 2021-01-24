@@ -1,16 +1,14 @@
 import json
-import os
 
 import discord
 from discord.ext import commands
-from dotenv import load_dotenv
 
-from cogs._utils.constants import COGS, DEFAULT_PREFIX, SPAM_LIMIT
 from cogs._utils import exceptions
+# HACK: I don't know why, but importing from cogs._utils.constants breaks *something* (maybe in my IDE),
+# so instead I have to copy the constants from there to configs.configs instead.
+from configs.configs import BOT_TOKEN, DEFAULT_PREFIX, COGS, OWNER_ID, SPAM_LIMIT
 
-load_dotenv()
-
-TOKEN = os.environ.get('JUST_A_BOT_TOKEN')
+TOKEN = BOT_TOKEN
 
 
 # CREDIT: Rapptz (GitHub [https://github.com/Rapptz/RoboDanny/blob/rewrite/bot.py#L44])
@@ -31,7 +29,7 @@ class JustABot(commands.Bot):
         super().__init__(
             command_prefix=_prefix_callable,
             case_insensitive=True,
-            owner_id=488828457703309313
+            owner_id=OWNER_ID
         )
         self.default_prefix = DEFAULT_PREFIX
 
@@ -44,7 +42,9 @@ class JustABot(commands.Bot):
 
     async def on_command_error(self, ctx, error):
         if isinstance(error, commands.CommandNotFound):
-            await ctx.send('Sorry. I can\'t find that command.')
+            # await ctx.send('Sorry. I can\'t find that command.')
+            await ctx.send('Sowwy! Oopsie-doopsie! We made a fucky wucky! '
+                           'We couldn\'t locate that commandy-wandy that you wanted! OwO!')
         elif isinstance(error, commands.MissingRequiredArgument):
             await ctx.send('Please insert all required arguments.')
         elif isinstance(error, commands.CheckFailure):
@@ -77,6 +77,6 @@ class JustABot(commands.Bot):
 bot = JustABot()
 
 if __name__ == '__main__':
-    for cog in COGS:
-        bot.load_extension(f'cogs.{cog[:-3]}')
+    for module in COGS:
+        bot.load_extension(module)
     bot.run(TOKEN)
