@@ -1,142 +1,114 @@
-import ast
+import io
 import json
+import textwrap
+import traceback
 import random
+from contextlib import redirect_stdout
 
 import discord
 from discord.ext import commands
 
-from ._utils.constants import SPAM_LIMIT
 from ._utils import exceptions
-
-
-def insert_returns(body):
-    # Insert return statement if the last expression is a expression statement.
-    if isinstance(body[-1], ast.Expr):
-        body[-1] = ast.Return(body[-1].value)
-        ast.fix_missing_locations(body[-1])
-
-    # For if statements, we insert returns into the body and the or else.
-    if isinstance(body[-1], ast.If):
-        insert_returns(body[-1].body)
-        insert_returns(body[-1].orelse)
-
-    # For with blocks, again we insert returns into the body.
-    if isinstance(body[-1], ast.With):
-        insert_returns(body[-1].body)
+from ._utils.constants import SPAM_LIMIT
 
 
 class Utils(commands.Cog):
-    def __init__(self, bot):
-        self.bot = bot
+	def __init__(self, bot):
+		self.bot = bot
 
-    @commands.Cog.listener()
-    async def on_ready(self):
-        print(f'INFO: {__name__} is ready.')
+	@commands.Cog.listener()
+	async def on_ready(self):
+		print(f'INFO: {__name__} is ready.')
 
-    # IDEA: is_down(self, ctx, service): Send True if the service is down, False otherwise.
+	@commands.command()
+	async def choose(self, ctx, *args):
+		"""Choose a random element from the given arguments."""
+		map(lambda x: x.strip(','), args)
+		await ctx.send(f'**{random.choice(args)}**')
 
-    @commands.command()
-    async def choose(self, ctx, *args):
-        """Choose a random element from the given arguments."""
-        map(lambda x: x.strip(','), args)
-        await ctx.send(f'**{random.choice(args)}**')
+	def cleanup_code(self, content):
+		"""Automatically removes code blocks from the code."""
+		# Remove ```py\n```.
+		if content.startswith('```') and content.endswith('```'):
+			return '\n'.join(content.split('\n')[1:-1])
 
-    # This command can be used for malicious purposes.
-    # CREDIT: @nitros12 (GitHub [https://gist.github.com/nitros12/2c3c265813121492655bc95aa54da6b9])
-    @commands.command(name='eval')
-    # checks.is_admin()
-    async def eval_(self, ctx, *, cmd):
-        """Evaluate the given source.
+		# Remove `foo`.
+		return content.strip('` \n')
 
-        Input is interpreted as newline separated statements.
-        If the last statement is an expression, that is the return value.
+	# CREDIT: @Rapptz (GitHub [https://github.com/Rapptz/RoboDanny/blob/rewrite/cogs/admin.py#L216])
+	@commands.command(name='eval', pass_context=True)
+	async def _eval(self, ctx, *, body: str):
+		"""Evaluate Python code."""
+		env = {
+			'bot': self.bot,
+			'ctx': ctx,
+			'channel': ctx.channel,
+			'author': ctx.author,
+			'guild': ctx.guild,
+			'message': ctx.message
+		}
 
-        Such that `!eval 1 + 1` gives `2` as the result.
-        """
-        env = {
-            '__import__': __import__,
-            'author': ctx.author,
-            'bot': ctx.bot,
-            'ctx': ctx,
-            'commands': commands,
-            'discord': discord,
-            'guild': ctx.guild,
-            'message': ctx.message,
-        }
+		env.update(globals())
 
-        fn_name = '_eval_expr'
-        cmd = cmd.strip('` ')
+		body = self.cleanup_code(body)
+		stdout = io.StringIO()
+		to_compile = f'async def func():\n{textwrap.indent(body, "  ")}'
 
-        # Add a layer of indentation.
-        cmd = '\n'.join(f'    {i}' for i in cmd.splitlines())
+		try:
+			exec(to_compile, env)
+		except Exception as e:
+			return await ctx.send(f'```py\n{e.__class__.__name__}: {e}\n```')
 
-        # Wrap in async def body.
-        body = f'async def {fn_name}():\n{cmd}'
-        parsed = ast.parse(body)
-        body = parsed.body[0].body
+		func = env['func']
+		try:
+			with redirect_stdout(stdout):
+				ret = await func()
+		except:
+			value = stdout.getvalue()
+			await ctx.send(f'```py\n{value}{traceback.format_exc()}\n```')
+		else:
+			value = stdout.getvalue()
 
-        insert_returns(body)
+			if ret is None:
+				if value:
+					await ctx.send(f'```py\n{value}\n```')
+			else:
+				self._last_result = ret
+				await ctx.send(f'```py\n{value}{ret}\n```')
 
-        exec(compile(parsed, filename='<ast>', mode='exec'), env)
-        result = (await eval(f'{fn_name}()', env))
-        await ctx.send(result)
+	@commands.command(aliases=['coin_flip', 'heads', 'tails'])
+	async def flip_coin(self, ctx, amount=1):
+		"""Flip a coin of the given amount of times."""
+		if amount >= SPAM_LIMIT:
+			raise exceptions.SpamError
 
-    @commands.command(aliases=['coin_flip', 'heads', 'tails'])
-    async def flip_coin(self, ctx, amount=1):
-        """Flip a coin of the given amount of times."""
-        if amount >= SPAM_LIMIT:
-            raise exceptions.SpamError
-        else:
-            for _ in range(amount):
-                await ctx.send(f'**{random.choice(["Heads", "Tails"])}**')
+		for _ in range(amount):
+			await ctx.send(f'**{random.choice(["Heads", "Tails"])}**')
 
-    @commands.command(aliases=['prefix'])
-    async def get_prefix(self, ctx):
-        """Get the guild's prefix."""
-        with open('configs/prefixes.json') as f:
-            p = json.load(f)[str(ctx.message.guild.id)]
-        await ctx.send(f'This server\'s prefix is `{p}`.')
+	@commands.command(aliases=['prefix'])
+	async def get_prefix(self, ctx):
+		"""Get the guild's prefix."""
+		file = open('configs/prefixes.json')
+		p = json.load(file)[str(ctx.message.guild.id)]
+		await ctx.send(f'This server\'s prefix is `{p}`.')
 
-    @commands.command(aliases=['len'])
-    async def length(self, ctx, *, text):
-        """Send the length of the given text."""
-        await ctx.send(f'**{len(text)}**')
+	@commands.command()
+	async def random(self, ctx):
+		"""Send a random number in the range [0, 1) or [0, 1] depending on rounding."""
+		await ctx.send(f'**{random.random()}**')
 
-    @commands.command()
-    async def random(self, ctx):
-        """Send a random number in the range [0, 1) or [0, 1] depending on rounding."""
-        await ctx.send(f'**{random.random()}**')
+	@commands.command(aliases=['dice', 'randint'])
+	async def roll(self, ctx, *, b=20, amount=1):
+		"""Send a random integer in range [1, b], including both end points, an amount of times."""
+		if b < 1:
+			await ctx.send('Please enter a positive integer (Use `!random` for rationals).')
+			return
+		if amount >= SPAM_LIMIT:
+			raise exceptions.SpamError
 
-    @commands.command(aliases=['dice', 'randint'])
-    async def roll(self, ctx, *, b=20, amount=1):
-        """Send a random integer in range [1, b], including both end points, an amount of times."""
-        if b < 1:
-            await ctx.send('Please input a positive integer (Use `!random` for rationals).')
-        else:
-            if amount >= SPAM_LIMIT:
-                raise exceptions.SpamError
-            else:
-                for _ in range(amount):
-                    await ctx.send(f'**{random.randint(1, b)}**')
-
-    @commands.command()
-    async def sort(self, ctx, *iterable):
-        """Send a new list containing all items from the given iterable in ascending order."""
-        map(lambda x: x.strip(','), iterable)
-        await ctx.send(' '.join(sorted(iterable)))
-
-    @commands.command()
-    async def words(self, ctx, *, text):
-        """Send the amount of words in the message's content."""
-        await ctx.send(f'**{len(text.split())}**')
-
-    # Exception Handling.
-
-    @eval_.error
-    async def eval_error(self, ctx, error):
-        if not isinstance(error, commands.UserInputError):
-            await ctx.send(error)
+		for _ in range(amount):
+			await ctx.send(f'**{random.randint(1, b)}**')
 
 
 def setup(bot):
-    bot.add_cog(Utils(bot))
+	bot.add_cog(Utils(bot))
