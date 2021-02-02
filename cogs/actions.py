@@ -1,3 +1,5 @@
+import random
+
 import discord
 from discord.ext import commands
 
@@ -5,10 +7,6 @@ from discord.ext import commands
 class Actions(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-
-    @commands.Cog.listener()
-    async def on_ready(self):
-        print(f'INFO: {__name__} is ready.')
 
     @commands.command()
     @commands.cooldown(3, 60.0, commands.BucketType.user)
@@ -21,15 +19,14 @@ class Actions(commands.Cog):
         elif member == self.bot.user:
             await ctx.send('You cuddled me.')
         else:
-            await member.send(f'{ctx.author.name} cuddled you.')
             await ctx.send(f'You cuddled {member.display_name}.')
+            await member.send(f'{ctx.author.name} cuddled you.')
 
     @commands.command(aliases=["cri"])
     @commands.cooldown(3, 60.0, commands.BucketType.user)
     async def cry(self, ctx):
         """Cry."""
-        file = open('images/cry.jpg', 'rb')
-        image = discord.File(file)
+        image = discord.File(open('images/cry.jpg', 'rb'))
         await ctx.send(file=image)
 
     @commands.command(aliases=['cream', 'jizz'])
@@ -41,9 +38,11 @@ class Actions(commands.Cog):
         elif member == self.bot.user:
             await ctx.send('Y-you want to c-cum inside my tiny robot bussy, master? o///o')
         else:
+            await ctx.send((f'You creamed {member.display_name}\' little bussy. '
+                            'You\'re under arrest to horny jail.' if member.display_name.lower().endswith('s')
+                            else f'You creamed {member.display_name}\'s little bussy. '
+                            'You\'re under arrest to horny jail.'))
             await member.send(f'{ctx.author.name} creamed you.')
-            await ctx.send(f'You creamed {member.display_name}\'s little bussy. '
-                           'You\'re under arrest to horny jail.')
 
     @commands.command()
     @commands.cooldown(3, 60.0, commands.BucketType.user)
@@ -57,9 +56,11 @@ class Actions(commands.Cog):
         elif member == self.bot.user:
             await ctx.send('You fucking destroyed my fragile robot bussy.')
         else:
+            await ctx.send((f'You destroyed {member.display_name}\' fragile asshole. '
+                            'You\'re under arrest to horny jail.' if member.display_name.lower().endswith('s')
+                            else f'You destroyed {member.display_name}\'s fragile asshole. '
+                            'You\'re under arrest to horny jail.'))
             await member.send(f'{ctx.author.name} fucking destroyed your fragile asshole.')
-            await ctx.send(f'You destroyed {member.display_name}\'s fragile asshole. '
-                           'You\'re under arrest to horny jail.')
 
     @commands.command(aliases=['hand_hold', 'hold_hands'])
     @commands.cooldown(3, 60.0, commands.BucketType.user)
@@ -70,8 +71,8 @@ class Actions(commands.Cog):
         elif member == self.bot.user:
             await ctx.send('You held my robot hand.')
         else:
-            await member.send(f'{ctx.author.name} held your hand.')
-            await ctx.send(f'You committed pre-marital hold handing with {member.display_name}.')
+            await ctx.send(f'You committed pre-marital hand holding with {member.display_name}.')
+            await member.send(f'{ctx.author.name} fucking destroyed your fragile asshole.')
 
     @commands.command()
     @commands.cooldown(3, 60.0, commands.BucketType.user)
@@ -84,8 +85,8 @@ class Actions(commands.Cog):
         elif member == self.bot.user:
             await ctx.send('You hugged me. Thanks, I needed one.')
         else:
-            await member.send(f'{ctx.author.name} hugged you.')
             await ctx.send(f'You hugged {member.display_name}.')
+            await member.send(f'{ctx.author.name} hugged you.')
 
     @commands.command(aliases=['assassinate', 'murder', 'slaughter'])
     @commands.cooldown(3, 60.0, commands.BucketType.user)
@@ -98,8 +99,8 @@ class Actions(commands.Cog):
         elif member == self.bot.user:
             await ctx.send('M-master... *is killed*')
         else:
-            await member.send(f'{ctx.author.name} killed you.')
             await ctx.send(f'You have murdered {member.display_name}. You\'re now on the FBI\'s wanted list.')
+            await member.send(f'{ctx.author.name} killed you.')
 
     @commands.command()
     @commands.cooldown(3, 60.0, commands.BucketType.user)
@@ -112,15 +113,14 @@ class Actions(commands.Cog):
         elif member == self.bot.user:
             await ctx.send('You kissed me.')
         else:
-            await member.send(f'{ctx.author.name} kissed you.')
             await ctx.send(f'You kissed {member.display_name}.')
+            await member.send(f'{ctx.author.name} kissed you.')
 
     @commands.command()
     @commands.cooldown(3, 60.0, commands.BucketType.user)
     async def moan(self, ctx):
         """Moan."""
-        file = open('images/moan.png', 'rb')
-        image = discord.File(file)
+        image = discord.File(open('images/moan.png', 'rb'))
         await ctx.send('And this guy moaned at least this loud.', file=image)
 
     @commands.command()
@@ -132,8 +132,8 @@ class Actions(commands.Cog):
         elif member == self.bot.user:
             await ctx.send('You poked me.')
         else:
-            await member.send(f'{ctx.author.name} poked you.')
             await ctx.send(f'You poked {member.display_name}.')
+            await member.send(f'{ctx.author.name} poked you.')
 
     @commands.command()
     async def scream(self, ctx):
@@ -145,29 +145,44 @@ class Actions(commands.Cog):
     @commands.command()
     @commands.cooldown(3, 60.0, commands.BucketType.user)
     async def slap(self, ctx, member: discord.Member = None):
-        """Slap the member."""
+        """Slap the member or their arse."""
+        choices = [
+            ('You facepalmed.',
+             'You slapped me.',
+             f'You slapped {member.display_name}.',
+             f'{ctx.author.name} slapped you.'),
+
+            ('You slapped your own thicc arse',
+             'You slapped my arse.',
+             (f'You slapped {member.display_name}\' thicc arse.' if member.display_name.lower().endswith('s')
+              else f'You slapped {member.display_name}\'s thicc arse.'),
+             f'{ctx.author.name} slapped your thicc arse.')
+        ]
+
+        output = random.choice(choices)
         if member is None or member == ctx.author:
-            await ctx.send('You facepalmed.')
+            await ctx.send(output[0])
         elif member == self.bot.user:
-            await ctx.send('You slapped me.')
+            await ctx.send(output[1])
         else:
-            await member.send(f'{ctx.author.name} slapped you.')
-            await ctx.send(f'You slapped {member.display_name}.')
+            await ctx.send(output[2])
+            await member.send(output[3])
 
     @commands.command(aliases=['suq'])
     @commands.cooldown(3, 60.0, commands.BucketType.user)
     async def suck(self, ctx, member: discord.Member = None):
-        """Suck the member."""
+        """Suck the member off."""
         if member is None or member == ctx.author:
-            await ctx.send('You self-sucked.')
+            image = discord.File(open('images/suck.png', 'rb'))
+            await ctx.send(file=image)
         elif member == self.bot.user:
             await ctx.send('You sucked my tiny cock.')
         elif member.id == 567488628003962880:  # Dr. IPA#3047
-            await member.send(f'{ctx.author.name} suqqed you.')
             await ctx.send(f'You suqqed {member.display_name}. You\'re under arrest to horny jail.')
+            await member.send(f'{ctx.author.name} suqqed you.')
         else:
-            await member.send(f'{ctx.author.name} sucked you.')
             await ctx.send(f'You sucked {member.display_name}. You\'re under arrest to horny jail.')
+            await member.send(f'{ctx.author.name} sucked you.')
 
     @cuddle.error
     @cum.error
@@ -179,7 +194,7 @@ class Actions(commands.Cog):
     @poke.error
     @slap.error
     @suck.error
-    async def action_error(self, ctx, error):
+    async def member_error(self, ctx, error):
         if isinstance(error, commands.BadArgument):
             await ctx.send('Please @mention a member.')
 
