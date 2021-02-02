@@ -16,10 +16,6 @@ class Utils(commands.Cog):
 	def __init__(self, bot):
 		self.bot = bot
 
-	@commands.Cog.listener()
-	async def on_ready(self):
-		print(f'INFO: {__name__} is ready.')
-
 	@commands.command()
 	async def choose(self, ctx, *args):
 		"""Choose a random element from the given arguments."""

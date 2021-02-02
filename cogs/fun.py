@@ -12,10 +12,6 @@ class Fun(commands.Cog):
 	def __init__(self, bot):
 		self.bot = bot
 
-	@commands.Cog.listener()
-	async def on_ready(self):
-		print(f'INFO: {__name__} is ready.')
-
 	# TODO: ?uwu command.
 
 	@commands.command(name='8ball', aliases=['8-ball'])
@@ -28,6 +24,10 @@ class Fun(commands.Cog):
 		            'Cannot predict now.', 'Concentrate and ask again.', 'Don\'t count on it.', 'My reply is no.',
 		            'My sources say no.', 'Outlook not so good.', 'Very doubtful.')
 		await ctx.send(f'> {question}\n{random.choice(outcomes)}')
+
+	@commands.command()
+	async def alive(self, ctx):
+		await ctx.send('I\'m already alive.')
 
 	@commands.command()
 	async def cbt(self, ctx):
@@ -63,17 +63,19 @@ class Fun(commands.Cog):
 	async def penis(self, ctx, member: discord.Member = None):
 		"""Send a random penis size between [0, 30] cm."""
 		member = member or ctx.author
-		if member == self.bot.get_user(320325816712167426):  # @PD6#1510
+		if member == self.bot.get_user(320325816712167426) or member == self.bot.get_user(567488628003962880):
 			n = 0
 		else:
 			n = random.randint(0, 30)
 
+		_penis = f'**c{"=" * n}3**'
+
 		if n < 5:
-			await ctx.send(f'{member.mention}\'s micropenis is {n} cm long: **8{"=" * n}D**')
+			await ctx.send(f'{member.mention}\'s micropenis is {n} cm long: {_penis}')
 		elif n < 20:
-			await ctx.send(f'{member.mention}\'s penis is {n} cm long: **8{"=" * n}D**')
+			await ctx.send(f'{member.mention}\'s penis is {n} cm long: {_penis}')
 		else:
-			await ctx.send(f'{member.mention}\'s hard monster cock is {n} cm long: **8{"=" * n}D**')
+			await ctx.send(f'{member.mention}\'s hard monster cock is {n} cm long: {_penis}')
 
 	@penis.error
 	async def member_error(self, ctx, error):
@@ -109,7 +111,8 @@ class Fun(commands.Cog):
 	@commands.command(aliases=['diaeresis'])
 	async def umlaut(self, ctx, *, text='text'):
 		"""Send the text with umlauted vowels."""
-		for vowel in 'aeiouwyAEIOUWY':
+		vowels = ['a', 'e', 'i', 'o', 'u', 'w', 'y', 'A', 'E', 'I', 'O', 'U', 'W', 'Y']
+		for vowel in vowels:
 			text = text.replace(vowel, vowel + '\u0308')
 		await ctx.send(text)
 
