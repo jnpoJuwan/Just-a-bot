@@ -6,21 +6,18 @@ from discord.ext import commands
 from cogs._utils import exceptions
 # HACK: I don't know why, but importing from cogs._utils.constants breaks *something* (maybe in my IDE),
 # so instead I have to copy the constants from there to configs.configs instead.
-from configs.configs import BOT_TOKEN, DEFAULT_PREFIX, COGS, OWNER_ID, SPAM_LIMIT
-
-TOKEN = BOT_TOKEN
+from configs.configs import DEFAULT_PREFIX, OWNER_ID, SPAM_LIMIT
 
 
 # CREDIT: Rapptz (GitHub [https://github.com/Rapptz/RoboDanny/blob/rewrite/bot.py#L44])
-def _prefix_callable(_bot, message):
+def _prefix_callable(bot, message):
     _id = bot.user.id
     base = [f'<@!{_id}> ', f'<@{_id}> ']
     if message.guild is None:
         base.append(DEFAULT_PREFIX)
     else:
-        with open('configs/prefixes.json') as f:
-            prefixes = json.load(f)
-            base.append(prefixes[str(message.guild.id)])
+        prefixes = json.load(open('configs/prefixes.json'))
+        base.append(prefixes[str(message.guild.id)])
     return base
 
 
@@ -38,7 +35,7 @@ class JustABot(commands.Bot):
     async def on_ready(self):
         activity = discord.Game(name='with Juwan\'s mental state.')
         await self.change_presence(activity=activity)
-        print(f'INFO: Logged on as @{bot.user.name}.')
+        print(f'INFO: Logged on as @{self.user.name}.')
 
     async def on_command_error(self, ctx, error):
         if isinstance(error, commands.CommandNotFound):
@@ -72,11 +69,3 @@ class JustABot(commands.Bot):
         if message.author.bot:
             return
         await self.process_commands(message)
-
-
-bot = JustABot()
-
-if __name__ == '__main__':
-    for module in COGS:
-        bot.load_extension(module)
-    bot.run(TOKEN)
