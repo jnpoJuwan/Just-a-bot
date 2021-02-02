@@ -1,18 +1,15 @@
+import json
+
 import discord
 from discord.ext import commands
 
 from ._utils import checks
+from ._utils.constants import DEFAULT_PREFIX
 
 
 class Admin(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-
-    @commands.Cog.listener()
-    async def on_ready(self):
-        print(f'INFO: {__name__} is ready.')
-
-    # Administration commands.
 
     @commands.command()
     @commands.guild_only()
@@ -24,7 +21,7 @@ class Admin(commands.Cog):
 
         if reason:
             await member.ban(reason=reason)
-            await ctx.send(f'{member.mention} was banned by {ctx.author.mention}.\n[Reason: {reason}]')
+            await ctx.send(f'{member.mention} was banned by {ctx.author.mention}.\n[Reason: "{reason}"]')
         else:
             await member.ban()
             await ctx.send(f'{member.mention} was banned by {ctx.author.mention}.')
@@ -70,26 +67,28 @@ class Admin(commands.Cog):
                 'https://support.discord.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID-'
             )
 
-    # Moderation commands.
+    # Configs commands.
 
-    @commands.command(aliases=['clear', 'delete'])
-    @commands.cooldown(3, 60.0, commands.BucketType.user)
-    @checks.is_mod()
-    async def purge(self, ctx, amount=0):
-        """Purge the given amount of messages."""
-        limit = 200
-        if amount > limit:
-            await ctx.send(f'The amount can\'t exceed {limit} messages.')
-            return
+    @commands.group()
+    async def configs(self, ctx):
+        pass
 
-        await ctx.message.delete()
-        await ctx.channel.purge(limit=amount)
-        await ctx.send(f'Purged {amount} message(s).', delete_after=2.5)
+    @configs.command()
+    @commands.guild_only()
+    @checks.is_admin()
+    async def prefix(self, ctx, prefix=None):
+        """Change the guild's prefix."""
+        prefix = prefix or DEFAULT_PREFIX
 
-    @purge.error
-    async def purge_error(self, ctx, error):
-        if isinstance(error, commands.BadArgument):
-            await ctx.send('Please enter a positive integer.')
+        with open('configs/prefixes.json') as f:
+            prefixes = json.load(f)
+
+        prefixes[str(ctx.guild.id)] = prefix
+
+        with open('configs/prefixes.json', 'w') as f:
+            json.dump(prefixes, f, indent=2, sort_keys=True)
+
+        await ctx.send(f'The server\'s prefix has been changed to `{prefix}`.')
 
 
 def setup(bot):
