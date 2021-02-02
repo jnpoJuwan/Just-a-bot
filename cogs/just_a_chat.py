@@ -5,16 +5,11 @@ from discord.ext import commands
 from pytz import timezone, utc
 
 from ._utils.constants import COLOUR
-from ._utils import checks
 
 
 class JustAChat(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-
-    @commands.Cog.listener()
-    async def on_ready(self):
-        print(f'INFO: {__name__} is ready.')
 
     # GLOSS: 'js' means 'Just some', not 'JavaScript'.
 

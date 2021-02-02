@@ -20,10 +20,6 @@ class Help(commands.Cog):
         self.bot = bot
         bot.help_command = None
 
-    @commands.Cog.listener()
-    async def on_ready(self):
-        print(f'INFO: {__name__} is ready.')
-
     @commands.command(aliases=['info'])
     async def help(self, ctx):
         """Send an embed with the Just a bot...'s information and a section of its commands."""
@@ -31,6 +27,7 @@ class Help(commands.Cog):
         p = json.load(file)[str(ctx.message.guild.id)]
 
         current_page = 0
+        # HACK: Using a list with tuples of the page contents.
         pages = [
             # Page 0
             (
@@ -61,13 +58,14 @@ class Help(commands.Cog):
 
             # Page 1
             (
-                ('Administration Commands',
+                ('Administration/Moderation Commands',
                  f'►`{p}ban <@member> (reason)` bans the member.\n'
-                 f'►`{p}settings prefix [prefix]` changes the server\'s prefix.\n'
+                 f'►`{p}configs prefix [prefix]` changes the server\'s prefix.\n'
                  f'►`{p}kick <@member> (reason)` kicks the member.\n'
-                 f'►`{p}logout` logouts the bot.\n'
-                 f'►`{p}purge [amount]` (or `{p}clear (num)`) purges the amount of messages.\n'
-                 f'►`{p}unban <user_id>` unbans the user.'),
+                 f'►`{p}mute` mutes the member.\n'
+                 f'►`{p}purge [amount]` (or `{p}clear [amount]`) deletes the amount of messages.\n'
+                 f'►`{p}unban <user_id>` unbans the user.\n'
+                 f'►`{p}unmute` unmutes the member.'),
             ),
 
             # Page 2
@@ -75,7 +73,7 @@ class Help(commands.Cog):
                 ('Utility Commands',
                  f'►`{p}choose [list]` randomly chooses an item of choice.\n'
                  f'►`{p}coin_flip [amount]` flips a coin an amount of times.\n'
-                 f'►`{p}eval [command]` evaluates Python code.\n'
+                 f'►`{p}eval [code]` evaluates Python code.\n'
                  f'►`{p}get_prefix` sends the server\'s prefix.\n'
                  f'►`{p}poll [question]` creates a poll for a question.\n'
                  f'►`{p}random` sends a fractional random number between 0 and 1.\n'
@@ -106,7 +104,7 @@ class Help(commands.Cog):
             return (
                 # Conditions for a successful pagination:
                 all((
-                    # Reaction is on this message.
+                    # Reaction is on the help message.
                     reaction_.message.id == message.id,
                     # Reaction is a pagination emoji.
                     str(reaction_.emoji) in PAGINATION_EMOJI,
@@ -123,7 +121,8 @@ class Help(commands.Cog):
                 reaction, user = await ctx.bot.wait_for('reaction_add', timeout=300.0, check=event_check)
             except asyncio.TimeoutError:
                 await message.clear_reactions()
-                embed = discord.Embed(title='Timeout Error', description='The command has timed out.', colour=COLOUR)
+                embed.set_footer(text=f'Requested by {ctx.author.name} | Paginator timed out',
+                                 icon_url=ctx.author.avatar_url)
                 await message.edit(embed=embed)
                 break
 

@@ -8,10 +8,6 @@ class Owner(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.Cog.listener()
-    async def on_ready(self):
-        print(f'INFO: {__name__} is ready.')
-
     @commands.command(name='quit', aliases=['die', 'logout', 'sleep'])
     @checks.is_bot_owner()
     async def _quit(self, ctx):
