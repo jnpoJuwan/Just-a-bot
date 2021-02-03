@@ -22,7 +22,7 @@ class Owner(commands.Cog):
         """Load a module."""
         try:
             self.bot.load_extension(module)
-        except commands.ExtensionError as e:
+        except Exception as e:
             await ctx.send(f'**{e.__class__.__name__}:** {e}')
         else:
             await ctx.send(f'`{module}` has been loaded.')
@@ -33,7 +33,7 @@ class Owner(commands.Cog):
         """Unload a module."""
         try:
             self.bot.unload_extension(module)
-        except commands.ExtensionError as e:
+        except Exception as e:
             await ctx.send(f'**{e.__class__.__name__}:** {e}')
         else:
             await ctx.send(f'`{module}` has been unloaded.')
@@ -44,7 +44,7 @@ class Owner(commands.Cog):
         """Reload a module."""
         try:
             self.bot.reload_extension(module)
-        except commands.ExtensionError as e:
+        except Exception as e:
             await ctx.send(f'**{e.__class__.__name__}:** {e}')
         else:
             await ctx.send(f'`{module}` has been reloaded.')
