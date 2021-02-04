@@ -11,7 +11,7 @@ class Mod(commands.Cog):
 	@commands.command()
 	@checks.is_mod()
 	async def mute(self, ctx, member: discord.Member):
-		"""Mute the member."""
+		"""Mutes the member."""
 		await member.edit(mute=True)
 		await ctx.send(f'{member.display_name} has been muted.')
 
@@ -19,7 +19,7 @@ class Mod(commands.Cog):
 	@commands.cooldown(3, 60.0, commands.BucketType.user)
 	@checks.is_mod()
 	async def purge(self, ctx, amount=0):
-		"""Purge the given amount of messages."""
+		"""Purges the amount of messages."""
 		limit = 200
 		if amount > limit:
 			await ctx.send(f'The amount can\'t exceed {limit} messages.')
@@ -37,7 +37,7 @@ class Mod(commands.Cog):
 	@commands.command()
 	@checks.is_mod()
 	async def unmute(self, ctx, member: discord.Member):
-		"""Unmute the member."""
+		"""Unmutes the member."""
 		await member.edit(mute=False)
 		await ctx.send(f'{member.display_name} has been unmuted.')
 

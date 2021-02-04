@@ -15,7 +15,7 @@ class JustAChat(commands.Cog):
 
     @commands.command(aliases=['jsd', 'just_some_documents'])
     async def jsdocs(self, ctx):
-        """Send an embed with the Just some documents...."""
+        """Sends Just some documents...."""
         docs_values = {
             'Just a bot...': 'https://github.com/jnpoJuwan/Just-a-bot',
             'Just a map...': 'https://goo.gl/maps/Z3VDj5JkwpVrDUSd7',
@@ -42,7 +42,7 @@ class JustAChat(commands.Cog):
 
     @commands.command(aliases=['jstz'])
     async def jstimezones(self, ctx):
-        """Send an embed with Just a chat... users' time zones."""
+        """Sends Just a chat... users' time zones."""
         message = await ctx.send('Calculating time zones...')
 
         # ctx.typing() is used, since this command takes an *extremely* long time.
@@ -72,7 +72,7 @@ class JustAChat(commands.Cog):
 
     @commands.command(aliases=['jsyt'])
     async def jsyoutube(self, ctx):
-        """Send an embed with some Just a chat... user's YouTube channels."""
+        """Send some Just a chat... user's YouTube channels."""
         channel_values = {
             'Aurora': 'https://www.youtube.com/channel/UCmDE7oQp2wzTLxd7lc4mA9A',
             'D\'ignoranza': 'https://www.youtube.com/channel/UCI4ZJ0QmSokr6ctUfURqm5A',

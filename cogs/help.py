@@ -20,9 +20,22 @@ class Help(commands.Cog):
         self.bot = bot
         bot.help_command = None
 
-    @commands.command(aliases=['info'])
+    @commands.command()
+    async def info(self, ctx):
+        """Sends information about the bot."""
+        file = open('configs/prefixes.json')
+        p = json.load(file)[str(ctx.message.guild.id)]
+        msg = ('A personal general purpose bot developed for tinkering with creating a bot for '
+               '[Just a chat...](https://aminoapps.com/c/conlang-conscript/home/) servers. '
+               f'Use `{p}help` to see its commands.\n\n'
+               '[Bot Invite](https://discord.com/api/oauth2/authorize?client_id=764106437701140490&permissions=8'
+               '&scope=bot) | [Source Code](https://github.com/jnpoJuwan/Just-a-bot)')
+        embed = discord.Embed(title='About Just a bot...', description=msg, colour=COLOUR)
+        await ctx.send(embed=embed)
+
+    @commands.command()
     async def help(self, ctx):
-        """Send an embed with the Just a bot...'s information and a section of its commands."""
+        """Sends the bot's commands."""
         file = open('configs/prefixes.json')
         p = json.load(file)[str(ctx.message.guild.id)]
 
@@ -36,7 +49,8 @@ class Help(commands.Cog):
                  f'►`{p}8ball [question]` asks the *Magic 8-Ball* for answers.\n'
                  f'►`{p}cbt` sends the Wikipedia summary and page for Cock and Ball Torture.\n'
                  f'►`{p}echo [message]` (or `{p}say [message]`) echoes the message.\n'
-                 f'►`{p}penis [@member]` sends a member\'s dick length.\n'
+                 f'►`{p}info` sends the information about this bot.\n'
+                 f'►`{p}penis [@member]` sends the member\'s penis length.\n'
                  f'►`{p}umlaut [message]` sënds yöür sëntëncë wïth ümläüts.\n'
                  f'►`{p}hello` Hi!\n'
                  f'►`{p}ping` Pong.'),
@@ -53,7 +67,7 @@ class Help(commands.Cog):
                  f'►`{p}poke <@member>` pokes the member.\n'
                  f'►`{p}scream` makes you scream.\n'
                  f'►`{p}slap <@member>` slaps the member in the face.\n'
-                 f'►`{p}suck` (or `{p}suq`) sucks the member.')
+                 f'►`{p}suck` (or `{p}suq`) sucks the member off.')
             ),
 
             # Page 1
@@ -76,7 +90,6 @@ class Help(commands.Cog):
                  f'►`{p}eval [code]` evaluates Python code.\n'
                  f'►`{p}get_prefix` sends the server\'s prefix.\n'
                  f'►`{p}poll [question]` creates a poll for a question.\n'
-                 f'►`{p}random` sends a fractional random number between 0 and 1.\n'
                  f'►`{p}roll [die] [amount]` rolls a die of a input number an amount of times.\n'),
                 ('Meta Commands',
                  f'►`{p}member [@member]` sends the member\'s information.\n'

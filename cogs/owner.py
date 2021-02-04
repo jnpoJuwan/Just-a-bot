@@ -19,7 +19,7 @@ class Owner(commands.Cog):
     @commands.command(hidden=True)
     @checks.is_bot_owner()
     async def load(self, ctx, module):
-        """Load a module."""
+        """Loads a module."""
         try:
             self.bot.load_extension(module)
         except Exception as e:
@@ -30,7 +30,7 @@ class Owner(commands.Cog):
     @commands.command(hidden=True)
     @checks.is_bot_owner()
     async def unload(self, ctx, module):
-        """Unload a module."""
+        """Unloads a module."""
         try:
             self.bot.unload_extension(module)
         except Exception as e:
@@ -41,7 +41,7 @@ class Owner(commands.Cog):
     @commands.command(hidden=True)
     @checks.is_bot_owner()
     async def reload(self, ctx, module):
-        """Reload a module."""
+        """Reloads a module."""
         try:
             self.bot.reload_extension(module)
         except Exception as e:
@@ -52,7 +52,7 @@ class Owner(commands.Cog):
     @commands.command(hidden=True)
     @checks.is_bot_owner()
     async def reload_all(self, ctx):
-        """Reload all extensions."""
+        """Reloads all extensions."""
         msg = await ctx.send('Reloading modules...')
         for module in COGS:
             self.bot.unload_extension(module)

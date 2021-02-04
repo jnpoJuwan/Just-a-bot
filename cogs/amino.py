@@ -16,7 +16,7 @@ class Amino(commands.Cog):
 	@commands.cooldown(3, 60.0, commands.BucketType.user)
 	@checks.is_mod()
 	async def jsguidelines(self, ctx):
-		"""Send an embed with (Amino) Just a chat... guidelines."""
+		"""Sends the Just a chat... guidelines from Amino."""
 		natlangs = discord.Embed(title='Just some guidelines...', colour=COLOUR)
 		natlangs.add_field(name=':flag_gb::flag_us: English',
 		                   value='The Amino\'s Guidelines apply here!\n'

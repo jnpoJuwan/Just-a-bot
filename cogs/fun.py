@@ -16,7 +16,7 @@ class Fun(commands.Cog):
 
 	@commands.command(name='8ball', aliases=['8-ball'])
 	async def _8ball(self, ctx, *, question='???'):
-		"""Choose a random answer from the Magic 8-Ball."""
+		"""Asks the question to the Magic 8-Ball."""
 		# SEE: https://en.wikipedia.org/wiki/Magic_8-Ball#Possible_answers
 		outcomes = ('It is certain.', 'It is decidedly so.', 'Without a doubt.', 'Yes - definitely.',
 		            'You may rely on it.', 'As I see it, yes.', 'Most likely.', 'Outlook good.', 'Yes.',
@@ -26,12 +26,8 @@ class Fun(commands.Cog):
 		await ctx.send(f'> {question}\n{random.choice(outcomes)}')
 
 	@commands.command()
-	async def alive(self, ctx):
-		await ctx.send('I\'m already alive.')
-
-	@commands.command()
 	async def cbt(self, ctx):
-		"""Send an embed with the summary for the Wikipedia page of 'Cock and ball torture'."""
+		"""Send the summary for the Wikipedia page of 'Cock and ball torture'."""
 		# SEE: https://en.wikipedia.org/wiki/Cock_and_ball_torture
 		async with ctx.typing():
 			embed = discord.Embed(title='Cock and ball torture',
@@ -42,18 +38,18 @@ class Fun(commands.Cog):
 		await ctx.send(embed=embed)
 
 	@commands.command(aliases=['say'])
-	async def echo(self, ctx, *, text='echo'):
-		"""Echo the user's input-message."""
-		await ctx.send(text)
+	async def echo(self, ctx, *, message='echo'):
+		"""Echoes the user's message."""
+		await ctx.send(message)
 
-	@commands.command(hidden=True, aliases=['fuckyou', 'f*ck_you'])
+	@commands.command(aliases=['fuckyou', 'f*ck_you'], hidden=True)
 	async def fuck_you(self, ctx):
 		"""Respond to 'fuck you'."""
 		await ctx.send('Fuck my robot body yourself, you fucking coward :rage:.')
 
 	@commands.command(aliases=['hey', 'hi'])
 	async def hello(self, ctx):
-		"""Greet the author."""
+		"""Greets the member."""
 		greetings = ['G\'day!', 'Good afternoon!', 'Good evening!', 'Good morning!', 'Hello!', 'Hey!', 'Hey, you!',
 		             'Hey, you. You\'re finally awake.', '*Hey~* ;)', 'Hi!', 'How are you?', 'Howdy!', 'What\'s up?']
 		await ctx.send(random.choice(greetings))
@@ -61,7 +57,7 @@ class Fun(commands.Cog):
 	@commands.command(aliases=['cock', 'dick', 'peen', 'pp', 'schlong'])
 	@commands.cooldown(3, 60.0, commands.BucketType.user)
 	async def penis(self, ctx, member: discord.Member = None):
-		"""Send a random penis size between [0, 30] cm."""
+		"""Sends the member's penis size."""
 		member = member or ctx.author
 		if member == self.bot.get_user(320325816712167426) or member == self.bot.get_user(567488628003962880):
 			n = 0
@@ -84,12 +80,12 @@ class Fun(commands.Cog):
 
 	@commands.command()
 	async def ping(self, ctx):
-		"""Send 'pong'."""
+		"""Sends "pong"."""
 		await ctx.send('pong')
 
 	@commands.command()
 	async def poll(self, ctx, *, question):
-		"""Create a basic poll."""
+		"""Creates a basic poll."""
 		embed = discord.Embed(title='Poll', description=question, colour=COLOUR)
 		embed.set_footer(text=f'Requested by {ctx.author.name}', icon_url=ctx.author.avatar_url)
 		message = await ctx.send(embed=embed)
@@ -97,20 +93,20 @@ class Fun(commands.Cog):
 		await message.add_reaction('👎')
 		await message.add_reaction('🤷')
 
-	@commands.command(aliases=['pang', 'peng', 'pung', 'pyng', 'pwng'])
+	@commands.command(aliases=['pang', 'peng', 'pung', 'pyng', 'pwng'], hidden=True)
 	async def pong(self, ctx):
-		"""Send 'ping' (sike)."""
+		"""Sends "ping" (sike)."""
 		await ctx.send('No! This isn\'t how you\'re supposed to play the game.')
 
 	@commands.command(hidden=True)
 	async def spam(self, ctx):
-		with open('configs/prefixes.json') as f:
-			p = json.load(f)[str(ctx.message.guild.id)]
-		await ctx.send(f'I\'ve already told you `{p}spam` isn\'t an available command anymore.')
+		file = open('configs/prefixes.json')
+		p = json.load(file)[str(ctx.message.guild.id)]
+		await ctx.send(f'I\'ve already said `{p}spam` is *not* an available command anymore.')
 
 	@commands.command(aliases=['diaeresis'])
 	async def umlaut(self, ctx, *, text='text'):
-		"""Send the text with umlauted vowels."""
+		"""Sends the text with umlauted vowels."""
 		vowels = ['a', 'e', 'i', 'o', 'u', 'w', 'y', 'A', 'E', 'I', 'O', 'U', 'W', 'Y']
 		for vowel in vowels:
 			text = text.replace(vowel, vowel + '\u0308')

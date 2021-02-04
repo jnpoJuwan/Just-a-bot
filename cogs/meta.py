@@ -16,7 +16,7 @@ class Meta(commands.Cog):
 
     @commands.command(aliases=['member'])
     async def member_info(self, ctx, member: discord.Member = None):
-        """Send an embed with the given member's information."""
+        """Sends the information about the member."""
         member = member or ctx.author
         roles = [(role.mention if role.name != '@everyone' else role.name) for role in member.roles][::-1]
         top_role = (member.top_role.mention if member.top_role.name != '@everyone' else member.top_role.name)
@@ -41,7 +41,7 @@ class Meta(commands.Cog):
 
     @commands.command(aliases=['server'])
     async def server_info(self, ctx):
-        """Send an embed with the guild's information."""
+        """Sends the information about the server."""
         guild = ctx.guild
 
         embed = discord.Embed(title=guild.name, colour=COLOUR)
@@ -57,7 +57,7 @@ class Meta(commands.Cog):
 
     @commands.command()
     async def icon(self, ctx):
-        """Send the guild's icon."""
+        """Sends the server's icon."""
         embed = discord.Embed(title=f'Icon of {ctx.guild.name}', colour=COLOUR)
         embed.set_image(url=ctx.guild.icon_url)
         embed.set_footer(text=f'Requested by {ctx.author.display_name}', icon_url=ctx.author.avatar_url)
@@ -65,7 +65,7 @@ class Meta(commands.Cog):
 
     @commands.command(aliases=['pfp'])
     async def avatar(self, ctx, member: discord.Member = None):
-        """Send the member's avatar."""
+        """Sends the member's avatar."""
         member = member or ctx.author
         title = (f'{member.display_name}\' profile picture' if member.display_name.lower().endswith('s')
                  else f'{member.display_name}\'s profile picture')
@@ -77,7 +77,7 @@ class Meta(commands.Cog):
 
     @commands.command(aliases=['source'])
     async def source_code(self, ctx):
-        """Send the URL the bot's GitHub repository."""
+        """Sends the URL the bot's GitHub repository."""
         embed = discord.Embed(title='Source Code', description='https://github.com/jnpoJuwan/just_a_bot',
                               colour=COLOUR)
         embed.set_footer(text=f'Requested by {ctx.author.display_name}', icon_url=ctx.author.avatar_url)

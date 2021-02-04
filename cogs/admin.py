@@ -15,30 +15,30 @@ class Admin(commands.Cog):
     @commands.guild_only()
     @checks.is_admin()
     async def ban(self, ctx, member: discord.Member, *, reason=None):
-        """Ban the member for a reason."""
+        """Bans the member."""
         if member == ctx.author:
             await ctx.send('You can\'t ban yourself.')
 
+        await member.ban(reason=reason)
+
         if reason:
-            await member.ban(reason=reason)
             await ctx.send(f'{member.mention} was banned by {ctx.author.mention}.\n[Reason: "{reason}"]')
         else:
-            await member.ban()
             await ctx.send(f'{member.mention} was banned by {ctx.author.mention}.')
 
     @commands.command()
     @commands.guild_only()
     @checks.is_admin()
     async def kick(self, ctx, member: discord.Member, *, reason=None):
-        """Kick the member for a reason."""
+        """Kicks the member."""
         if member == ctx.author:
             await ctx.send('You can\'t kick yourself.')
 
+        await member.kick(reason=reason)
+
         if reason:
-            await member.kick(reason=reason)
             await ctx.send(f'{member.mention} was kicked by {ctx.author.mention}.\n[Reason: {reason}]')
         else:
-            await member.kick()
             await ctx.send(f'{member.mention} was kicked by {ctx.author.mention}.')
 
     @ban.error
@@ -51,7 +51,7 @@ class Admin(commands.Cog):
     @commands.guild_only()
     @checks.is_admin()
     async def unban(self, ctx, user_id: int = None):
-        """Unban the user by user ID."""
+        """Unbans the user."""
         if user_id is None:
             raise commands.BadArgument
 
@@ -63,7 +63,7 @@ class Admin(commands.Cog):
     async def unban_error(self, ctx, error):
         if isinstance(error, commands.BadArgument):
             await ctx.send(
-                'Please insert a valid user ID.\n**Support:** '
+                'Please insert a valid user ID.\nHow to get an user ID:'
                 'https://support.discord.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID-'
             )
 
@@ -77,15 +77,13 @@ class Admin(commands.Cog):
     @commands.guild_only()
     @checks.is_admin()
     async def prefix(self, ctx, prefix=None):
-        """Change the guild's prefix."""
+        """Changes the server's prefix or defaults the prefix."""
         prefix = prefix or DEFAULT_PREFIX
-
-        with open('configs/prefixes.json') as f:
-            prefixes = json.load(f)
-
+        path = 'configs/prefixes.json'
+        prefixes = json.load(open(path))
         prefixes[str(ctx.guild.id)] = prefix
 
-        with open('configs/prefixes.json', 'w') as f:
+        with open(path, 'w') as f:
             json.dump(prefixes, f, indent=2, sort_keys=True)
 
         await ctx.send(f'The server\'s prefix has been changed to `{prefix}`.')
