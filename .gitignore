@@ -2,7 +2,7 @@
 __pycache__/
 
 # Configurations
-configs/*
+bot/configs/*
 
 # Logs
 *.log
