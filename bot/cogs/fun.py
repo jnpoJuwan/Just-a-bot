@@ -5,14 +5,12 @@ import discord
 import wikipedia
 from discord.ext import commands
 
-from ._utils.constants import COLOUR
+from ..utils.constants import COLOUR
 
 
 class Fun(commands.Cog):
 	def __init__(self, bot):
 		self.bot = bot
-
-	# TODO: ?uwu command.
 
 	@commands.command(name='8ball', aliases=['8-ball'])
 	async def _8ball(self, ctx, *, question='???'):
@@ -27,7 +25,7 @@ class Fun(commands.Cog):
 
 	@commands.command()
 	async def cbt(self, ctx):
-		"""Send the summary for the Wikipedia page of 'Cock and ball torture'."""
+		"""Send the Wikipedia article for 'Cock and ball torture'."""
 		# SEE: https://en.wikipedia.org/wiki/Cock_and_ball_torture
 		async with ctx.typing():
 			embed = discord.Embed(title='Cock and ball torture',
@@ -80,7 +78,7 @@ class Fun(commands.Cog):
 
 	@commands.command()
 	async def ping(self, ctx):
-		"""Sends "pong"."""
+		"""Pings back."""
 		await ctx.send('pong')
 
 	@commands.command()
@@ -95,7 +93,7 @@ class Fun(commands.Cog):
 
 	@commands.command(aliases=['pang', 'peng', 'pung', 'pyng', 'pwng'], hidden=True)
 	async def pong(self, ctx):
-		"""Sends "ping" (sike)."""
+		"""Pongs back."""
 		await ctx.send('No! This isn\'t how you\'re supposed to play the game.')
 
 	@commands.command(hidden=True)

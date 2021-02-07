@@ -29,7 +29,7 @@ class Actions(commands.Cog):
         image = discord.File(open('images/cry.jpg', 'rb'))
         await ctx.send(file=image)
 
-    @commands.command(aliases=['ejaculate', 'cream', 'jizz'])
+    @commands.command(aliases=['ejaculate', 'cream', 'jizz', 'nut'])
     @commands.cooldown(3, 60.0, commands.BucketType.user)
     async def cum(self, ctx, member: discord.Member = None):
         """Cums or creams the member."""

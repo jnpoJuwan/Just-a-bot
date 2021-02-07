@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 
-from ._utils import checks
+from ..utils import checks
 
 
 class Mod(commands.Cog):

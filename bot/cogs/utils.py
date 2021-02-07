@@ -8,8 +8,8 @@ from contextlib import redirect_stdout
 import discord
 from discord.ext import commands
 
-from ._utils import exceptions
-from ._utils.constants import SPAM_LIMIT
+from ..utils import exceptions
+from ..utils.constants import SPAM_LIMIT
 
 
 class Utils(commands.Cog):
@@ -30,7 +30,7 @@ class Utils(commands.Cog):
 		# Remove `foo`.
 		return content.strip('` \n')
 
-	# CREDIT: @Rapptz (GitHub [https://github.com/Rapptz/RoboDanny/blob/rewrite/cogs/admin.py#L216])
+	# CREDIT: @Rapptz (https://github.com/Rapptz/RoboDanny/blob/rewrite/cogs/admin.py#L216)
 	@commands.command(name='eval', pass_context=True)
 	async def _eval(self, ctx, *, body: str):
 		"""Evaluates Python code."""

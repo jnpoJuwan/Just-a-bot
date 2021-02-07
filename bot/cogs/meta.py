@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 
-from ._utils.constants import COLOUR
+from ..utils.constants import COLOUR
 
 
 def fmt(dt=None):

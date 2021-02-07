@@ -3,8 +3,8 @@ import json
 import discord
 from discord.ext import commands
 
-from ._utils import checks
-from ._utils.constants import DEFAULT_PREFIX
+from ..utils import checks
+from ..utils.constants import DEFAULT_PREFIX
 
 
 class Admin(commands.Cog):
@@ -18,6 +18,7 @@ class Admin(commands.Cog):
         """Bans the member."""
         if member == ctx.author:
             await ctx.send('You can\'t ban yourself.')
+            return
 
         await member.ban(reason=reason)
 
@@ -33,6 +34,7 @@ class Admin(commands.Cog):
         """Kicks the member."""
         if member == ctx.author:
             await ctx.send('You can\'t kick yourself.')
+            return
 
         await member.kick(reason=reason)
 
@@ -46,6 +48,21 @@ class Admin(commands.Cog):
     async def kickban_error(self, ctx, error):
         if isinstance(error, commands.BadArgument):
             await ctx.send('Please @mention a member.')
+
+    @commands.command()
+    @commands.guild_only()
+    @checks.is_admin()
+    async def set_prefix(self, ctx, prefix=None):
+        """Sets the server's prefix."""
+        prefix = prefix or DEFAULT_PREFIX
+        path = 'configs/prefixes.json'
+        prefixes = json.load(open(path))
+        prefixes[str(ctx.guild.id)] = prefix
+
+        with open(path, 'w') as f:
+            json.dump(prefixes, f, indent=2, sort_keys=True)
+
+        await ctx.send(f'The server\'s prefix has been changed to `{prefix}`.')
 
     @commands.command()
     @commands.guild_only()
@@ -66,27 +83,6 @@ class Admin(commands.Cog):
                 'Please insert a valid user ID.\nHow to get an user ID:'
                 'https://support.discord.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID-'
             )
-
-    # Configs commands.
-
-    @commands.group()
-    async def configs(self, ctx):
-        pass
-
-    @configs.command()
-    @commands.guild_only()
-    @checks.is_admin()
-    async def prefix(self, ctx, prefix=None):
-        """Changes the server's prefix or defaults the prefix."""
-        prefix = prefix or DEFAULT_PREFIX
-        path = 'configs/prefixes.json'
-        prefixes = json.load(open(path))
-        prefixes[str(ctx.guild.id)] = prefix
-
-        with open(path, 'w') as f:
-            json.dump(prefixes, f, indent=2, sort_keys=True)
-
-        await ctx.send(f'The server\'s prefix has been changed to `{prefix}`.')
 
 
 def setup(bot):
