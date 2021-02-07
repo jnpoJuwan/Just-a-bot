@@ -1,3 +1,4 @@
+import asyncio
 import typing as t
 
 import discord
@@ -153,11 +154,9 @@ class Paginator:
 
 		while True:
 			try:
-				reaction, user = await bot_reference.wait_for('reaction_add', timeout=5, check=react_check)
-			except TimeoutError:
-				await self._message.clear_all_reactions()
-				self._message.set_footer('Paginator timed out')
-				await self.update_message()
+				reaction, user = await bot_reference.wait_for('reaction_add', timeout=self._timeout, check=react_check)
+			except asyncio.TimeoutError:
+				await self.clear_all_reactions()
 				break
 
 			if str(reaction) == FIRST_ARROW:
