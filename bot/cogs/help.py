@@ -49,7 +49,7 @@ class PrettyHelpCommand(commands.MinimalHelpCommand):
 
     def add_bot_commands_formatting(self, commands_, heading):
         if commands_:
-            outputs = [f'`{c.name}` — {c.short_doc}' for c in commands_]
+            outputs = [f'`{c.name}` ◆ {c.short_doc}' for c in commands_]
             joined = "\n".join(outputs)
             self.paginator.add_line(f'\n\n**{heading}**\n')
             self.paginator.add_line(joined)
