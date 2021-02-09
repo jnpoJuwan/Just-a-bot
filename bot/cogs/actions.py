@@ -26,7 +26,7 @@ class Actions(commands.Cog):
     @commands.cooldown(3, 60.0, commands.BucketType.user)
     async def cry(self, ctx):
         """Cries."""
-        image = discord.File(open('images/cry.jpg', 'rb'))
+        image = discord.File(open('bot/images/cry.jpg', 'rb'))
         await ctx.send(file=image)
 
     @commands.command(aliases=['ejaculate', 'cream', 'jizz', 'nut'])
@@ -44,7 +44,7 @@ class Actions(commands.Cog):
                             'You\'re under arrest to horny jail.'))
             await member.send(f'{ctx.author.name} creamed you.')
 
-    @commands.command()
+    @commands.command(aliases=['fuq'])
     @commands.cooldown(3, 60.0, commands.BucketType.user)
     async def fuck(self, ctx, member: discord.Member = None):
         """Fucks the member."""
@@ -120,7 +120,7 @@ class Actions(commands.Cog):
     @commands.cooldown(3, 60.0, commands.BucketType.user)
     async def moan(self, ctx):
         """Moans."""
-        image = discord.File(open('images/moan.png', 'rb'))
+        image = discord.File(open('bot/images/moan.png', 'rb'))
         await ctx.send('And this guy moaned at least this loud.', file=image)
 
     @commands.command()
@@ -138,7 +138,7 @@ class Actions(commands.Cog):
     @commands.command()
     async def scream(self, ctx):
         """Screams."""
-        file = open('images/scream.jpg', 'rb')
+        file = open('bot/images/scream.jpg', 'rb')
         image = discord.File(file)
         await ctx.send(file=image)
 
@@ -173,7 +173,7 @@ class Actions(commands.Cog):
     async def suck(self, ctx, member: discord.Member = None):
         """Sucks the member off."""
         if member is None or member == ctx.author:
-            image = discord.File(open('images/suck.png', 'rb'))
+            image = discord.File(open('bot/images/suck.png', 'rb'))
             await ctx.send(file=image)
         elif member == self.bot.user:
             await ctx.send('You sucked my tiny cock.')
