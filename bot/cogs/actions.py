@@ -12,7 +12,7 @@ class Actions(commands.Cog):
     @commands.cooldown(3, 60.0, commands.BucketType.user)
     async def cuddle(self, ctx, member: discord.Member = None):
         """Cuddles the member."""
-        if member is None:
+        if not member:
             await ctx.send('You cuddled your pillow, since you\'re alone and lonely.')
         elif member == ctx.author:
             await ctx.send('You cuddled yourself.')
@@ -29,11 +29,11 @@ class Actions(commands.Cog):
         image = discord.File(open('bot/images/cry.jpg', 'rb'))
         await ctx.send(file=image)
 
-    @commands.command(aliases=['ejaculate', 'cream', 'jizz', 'nut'])
+    @commands.command(aliases=['ejaculate', 'cream', 'jizz', 'nut', 'splooge'])
     @commands.cooldown(3, 60.0, commands.BucketType.user)
     async def cum(self, ctx, member: discord.Member = None):
         """Cums or creams the member."""
-        if member is None or member == ctx.author:
+        if not member or member == ctx.author:
             await ctx.send('Oopsie-doopsie! You cummed all over yourself!')
         elif member == self.bot.user:
             await ctx.send('Y-you want to c-cum inside my tiny robot bussy, master? o///o')
@@ -48,7 +48,7 @@ class Actions(commands.Cog):
     @commands.cooldown(3, 60.0, commands.BucketType.user)
     async def fuck(self, ctx, member: discord.Member = None):
         """Fucks the member."""
-        if member is None:
+        if not member:
             await ctx.send('You fucked your pillow, since you\'re alone and lonely, '
                            'and officially became PD6.')
         elif member == ctx.author:
@@ -66,7 +66,7 @@ class Actions(commands.Cog):
     @commands.cooldown(3, 60.0, commands.BucketType.user)
     async def hold_hand(self, ctx, member: discord.Member = None):
         """Holds hands with the member."""
-        if member is None or member == ctx.author:
+        if not member or member == ctx.author:
             await ctx.send('You held your own hand.')
         elif member == self.bot.user:
             await ctx.send('You held my robot hand.')
@@ -78,12 +78,12 @@ class Actions(commands.Cog):
     @commands.cooldown(3, 60.0, commands.BucketType.user)
     async def hug(self, ctx, member: discord.Member = None):
         """Hugs the member."""
-        if member is None:
+        if not member:
             await ctx.send('You hugged your pillow, since you\'re alone and lonely.')
         elif member == ctx.author:
             await ctx.send('You hugged yourself.')
         elif member == self.bot.user:
-            await ctx.send('You hugged me. Thanks, I needed one.')
+            await ctx.send('You hugged me. I appreciate it.')
         else:
             await ctx.send(f'You hugged {member.display_name}.')
             await member.send(f'{ctx.author.name} hugged you.')
@@ -92,12 +92,12 @@ class Actions(commands.Cog):
     @commands.cooldown(3, 60.0, commands.BucketType.user)
     async def kill(self, ctx, member: discord.Member = None):
         """Brutally kills the member."""
-        if member is None:
+        if not member:
             await ctx.send('You didn\'t killed anyone.')
         elif member == ctx.author:
             await ctx.send('Hey. You wanna talk about this?')
         elif member == self.bot.user:
-            await ctx.send('M-master... *is killed*')
+            await ctx.send('But m-master... \\*is killed\\*')
         else:
             await ctx.send(f'You have murdered {member.display_name}. You\'re now on the Magnvs\' wanted list.')
             await member.send(f'{ctx.author.name} killed you.')
@@ -106,12 +106,12 @@ class Actions(commands.Cog):
     @commands.cooldown(3, 60.0, commands.BucketType.user)
     async def kiss(self, ctx, member: discord.Member = None):
         """Kisses the member."""
-        if member is None:
+        if not member:
             await ctx.send('You kissed your pillow, since you\'re lonely.')
         elif member == ctx.author:
             await ctx.send('You kissed yourself.')
         elif member == self.bot.user:
-            await ctx.send('You kissed me.')
+            await ctx.send('You kissed me. <:oniichan:808866738812878858>')
         else:
             await ctx.send(f'You kissed {member.display_name}.')
             await member.send(f'{ctx.author.name} kissed you.')
@@ -127,7 +127,7 @@ class Actions(commands.Cog):
     @commands.cooldown(3, 60.0, commands.BucketType.user)
     async def poke(self, ctx, member: discord.Member = None):
         """Pokes the given member."""
-        if member is None or member == ctx.author:
+        if not member or member == ctx.author:
             await ctx.send('You poked yourself.')
         elif member == self.bot.user:
             await ctx.send('You poked me.')
@@ -152,15 +152,15 @@ class Actions(commands.Cog):
              f'You slapped {member.display_name}.',
              f'{ctx.author.name} slapped you.'),
 
-            ('You slapped your own thicc arse',
+            ('You slapped your own thicc juicy arse',
              'You slapped my arse.',
-             (f'You slapped {member.display_name}\' thicc arse.' if member.display_name.lower().endswith('s')
-              else f'You slapped {member.display_name}\'s thicc arse.'),
-             f'{ctx.author.name} slapped your thicc arse.')
+             (f'You slapped {member.display_name}\' thicc juicy arse.' if member.display_name.lower().endswith('s')
+              else f'You slapped {member.display_name}\'s thicc juicy arse.'),
+             f'{ctx.author.name} slapped your thicc juicy arse.')
         ]
 
         output = random.choice(choices)
-        if member is None or member == ctx.author:
+        if not member or member == ctx.author:
             await ctx.send(output[0])
         elif member == self.bot.user:
             await ctx.send(output[1])
@@ -172,7 +172,7 @@ class Actions(commands.Cog):
     @commands.cooldown(3, 60.0, commands.BucketType.user)
     async def suck(self, ctx, member: discord.Member = None):
         """Sucks the member off."""
-        if member is None or member == ctx.author:
+        if not member or member == ctx.author:
             image = discord.File(open('bot/images/suck.png', 'rb'))
             await ctx.send(file=image)
         elif member == self.bot.user:
