@@ -33,8 +33,11 @@ class Actions(commands.Cog):
     @commands.cooldown(3, 60.0, commands.BucketType.user)
     async def cum(self, ctx, member: discord.Member = None):
         """Cums or creams the member."""
-        if not member or member == ctx.author:
+        if not member:
             await ctx.send('Oopsie-doopsie! You cummed all over yourself!')
+        if member == ctx.author:
+            image = discord.File(open('bot/images/cream.png', 'rb'))
+            await ctx.send(file=image)
         elif member == self.bot.user:
             await ctx.send('Y-you want to c-cum inside my tiny robot bussy, master? o///o')
         else:
