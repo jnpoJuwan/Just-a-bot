@@ -99,7 +99,7 @@ class Actions(commands.Cog):
         elif member == self.bot.user:
             await ctx.send('M-master... *is killed*')
         else:
-            await ctx.send(f'You have murdered {member.display_name}. You\'re now on the FBI\'s wanted list.')
+            await ctx.send(f'You have murdered {member.display_name}. You\'re now on the Magnvs\' wanted list.')
             await member.send(f'{ctx.author.name} killed you.')
 
     @commands.command()
