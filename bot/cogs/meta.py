@@ -18,7 +18,7 @@ class Meta(commands.Cog):
     async def member_info(self, ctx, member: discord.Member = None):
         """Sends some information about the member."""
         member = member or ctx.author
-        roles = [(role.mention if role.name != '@everyone' else role.name) for role in member.roles][::-1]
+        roles = [role.mention for role in member.roles if role.name != '@everyone'][::-1]
         top_role = (member.top_role.mention if member.top_role.name != '@everyone' else member.top_role.name)
 
         embed = discord.Embed(colour=COLOUR)
@@ -26,7 +26,7 @@ class Meta(commands.Cog):
         embed.add_field(name='Nickname', value=member.display_name)
         embed.add_field(name='Top Role', value=top_role)
         embed.add_field(name=f'Roles ({len(roles)})',
-                        value=' '.join(roles) if len(roles) < 10 else ' '.join(roles[:10]) + ' ...')
+                        value=' '.join(roles) if len(roles) <= 10 else ' '.join(roles[:10]) + ' ...')
         embed.add_field(name='Created:', value=fmt(member.created_at))
         embed.add_field(name='Joined:', value=fmt(member.joined_at))
         embed.add_field(name='User ID', value=member.id)

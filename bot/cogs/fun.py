@@ -105,7 +105,7 @@ class Fun(commands.Cog):
 	@commands.command(aliases=['diaeresis'])
 	async def umlaut(self, ctx, *, text='text'):
 		"""Sends the text with umlauted vowels."""
-		vowels = ['a', 'e', 'i', 'o', 'u', 'w', 'y', 'A', 'E', 'I', 'O', 'U', 'W', 'Y']
+		vowels = ['a', 'e', 'i', 'j', 'o', 'u', 'w', 'y', 'A', 'E', 'I', 'J', 'O', 'U', 'W', 'Y']
 		for vowel in vowels:
 			text = text.replace(vowel, vowel + '\u0308')
 		await ctx.send(text)
