@@ -141,7 +141,7 @@ class Paginator:
 		try:
 			await self._message.remove_reaction(reaction, author)
 		except discord.HTTPException:
-			# Silently ignore if no permission to remove reaction (e.g. DMs).
+			# Silently ignore if no permission to remove reaction (e.g. in DMs).
 			pass
 
 	async def _start_listener(self, author: t.Union[discord.User, discord.Member], bot_reference):

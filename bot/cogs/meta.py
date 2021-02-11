@@ -16,7 +16,7 @@ class Meta(commands.Cog):
 
     @commands.command(aliases=['member'])
     async def member_info(self, ctx, member: discord.Member = None):
-        """Sends the information about the member."""
+        """Sends some information about the member."""
         member = member or ctx.author
         roles = [(role.mention if role.name != '@everyone' else role.name) for role in member.roles][::-1]
         top_role = (member.top_role.mention if member.top_role.name != '@everyone' else member.top_role.name)
@@ -41,7 +41,7 @@ class Meta(commands.Cog):
 
     @commands.command(aliases=['server'])
     async def server_info(self, ctx):
-        """Sends the information about the server."""
+        """Sends some information about the server."""
         guild = ctx.guild
 
         embed = discord.Embed(title=guild.name, colour=COLOUR)
@@ -77,7 +77,7 @@ class Meta(commands.Cog):
 
     @commands.command(aliases=['source'])
     async def source_code(self, ctx):
-        """Sends the URL the bot's GitHub repository."""
+        """Sends an URL the bot's GitHub repo."""
         embed = discord.Embed(title='Source Code', description='https://github.com/jnpoJuwan/just_a_bot',
                               colour=COLOUR)
         embed.set_footer(text=f'Requested by {ctx.author.display_name}', icon_url=ctx.author.avatar_url)
