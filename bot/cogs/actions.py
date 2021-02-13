@@ -26,7 +26,7 @@ class Actions(commands.Cog):
     @commands.cooldown(3, 60.0, commands.BucketType.user)
     async def cry(self, ctx):
         """Cries."""
-        image = discord.File(open('bot/images/cry.jpg', 'rb'))
+        image = discord.File(open('bot/data/cry.jpg', 'rb'))
         await ctx.send(file=image)
 
     @commands.command(aliases=['ejaculate', 'cream', 'jizz', 'nut', 'splooge'])
@@ -36,7 +36,7 @@ class Actions(commands.Cog):
         if not member:
             await ctx.send('Oopsie-doopsie! You cummed all over yourself!')
         if member == ctx.author:
-            image = discord.File(open('bot/images/cream.png', 'rb'))
+            image = discord.File(open('bot/data/cream.png', 'rb'))
             await ctx.send(file=image)
         elif member == self.bot.user:
             await ctx.send('Y-you want to c-cum inside my tiny robot bussy, master? o///o')
@@ -123,7 +123,7 @@ class Actions(commands.Cog):
     @commands.cooldown(3, 60.0, commands.BucketType.user)
     async def moan(self, ctx):
         """Moans."""
-        image = discord.File(open('bot/images/moan.png', 'rb'))
+        image = discord.File(open('bot/data/moan.png', 'rb'))
         await ctx.send('And this guy moaned at least this loud.', file=image)
 
     @commands.command()
@@ -141,7 +141,7 @@ class Actions(commands.Cog):
     @commands.command()
     async def scream(self, ctx):
         """Screams."""
-        file = open('bot/images/scream.jpg', 'rb')
+        file = open('bot/data/scream.jpg', 'rb')
         image = discord.File(file)
         await ctx.send(file=image)
 
@@ -176,7 +176,7 @@ class Actions(commands.Cog):
     async def suck(self, ctx, member: discord.Member = None):
         """Sucks the member off."""
         if not member or member == ctx.author:
-            image = discord.File(open('bot/images/suck.png', 'rb'))
+            image = discord.File(open('bot/data/suck.png', 'rb'))
             await ctx.send(file=image)
         elif member == self.bot.user:
             await ctx.send('You sucked my tiny cock.')

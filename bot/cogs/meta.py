@@ -5,7 +5,7 @@ from ..utils.constants import COLOUR
 
 
 def fmt(dt=None):
-    if dt is None:
+    if not dt:
         return 'N/A'
     return f'{dt:%Y-%m-%d %H:%M UTC}'
 
