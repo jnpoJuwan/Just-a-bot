@@ -146,7 +146,7 @@ class Actions(commands.Cog):
         elif member == self.bot.user:
             await ctx.send('You rejected me. <:noooooooo:809935851052072980>')
         else:
-            await ctx.send(f'Ew. Get away from {ctx.author.name}, {member.display_name}.')
+            await ctx.send(f'Ew. Get away from {ctx.author.display_name}, {member.display_name}.')
             await member.send(f'{ctx.author.name} told you to get away from them.')
 
     @commands.command()
