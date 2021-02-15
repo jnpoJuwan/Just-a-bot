@@ -11,7 +11,7 @@ class Actions(commands.Cog):
     @commands.command()
     @commands.cooldown(3, 60.0, commands.BucketType.user)
     async def cuddle(self, ctx, member: discord.Member = None):
-        """Cuddles the member."""
+        """Cuddles someone."""
         if not member:
             await ctx.send('You cuddled your pillow, since you\'re alone and lonely.')
         elif member == ctx.author:
@@ -32,7 +32,7 @@ class Actions(commands.Cog):
     @commands.command(aliases=['ejaculate', 'cream', 'jizz', 'nut', 'splooge'])
     @commands.cooldown(3, 60.0, commands.BucketType.user)
     async def cum(self, ctx, member: discord.Member = None):
-        """Cums or creams the member."""
+        """Cums or creams someone."""
         if not member:
             await ctx.send('Oopsie-doopsie! You cummed all over yourself!')
         if member == ctx.author:
@@ -50,7 +50,7 @@ class Actions(commands.Cog):
     @commands.command(aliases=['fuq'])
     @commands.cooldown(3, 60.0, commands.BucketType.user)
     async def fuck(self, ctx, member: discord.Member = None):
-        """Fucks the member."""
+        """Fucks someone."""
         if not member:
             await ctx.send('You fucked your pillow, since you\'re alone and lonely, '
                            'and officially became PD6.')
@@ -68,7 +68,7 @@ class Actions(commands.Cog):
     @commands.command(aliases=['hand_hold', 'hold_hands'])
     @commands.cooldown(3, 60.0, commands.BucketType.user)
     async def hold_hand(self, ctx, member: discord.Member = None):
-        """Holds hands with the member."""
+        """Holds hands with someone."""
         if not member or member == ctx.author:
             await ctx.send('You held your own hand.')
         elif member == self.bot.user:
@@ -80,7 +80,7 @@ class Actions(commands.Cog):
     @commands.command()
     @commands.cooldown(3, 60.0, commands.BucketType.user)
     async def hug(self, ctx, member: discord.Member = None):
-        """Hugs the member."""
+        """Hugs someone."""
         if not member:
             await ctx.send('You hugged your pillow, since you\'re alone and lonely.')
         elif member == ctx.author:
@@ -94,7 +94,7 @@ class Actions(commands.Cog):
     @commands.command(aliases=['assassinate', 'murder', 'slaughter'])
     @commands.cooldown(3, 60.0, commands.BucketType.user)
     async def kill(self, ctx, member: discord.Member = None):
-        """Brutally kills the member."""
+        """Brutally kills someone."""
         if not member:
             await ctx.send('You didn\'t killed anyone.')
         elif member == ctx.author:
@@ -108,7 +108,7 @@ class Actions(commands.Cog):
     @commands.command()
     @commands.cooldown(3, 60.0, commands.BucketType.user)
     async def kiss(self, ctx, member: discord.Member = None):
-        """Kisses the member."""
+        """Kisses someone."""
         if not member:
             await ctx.send('You kissed your pillow, since you\'re lonely.')
         elif member == ctx.author:
@@ -139,6 +139,17 @@ class Actions(commands.Cog):
             await member.send(f'{ctx.author.name} poked you.')
 
     @commands.command()
+    async def reject(self, ctx, member: discord.Member = None):
+        """Reject someone."""
+        if not member or member == ctx.author:
+            await ctx.send('You rejected yourself.')
+        elif member == self.bot.user:
+            await ctx.send('You rejected me. <:noooooooo:809935851052072980>')
+        else:
+            await ctx.send(f'Ew. Get away from {ctx.author.name}, {member.display_name}.')
+            await member.send(f'{ctx.author.name} told you to get away from them.')
+
+    @commands.command()
     async def scream(self, ctx):
         """Screams."""
         file = open('bot/data/scream.jpg', 'rb')
@@ -148,7 +159,7 @@ class Actions(commands.Cog):
     @commands.command()
     @commands.cooldown(3, 60.0, commands.BucketType.user)
     async def slap(self, ctx, member: discord.Member = None):
-        """Slaps the member's face or juicy arse."""
+        """Slaps someone's face or juicy arse."""
         choices = [
             ('You facepalmed.',
              'You slapped me.',
@@ -174,7 +185,7 @@ class Actions(commands.Cog):
     @commands.command(aliases=['suq'])
     @commands.cooldown(3, 60.0, commands.BucketType.user)
     async def suck(self, ctx, member: discord.Member = None):
-        """Sucks the member off."""
+        """Sucks someone off."""
         if not member or member == ctx.author:
             image = discord.File(open('bot/data/suck.png', 'rb'))
             await ctx.send(file=image)
@@ -195,6 +206,7 @@ class Actions(commands.Cog):
     @kill.error
     @kiss.error
     @poke.error
+    @reject.error
     @slap.error
     @suck.error
     async def member_error(self, ctx, error):
