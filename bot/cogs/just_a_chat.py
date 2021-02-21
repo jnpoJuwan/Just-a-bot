@@ -6,8 +6,7 @@ from discord.ext import commands
 from pytz import timezone, utc
 
 from ..utils import checks
-from ..utils.constants import COLOUR
-from ..utils.paginator import FIRST_ARROW, LEFT_ARROW, DELETE_EMOJI, RIGHT_ARROW, LAST_ARROW, PAGINATION_EMOJI
+from ..utils.constants import COLOUR, ARROW_TO_BEGINNING, LEFT_ARROW, DELETE_EMOJI, RIGHT_ARROW, ARROW_TO_END, PAGINATION_EMOJI
 
 
 class JustAChat(commands.Cog, name='Just a chat...'):
@@ -40,6 +39,7 @@ class JustAChat(commands.Cog, name='Just a chat...'):
 		embed = discord.Embed(title='Just some documents...', colour=COLOUR)
 		for k, v in docs_values.items():
 			embed.add_field(name=k, value=v, inline=False)
+
 		embed.set_footer(text=f'Requested by {ctx.author.display_name}', icon_url=ctx.author.avatar_url)
 		await ctx.send(embed=embed)
 
@@ -48,28 +48,28 @@ class JustAChat(commands.Cog, name='Just a chat...'):
 		"""Sends Just a chat... users' time zones."""
 		message = await ctx.send('Calculating time zones...')
 
-		# ctx.typing() is used, since this command takes an *extremely* long time.
-		async with ctx.typing():
-			dt = datetime.datetime.now(tz=utc)
-			tz_values = {
-				'🇲🇽 Mexico (Pacific)': timezone('Mexico/BajaSur'),
-				'🇺🇸 US (Mountain)': timezone('US/Mountain'),
-				'🇲🇽 Mexico (Central)': timezone('Mexico/General'),
-				'🇺🇸 US (Central)': timezone('US/Central'),
-				'🇺🇸 US (Eastern)': timezone('US/Eastern'),
-				'🇵🇾 Paraguay': timezone('America/Asuncion'),
-				'🇧🇷 Brazil (Brasília)': timezone('Brazil/East'),
-				'🇪🇺 Europe (Western)': timezone('Europe/London'),
-				'🇪🇺 Europe (Central)': timezone('Europe/Berlin'),
-				'🇪🇺 Europe (Eastern)': timezone('Europe/Athens'),
-				'🇦🇪 United Arab Emirates': timezone('Asia/Dubai'),
-				'🇰🇷 South Korea': timezone('Asia/Seoul'),
-			}
+		await ctx.trigger_typing()
+		dt = datetime.datetime.now(tz=utc)
+		tz_values = {
+			'🇲🇽 Mexico (Pacific)': timezone('Mexico/BajaSur'),
+			'🇺🇸 US (Mountain)': timezone('US/Mountain'),
+			'🇲🇽 Mexico (Central)': timezone('Mexico/General'),
+			'🇺🇸 US (Central)': timezone('US/Central'),
+			'🇺🇸 US (Eastern)': timezone('US/Eastern'),
+			'🇵🇾 Paraguay': timezone('America/Asuncion'),
+			'🇧🇷 Brazil (Brasília)': timezone('Brazil/East'),
+			'🇪🇺 Europe (Western)': timezone('Europe/London'),
+			'🇪🇺 Europe (Central)': timezone('Europe/Berlin'),
+			'🇪🇺 Europe (Eastern)': timezone('Europe/Athens'),
+			'🇦🇪 United Arab Emirates': timezone('Asia/Dubai'),
+			'🇰🇷 South Korea': timezone('Asia/Seoul'),
+		}
 
-			embed = discord.Embed(title='Just some time zones...', colour=COLOUR)
-			for k, v in tz_values.items():
-				embed.add_field(name=k, value=str(dt.astimezone(v).strftime('%A, %B %d **%H:%M** UTC%z')))
-			embed.set_footer(text=f'Requested by {ctx.author.display_name}', icon_url=ctx.author.avatar_url)
+		embed = discord.Embed(title='Just some time zones...', colour=COLOUR)
+		for k, v in tz_values.items():
+			embed.add_field(name=k, value=str(dt.astimezone(v).strftime('%A, %B %d **%H:%M** UTC%z')))
+
+		embed.set_footer(text=f'Requested by {ctx.author.display_name}', icon_url=ctx.author.avatar_url)
 		await message.edit(embed=embed)
 
 	@commands.command(aliases=['jsyt'])
@@ -87,11 +87,12 @@ class JustAChat(commands.Cog, name='Just a chat...'):
 		embed = discord.Embed(name='Just some YouTube channels...', colour=COLOUR)
 		for k, v in channel_values.items():
 			embed.add_field(name=k, value=v)
+
 		embed.set_footer(text=f'Requested by {ctx.author.display_name}', icon_url=ctx.author.avatar_url)
 		await ctx.send(embed=embed)
 
 	@commands.command(aliases=['jsg'])
-	@commands.cooldown(3, 60.0, commands.BucketType.user)
+	@commands.cooldown(1, 60.0, commands.BucketType.user)
 	@checks.is_mod()
 	async def jsguidelines(self, ctx, paginator='off'):
 		"""
@@ -109,14 +110,16 @@ class JustAChat(commands.Cog, name='Just a chat...'):
 		pages = []
 
 		# Create pages with the content for the embeds.
-		# FIXME: The pagination of content still needs to be done manually.
+		# FIXME: There's still manual pagination
 		for line in lines:
 			if line.startswith('# '):
 				pages.append({})
 			elif line.startswith('## '):
 				current_line = lines.index(line)
+
 				# Join up the three lines of content in the section.
 				page_content = ''.join(lines[current_line + 1:current_line + 4])[:-1]
+
 				# Find the last page and insert the section into it.
 				dict_indices = [i for i, v in enumerate(pages) if isinstance(v, dict)]
 				pages[dict_indices[-1]][line[3:-1]] = page_content
@@ -126,6 +129,7 @@ class JustAChat(commands.Cog, name='Just a chat...'):
 			for page in pages[:-1]:
 				for k, v in page.items():
 					embed.add_field(name=k, value=v)
+
 				await ctx.send(embed=embed)
 				embed.clear_fields()
 			# Only the last embed needs a footer.
@@ -173,8 +177,8 @@ class JustAChat(commands.Cog, name='Just a chat...'):
 					await message.clear_reactions()
 					break
 
-				if str(reaction) == FIRST_ARROW:
-					await message.remove_reaction(FIRST_ARROW, ctx.author)
+				if str(reaction) == ARROW_TO_BEGINNING:
+					await message.remove_reaction(ARROW_TO_BEGINNING, ctx.author)
 					if page_index > 0:
 						page_index = 0
 						await update_message()
@@ -190,8 +194,8 @@ class JustAChat(commands.Cog, name='Just a chat...'):
 					if page_index < len(pages) - 1:
 						page_index += 1
 						await update_message()
-				elif str(reaction) == LAST_ARROW:
-					await message.remove_reaction(LAST_ARROW, ctx.author)
+				elif str(reaction) == ARROW_TO_END:
+					await message.remove_reaction(ARROW_TO_END, ctx.author)
 					if page_index < len(pages) - 1:
 						page_index = len(pages) - 1
 						await update_message()

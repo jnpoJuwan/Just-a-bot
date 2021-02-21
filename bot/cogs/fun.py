@@ -13,7 +13,7 @@ class Fun(commands.Cog):
 		self.bot = bot
 
 	@commands.command(name='8ball', aliases=['8-ball'])
-	async def _8ball(self, ctx, *, question='???'):
+	async def _8ball(self, ctx, *, question=None):
 		"""Asks the question to the Magic 8-Ball."""
 		# SEE: https://en.wikipedia.org/wiki/Magic_8-Ball#Possible_answers
 		outcomes = (
@@ -23,7 +23,10 @@ class Fun(commands.Cog):
 			'Cannot predict now.', 'Concentrate and ask again.', 'Don\'t count on it.', 'My reply is no.',
 			'My sources say no.', 'Outlook not so good.', 'Very doubtful.'
 		)
-		await ctx.send(f'> {question}\n{random.choice(outcomes)}')
+		if not question:
+			await ctx.send(random.choice(outcomes))
+		else:
+			await ctx.send(f'> {question}\n{random.choice(outcomes)}')
 
 	@commands.command()
 	async def cbt(self, ctx):

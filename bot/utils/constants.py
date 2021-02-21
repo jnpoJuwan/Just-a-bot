@@ -3,3 +3,11 @@ import discord
 COLOUR = discord.Colour(0x8b0000)
 DEFAULT_PREFIX = '?'
 SPAM_LIMIT = 25
+
+# Pagination emoji.
+ARROW_TO_BEGINNING = '⏪'
+LEFT_ARROW = '◀'
+DELETE_EMOJI = '🗑️'
+RIGHT_ARROW = '▶'
+ARROW_TO_END = '⏩'
+PAGINATION_EMOJI = (ARROW_TO_BEGINNING, LEFT_ARROW, DELETE_EMOJI, RIGHT_ARROW, ARROW_TO_END)

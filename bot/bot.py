@@ -25,7 +25,7 @@ def _prefix_callable(bot, message):
 class JustABot(commands.Bot):
 	def __init__(self):
 		super().__init__(command_prefix=_prefix_callable, case_insensitive=True, owner_id=OWNER_ID)
-		self._was_ready_once = False
+		self.was_ready_once = False
 
 	# CREDIT: @Tortoise-Community (https://github.com/Tortoise-Community/Tortoise-BOT/blob/master/bot/bot.py#L65)
 	def load_extensions(self):
@@ -42,8 +42,14 @@ class JustABot(commands.Bot):
 
 	async def on_ready(self):
 		print(f'Logged in as @{self.user.name}.')
+
+		if not self.was_ready_once:
+			await self.on_first_ready()
+			self.was_ready_once = True
+
+	async def on_first_ready(self):
 		self.load_extensions()
-		await self.change_presence(activity=discord.Game(name=f'?help | {len(self.guilds)} servers'))
+		await self.change_presence(activity=discord.Game(name=f'{DEFAULT_PREFIX}help | {len(self.guilds)} servers'))
 
 	@staticmethod
 	async def on_connect():
@@ -54,12 +60,7 @@ class JustABot(commands.Bot):
 		print("Connection to Discord lost.")
 
 	async def on_command_error(self, ctx, error):
-		if isinstance(error, commands.CommandNotFound):
-			# await ctx.send('Sorry. I could\'t find that command.')
-			await ctx.send('Fuck you, dumbass. You thought that was an actual command??? '
-			               'OMFG. You\'re dumb. No, you\'re dumber than dumb. You\'re fucking stupid. You\'re a moron. '
-			               'Fuck you.')
-		elif isinstance(error, commands.MissingRequiredArgument):
+		if isinstance(error, commands.MissingRequiredArgument):
 			await ctx.send('Please insert all required arguments.')
 		elif isinstance(error, commands.CheckFailure):
 			await ctx.send('You don\'t have permission to use that command.')
@@ -69,23 +70,16 @@ class JustABot(commands.Bot):
 			await ctx.send(f'That\'s too much spam. The amount can\'t exceed {SPAM_LIMIT}.')
 
 	async def on_guild_join(self, guild):
-		file = 'configs/prefixes.json'
-		prefixes = json.load(open(file))
+		prefixes = json.load(open('configs/prefixes.json'))
 		with open('configs/prefixes.json', 'w') as f:
 			prefixes[str(guild.id)] = DEFAULT_PREFIX
 			json.dump(prefixes, f, indent=2)
 
 	async def on_guild_remove(self, guild):
-		file = 'configs/prefixes.json'
-		prefixes = json.load(open(file))
+		prefixes = json.load(open('configs/prefixes.json'))
 		with open('configs/prefixes.json', 'w') as f:
 			prefixes.pop(str(guild.id))
 			json.dump(prefixes, f, indent=2, sort_keys=True)
-
-	async def on_member_join(self, member):
-		if member.guild.id == 750863262911954964:
-			role = discord.utils.get(member.guild.roles, name='Just a member...')
-			await member.add_roles(role)
 
 	async def on_message(self, message):
 		if message.author.bot:
