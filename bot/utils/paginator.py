@@ -3,28 +3,28 @@ import typing as t
 
 import discord
 from discord.abc import Messageable
+from discord.ext import commands
 
-from .constants import COLOUR
-
-FIRST_ARROW = '⏪'
-LEFT_ARROW = '◀'
-DELETE_EMOJI = '🗑️'
-RIGHT_ARROW = '▶'
-LAST_ARROW = '⏩'
-PAGINATION_EMOJI = (FIRST_ARROW, LEFT_ARROW, DELETE_EMOJI, RIGHT_ARROW, LAST_ARROW)
+from .constants import COLOUR, ARROW_TO_BEGINNING, LEFT_ARROW, DELETE_EMOJI, RIGHT_ARROW, ARROW_TO_END, PAGINATION_EMOJI
 
 
 # CREDIT: @Tortoise-Community (https://github.com/Tortoise-Community/Tortoise-BOT/blob/master/bot/utils/paginator.py)
 class Paginator:
-	def __init__(self, *, page_size: int = 2000, separator: str = '\n', timeout: int = 300, prefix: str = '',
-	             suffix: str = ''):
+	def __init__(
+			self, *,
+			page_size: int = 2000,
+			separator: str = '\n',
+			timeout: int = 300,
+			prefix: str = '',
+			suffix: str = ''
+	):
 		"""
-        :param page_size: Maximum page string size for the page content.
-        :param separator: Separator used to break large chunks of content to smaller ones, if needed.
-        :param timeout: How long will the reactions be awaited for.
-        :param prefix: Prefix for the message content.
-        :param suffix: Suffix for the message content.
-        """
+		:param page_size: Maximum page string size for the page content.
+		:param separator: Separator used to break large chunks of content to smaller ones, if needed.
+		:param timeout: How long will the reactions be awaited for.
+		:param prefix: Prefix for the message content.
+		:param suffix: Suffix for the message content.
+		"""
 		self._separator = separator
 		self._timeout = timeout
 		self._prefix = prefix
@@ -56,14 +56,14 @@ class Paginator:
 	@staticmethod
 	def break_long_entries(chunk_list: t.List[str], max_chunk_size: int):
 		"""
-        We further break down chunk_list in case any of the entries are larger than max_chunk_size.
-        Modifies passed list in place!
-        Will throw RecursionError if the string length in list is mega-huge.
-        Basically when the entry is found just split it in half and re-add it in list without breaking order.
-        Split in half will be done as many times as needed as long as resulting entry is larger than max_chunk_size
-        :param chunk_list: list of strings
-        :param max_chunk_size: integer, if chunk is larger that this we break it down
-        """
+		We further break down chunk_list in case any of the entries are larger than max_chunk_size.
+		Modifies passed list in place!
+		Will throw RecursionError if the string length in list is mega-huge.
+		Basically when the entry is found just split it in half and re-add it in list without breaking order.
+		Split in half will be done as many times as needed as long as resulting entry is larger than max_chunk_size
+		:param chunk_list: list of strings
+		:param max_chunk_size: integer, if chunk is larger that this we break it down
+		"""
 		for i, entry in enumerate(chunk_list):
 			if len(entry) > max_chunk_size:
 				# Split string in 2 parts by the middle.
@@ -159,8 +159,8 @@ class Paginator:
 				await self.clear_all_reactions()
 				break
 
-			if str(reaction) == FIRST_ARROW:
-				await self._remove_reaction(FIRST_ARROW, author)
+			if str(reaction) == ARROW_TO_BEGINNING:
+				await self._remove_reaction(ARROW_TO_BEGINNING, author)
 				if self._page_index > 0:
 					self._page_index = 0
 					await self.update_message()
@@ -176,8 +176,8 @@ class Paginator:
 				if self._page_index < len(self._pages) - 1:
 					self._page_index += 1
 					await self.update_message()
-			elif str(reaction) == LAST_ARROW:
-				await self._remove_reaction(LAST_ARROW, author)
+			elif str(reaction) == ARROW_TO_END:
+				await self._remove_reaction(ARROW_TO_END, author)
 				if self._page_index < len(self._pages) - 1:
 					self._page_index = len(self._pages) - 1
 					await self.update_message()
@@ -206,3 +206,78 @@ class EmbedPaginator(Paginator):
 		embed = discord.Embed(title=self._embed_title, description=self.get_message_content(), colour=COLOUR)
 		embed.set_footer(text=self._get_page_counter_message())
 		await self._message.edit(embed=embed)
+
+
+class ListPaginator:
+	"""Constructs a paginator when provided a list of embeds/messages."""
+	def __init__(self, ctx: commands.Context, page_list):
+		self.pages = page_list
+		self.ctx = ctx
+		self.bot = ctx.bot
+
+	def get_next_page(self, page):
+		pages = self.pages
+
+		if page != pages[-1]:
+			current_page_index = pages.index(page)
+			next_page = pages[current_page_index+1]
+			return next_page
+
+		return pages[-1]
+
+	def get_prev_page(self, page):
+		pages = self.pages
+
+		if page != pages[0]:
+			current_page_index = pages.index(page)
+			next_page = pages[current_page_index-1]
+			return next_page
+
+		return pages[0]
+
+	async def start(self):
+		ctx = self.ctx
+		pages = self.pages
+		embed = pages[0]
+		msg = await ctx.send(embed=embed)
+
+		for emote in PAGINATION_EMOJI:
+			await msg.add_reaction(emote)
+
+		def check(_reaction, _user):
+			return _user == ctx.author and str(_reaction.emoji) in PAGINATION_EMOJI and _reaction.message == msg
+
+		current_page = embed
+
+		while True:
+			try:
+				reaction, user = await self.bot.wait_for('reaction_add', timeout=60, check=check)
+
+				if str(reaction.emoji) == ARROW_TO_BEGINNING:
+					await msg.edit(embed=pages[0])
+					current_page = pages[0]
+					await msg.remove_reaction(ARROW_TO_BEGINNING, ctx.author)
+
+				elif str(reaction.emoji) == ARROW_TO_END:
+					await msg.edit(embed=pages[-1])
+					current_page = pages[-1]
+					await msg.remove_reaction(ARROW_TO_END, ctx.author)
+
+				elif str(reaction.emoji) == RIGHT_ARROW:
+					next_page = self.get_next_page(current_page)
+					await msg.edit(embed=self.get_next_page(current_page))
+					current_page = next_page
+					await msg.remove_reaction(RIGHT_ARROW, ctx.author)
+
+				elif str(reaction.emoji) == DELETE_EMOJI:
+					await msg.delete()
+					break
+
+				elif str(reaction.emoji) == LEFT_ARROW:
+					prev_page = self.get_prev_page(current_page)
+					await msg.edit(embed=prev_page)
+					current_page = prev_page
+					await msg.remove_reaction(LEFT_ARROW, ctx.author)
+
+			except TimeoutError:
+				await msg.clear_reactions()
