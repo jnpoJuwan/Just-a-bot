@@ -23,6 +23,7 @@ class Fun(commands.Cog):
 			'Cannot predict now.', 'Concentrate and ask again.', 'Don\'t count on it.', 'My reply is no.',
 			'My sources say no.', 'Outlook not so good.', 'Very doubtful.'
 		)
+
 		if not question:
 			await ctx.send(random.choice(outcomes))
 		else:
@@ -32,14 +33,14 @@ class Fun(commands.Cog):
 	async def cbt(self, ctx):
 		"""Send the Wikipedia article for 'Cock and ball torture'."""
 		# SEE: https://en.wikipedia.org/wiki/Cock_and_ball_torture
-		async with ctx.typing():
-			embed = discord.Embed(
-				title='Cock and ball torture',
-				url='https://en.wikipedia.org/wiki/Cock_and_ball_torture',
-				description=wikipedia.summary('Cock_and_ball_torture'), colour=COLOUR
-			)
-			embed.set_footer(text=f'Requested by {ctx.author.display_name} | Powered by Wikipedia',
-			                 icon_url=ctx.author.avatar_url)
+		await ctx.trigger_typing()
+		embed = discord.Embed(
+			title='Cock and ball torture',
+			url='https://en.wikipedia.org/wiki/Cock_and_ball_torture',
+			description=wikipedia.summary('Cock_and_ball_torture'), colour=COLOUR
+		)
+		embed.set_footer(text=f'Requested by {ctx.author.display_name} | From Wikipedia, the free encyclopedia',
+		                 icon_url=ctx.author.avatar_url)
 		await ctx.send(embed=embed)
 
 	@commands.command(aliases=['say'])
@@ -62,24 +63,23 @@ class Fun(commands.Cog):
 		await ctx.send(random.choice(greetings))
 
 	@commands.command(aliases=['cock', 'dick', 'peen', 'pp', 'schlong'])
-	@commands.cooldown(3, 60.0, commands.BucketType.user)
 	async def penis(self, ctx, member: discord.Member = None):
 		"""Sends the member's penis size."""
 		member = member or ctx.author
+		n = random.randint(0, 30)
+		# FIXME: Member-specific numbers stopped working.
 		if member == self.bot.get_user(320325816712167426) or member == self.bot.get_user(567488628003962880):
 			# PD6#1510, Dr. IPA#3047
 			n = 0
-		else:
-			n = random.randint(0, 30)
 
 		_penis = f'**c{"=" * n}3**'
 
 		if n < 5:
-			await ctx.send(f'{member.mention}\'s micropenis is {n} cm long: {_penis}')
+			await ctx.send(f'{member.display_name}\'s micropenis is {n} cm long: {_penis}')
 		elif n < 20:
-			await ctx.send(f'{member.mention}\'s penis is {n} cm long: {_penis}')
+			await ctx.send(f'{member.display_name}\'s penis is {n} cm long: {_penis}')
 		else:
-			await ctx.send(f'{member.mention}\'s hard monster cock is {n} cm long: {_penis}')
+			await ctx.send(f'{member.display_name}\'s hard monster cock is {n} cm long: {_penis}')
 
 	@penis.error
 	async def member_error(self, ctx, error):
@@ -90,16 +90,6 @@ class Fun(commands.Cog):
 	async def ping(self, ctx):
 		"""Pings back."""
 		await ctx.send('pong')
-
-	@commands.command()
-	async def poll(self, ctx, *, question):
-		"""Creates a basic poll."""
-		embed = discord.Embed(title='Poll', description=question, colour=COLOUR)
-		embed.set_footer(text=f'Requested by {ctx.author.name}', icon_url=ctx.author.avatar_url)
-		message = await ctx.send(embed=embed)
-		await message.add_reaction('👍')
-		await message.add_reaction('👎')
-		await message.add_reaction('🤷')
 
 	@commands.command(aliases=['pang', 'peng', 'pung', 'pyng', 'pwng'], hidden=True)
 	async def pong(self, ctx):
