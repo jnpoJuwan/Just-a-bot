@@ -6,7 +6,8 @@ from discord.ext import commands
 from pytz import timezone, utc
 
 from ..utils import checks
-from ..utils.constants import COLOUR, ARROW_TO_BEGINNING, LEFT_ARROW, DELETE_EMOJI, RIGHT_ARROW, ARROW_TO_END, PAGINATION_EMOJI
+from ..utils.constants import COLOUR, ARROW_TO_BEGINNING, LEFT_ARROW, DELETE_EMOJI, RIGHT_ARROW, ARROW_TO_END, \
+	PAGINATION_EMOJI
 
 
 class JustAChat(commands.Cog, name='Just a chat...'):
@@ -15,42 +16,115 @@ class JustAChat(commands.Cog, name='Just a chat...'):
 
 	# GLOSS: 'js' means 'Just some', not 'JavaScript'.
 
-	@commands.command(aliases=['jsd', 'just_some_documents'])
+	@commands.command(aliases=['jacdocs', 'jsd', 'just_some_documents'])
 	async def jsdocs(self, ctx):
 		"""Sends Just some documents...."""
-		docs_values = {
-			'Just a bot...': 'https://github.com/jnpoJuwan/Just-a-bot',
-			'Just a map...': 'https://goo.gl/maps/Z3VDj5JkwpVrDUSd7',
-			'Just some (fuck-able) ages...':
-				'https://docs.google.com/document/d/1xeAlaHXVZ4PfFm_BrOuAxXrO-0SBZZZvZndCpI0rkDc/edit?usp=sharing',
-			'Just some guidelines...':
-				'https://docs.google.com/document/d/1NAH6GZNC0UNFHdBmAd0u9U5keGhAgnxY-vqiRaATL8c/edit?usp=sharing',
-			'Just some penises...':
-				'https://docs.google.com/document/d/1gUoTqg4uzdSG_0eqoERcbMBFBrWdIEw6IBy_L3OrRnQ/edit?usp=sharing',
-			'Just some stories...':
-				'https://docs.google.com/document/d/1EGwg2vBL6VHaXK0B0u1mEXGV8SE9w6Xr1axlN8rB-Ic/edit?usp=sharing',
-			'Just some units of measurement...':
-				'https://docs.google.com/document/d/1Zk1unIM76WaBvOh1ew04nEbSPxH1Gq54M3Tu4Znj05A/edit?usp=sharing',
-			'(Extended) International Phonetic Alphabet':
-				'https://docs.google.com/spreadsheets/d/1Rx8ui5eug2Qk__B9IQkxVxFkdZaxbDkgGI2xNicqbtM'
-				'/edit?usp=sharing',
+		docs_dict = {
+			'Just some documents...': {
+				'Just a bot...': 'https://github.com/jnpoJuwan/Just-a-bot',
+				'Just a map...': 'https://goo.gl/maps/Z3VDj5JkwpVrDUSd7',
+				'Just some (fuck-able) ages...':
+					'https://docs.google.com/document/d/1xeAlaHXVZ4PfFm_BrOuAxXrO-0SBZZZvZndCpI0rkDc/edit?usp=sharing',
+				'Just some guidelines...':
+					'https://docs.google.com/document/d/1NAH6GZNC0UNFHdBmAd0u9U5keGhAgnxY-vqiRaATL8c/edit?usp=sharing',
+				'Just some languages...':
+					'https://docs.google.com/document/d/1ay2Ue2D6teOY4XjO-tqThffzYgwV-WHKaxJlZCU4DDA/edit?usp=sharing',
+				'Just some penises...':
+					'https://docs.google.com/document/d/1gUoTqg4uzdSG_0eqoERcbMBFBrWdIEw6IBy_L3OrRnQ/edit?usp=sharing',
+				'Just some stories...':
+					'https://docs.google.com/document/d/1EGwg2vBL6VHaXK0B0u1mEXGV8SE9w6Xr1axlN8rB-Ic/edit?usp=sharing',
+				'Just some units of measurement...':
+					'https://docs.google.com/document/d/1Zk1unIM76WaBvOh1ew04nEbSPxH1Gq54M3Tu4Znj05A/edit?usp=sharing',
+			},
+
+			'*Boyfriends* Extra Chapters': {
+				'Extra Chapter 01 (Goth x Nerd)':
+					'https://drive.google.com/file/d/1qzXIDXNiVZw3Kra0lzSJBwb911ROyOLA/view?usp=drivesdk ',
+				'Extra Chapter 02 (Jock x Prep)':
+					'https://drive.google.com/file/d/1wdU-XGUCcNXAm1QmpRDxa_vZMgljiQok/view?usp=drivesdk'
+			},
+
+			'Other documents': {
+				'(Extended) International Phonetic Alphabet':
+					'https://docs.google.com/spreadsheets/d/1Rx8ui5eug2Qk__B9IQkxVxFkdZaxbDkgGI2xNicqbtM'
+					'/edit?usp=sharing'
+			}
 		}
 
-		embed = discord.Embed(title='Just some documents...', colour=COLOUR)
-		for k, v in docs_values.items():
-			embed.add_field(name=k, value=v, inline=False)
+		pages = [{k: v} for k, v in docs_dict.items()]
 
-		embed.set_footer(text=f'Requested by {ctx.author.display_name}', icon_url=ctx.author.avatar_url)
-		await ctx.send(embed=embed)
+		# CRED: @Tortoise-Community
+		# (https://github.com/Tortoise-Community/Tortoise-BOT/blob/master/bot/utils/paginator.py)
+		i = 0
 
-	@commands.command(aliases=['jstz'])
+		def page_counter():
+			return f'Page {i + 1}/{len(pages)}'
+
+		embed = discord.Embed(title='Just some guidelines...', colour=COLOUR)
+		for k, v in pages[i].items():
+			docs_urls = [f'• **[{_k}]({_v})**' for _k, _v in v.items()]
+			embed.add_field(name=k, value='\n'.join(docs_urls), inline=False)
+		embed.set_footer(text=f'Requested by {ctx.author.display_name} | {page_counter()}',
+		                 icon_url=ctx.author.avatar_url)
+		message = await ctx.send(embed=embed)
+
+		for emoji in PAGINATION_EMOJI:
+			await message.add_reaction(emoji)
+
+		async def update_message():
+			embed.clear_fields()
+			for _k, _v in pages[i].items():
+				_docs_urls = [f'• **[{_k}]({_v})**' for _k, _v in _v.items()]
+				embed.add_field(name=k, value='\n'.join(_docs_urls), inline=False)
+			embed.set_footer(text=f'Requested by {ctx.author.display_name} | {page_counter()}',
+			                 icon_url=ctx.author.avatar_url)
+			await message.edit(embed=embed)
+
+		def react_check(reaction_, member):
+			return (
+					str(reaction_) in PAGINATION_EMOJI and
+					member.id == ctx.author.id and
+					reaction_.message.id == message.id
+			)
+
+		while True:
+			try:
+				reaction, user = await self.bot.wait_for('reaction_add', timeout=300, check=react_check)
+			except asyncio.TimeoutError:
+				await message.clear_reactions()
+				break
+
+			if str(reaction) == ARROW_TO_BEGINNING:
+				await message.remove_reaction(ARROW_TO_BEGINNING, ctx.author)
+				if i > 0:
+					i = 0
+					await update_message()
+			elif str(reaction) == LEFT_ARROW:
+				await message.remove_reaction(LEFT_ARROW, ctx.author)
+				if i > 0:
+					i -= 1
+					await update_message()
+			elif str(reaction) == DELETE_EMOJI:
+				return await message.delete()
+			elif str(reaction) == RIGHT_ARROW:
+				await message.remove_reaction(RIGHT_ARROW, ctx.author)
+				if i < len(pages) - 1:
+					i += 1
+					await update_message()
+			elif str(reaction) == ARROW_TO_END:
+				await message.remove_reaction(ARROW_TO_END, ctx.author)
+				if i < len(pages) - 1:
+					i = len(pages) - 1
+					await update_message()
+
+	@commands.command(aliases=['jactimezones', 'jactz', 'jstz'])
 	async def jstimezones(self, ctx):
 		"""Sends Just a chat... users' time zones."""
-		message = await ctx.send('Calculating time zones...')
+		message = await ctx.send('Calculating times...')
 
 		await ctx.trigger_typing()
 		dt = datetime.datetime.now(tz=utc)
-		tz_values = {
+		tz_dict = {
 			'🇲🇽 Mexico (Pacific)': timezone('Mexico/BajaSur'),
 			'🇺🇸 US (Mountain)': timezone('US/Mountain'),
 			'🇲🇽 Mexico (Central)': timezone('Mexico/General'),
@@ -66,16 +140,16 @@ class JustAChat(commands.Cog, name='Just a chat...'):
 		}
 
 		embed = discord.Embed(title='Just some time zones...', colour=COLOUR)
-		for k, v in tz_values.items():
+		for k, v in tz_dict.items():
 			embed.add_field(name=k, value=str(dt.astimezone(v).strftime('%A, %B %d **%H:%M** UTC%z')))
 
 		embed.set_footer(text=f'Requested by {ctx.author.display_name}', icon_url=ctx.author.avatar_url)
 		await message.edit(embed=embed)
 
-	@commands.command(aliases=['jsyt'])
+	@commands.command(aliases=['jacyoutube', 'jacyt', 'jsyt'])
 	async def jsyoutube(self, ctx):
 		"""Send some Just a chat... users' YouTube channels."""
-		channel_values = {
+		channels_dict = {
 			'Aurora': 'https://www.youtube.com/channel/UCmDE7oQp2wzTLxd7lc4mA9A',
 			'D\'ignoranza': 'https://www.youtube.com/channel/UCI4ZJ0QmSokr6ctUfURqm5A',
 			'Dr. IPA': 'https://www.youtube.com/channel/UCfPYxsZHRBaW24q3pb9oOnA',
@@ -85,7 +159,7 @@ class JustAChat(commands.Cog, name='Just a chat...'):
 		}
 
 		embed = discord.Embed(name='Just some YouTube channels...', colour=COLOUR)
-		for k, v in channel_values.items():
+		for k, v in channels_dict.items():
 			embed.add_field(name=k, value=v)
 
 		embed.set_footer(text=f'Requested by {ctx.author.display_name}', icon_url=ctx.author.avatar_url)
@@ -94,33 +168,36 @@ class JustAChat(commands.Cog, name='Just a chat...'):
 	@commands.command(aliases=['jsg'])
 	@commands.cooldown(1, 60.0, commands.BucketType.user)
 	@checks.is_mod()
-	async def jsguidelines(self, ctx, paginator='off'):
+	async def jsguidelines(self, ctx, paginator='on'):
 		"""
 		Sends the Just a chat... guidelines from Amino.
 
 		The paginator can be turned either on or off.
 		"""
+		# SEE: https://docs.google.com/document/d/1NAH6GZNC0UNFHdBmAd0u9U5keGhAgnxY-vqiRaATL8c/edit?usp=sharing
 
 		if paginator not in ['off', 'on']:
 			raise commands.BadArgument
 
-		# SEE: https://docs.google.com/document/d/1NAH6GZNC0UNFHdBmAd0u9U5keGhAgnxY-vqiRaATL8c/edit?usp=sharing
 		file = open('bot/data/languages.md', encoding='utf-8')
 		lines = file.readlines()
 		pages = []
 
-		# Create pages with the content for the embeds.
-		# FIXME: There's still manual pagination
+		# HACK: Probably not the best solution.
+		# FIXME: There's still manual pagination.
 		for line in lines:
+			# Loop over the lines, turn headings level 1 and headings level 2 into dictionaries,
+			# add the text content into them, and append it into pages.
 			if line.startswith('# '):
 				pages.append({})
 			elif line.startswith('## '):
 				current_line = lines.index(line)
 
-				# Join up the three lines of content in the section.
-				page_content = ''.join(lines[current_line + 1:current_line + 4])[:-1]
+				# Join up the three lines of content after the heading.
+				# XXX: Adding a new line breaks the "pseudo-paginator".
+				page_content = ''.join(lines[current_line + 1: current_line + 4])[:-1]
 
-				# Find the last page and insert the section into it.
+				# Find the last page and append the section into it.
 				dict_indices = [i for i, v in enumerate(pages) if isinstance(v, dict)]
 				pages[dict_indices[-1]][line[3:-1]] = page_content
 
@@ -129,24 +206,22 @@ class JustAChat(commands.Cog, name='Just a chat...'):
 			for page in pages[:-1]:
 				for k, v in page.items():
 					embed.add_field(name=k, value=v)
-
 				await ctx.send(embed=embed)
 				embed.clear_fields()
+
 			# Only the last embed needs a footer.
 			for k, v in pages[-1].items():
 				embed.add_field(name=k, value=v)
 			embed.set_footer(text=f'Requested by {ctx.author.display_name}', icon_url=ctx.author.avatar_url)
 			await ctx.send(embed=embed)
 		else:
-			# CREDIT: @Tortoise-Community
-			# (https://github.com/Tortoise-Community/Tortoise-BOT/blob/master/bot/utils/paginator.py)
-			page_index = 0
+			i = 0
 
 			def page_counter():
-				return f'Page {page_index + 1}/{len(pages)}'
+				return f'Page {i + 1}/{len(pages)}'
 
 			embed = discord.Embed(title='Just some guidelines...', colour=COLOUR)
-			for k, v in pages[page_index].items():
+			for k, v in pages[i].items():
 				embed.add_field(name=k, value=v)
 			embed.set_footer(text=f'Requested by {ctx.author.display_name} | {page_counter()}',
 			                 icon_url=ctx.author.avatar_url)
@@ -157,8 +232,8 @@ class JustAChat(commands.Cog, name='Just a chat...'):
 
 			async def update_message():
 				embed.clear_fields()
-				for k, v in pages[page_index].items():
-					embed.add_field(name=k, value=v)
+				for _k, _v in pages[i].items():
+					embed.add_field(name=_k, value=_v)
 				embed.set_footer(text=f'Requested by {ctx.author.display_name} | {page_counter()}',
 				                 icon_url=ctx.author.avatar_url)
 				await message.edit(embed=embed)
@@ -179,25 +254,25 @@ class JustAChat(commands.Cog, name='Just a chat...'):
 
 				if str(reaction) == ARROW_TO_BEGINNING:
 					await message.remove_reaction(ARROW_TO_BEGINNING, ctx.author)
-					if page_index > 0:
-						page_index = 0
+					if i > 0:
+						i = 0
 						await update_message()
 				elif str(reaction) == LEFT_ARROW:
 					await message.remove_reaction(LEFT_ARROW, ctx.author)
-					if page_index > 0:
-						page_index -= 1
+					if i > 0:
+						i -= 1
 						await update_message()
 				elif str(reaction) == DELETE_EMOJI:
 					return await message.delete()
 				elif str(reaction) == RIGHT_ARROW:
 					await message.remove_reaction(RIGHT_ARROW, ctx.author)
-					if page_index < len(pages) - 1:
-						page_index += 1
+					if i < len(pages) - 1:
+						i += 1
 						await update_message()
 				elif str(reaction) == ARROW_TO_END:
 					await message.remove_reaction(ARROW_TO_END, ctx.author)
-					if page_index < len(pages) - 1:
-						page_index = len(pages) - 1
+					if i < len(pages) - 1:
+						i = len(pages) - 1
 						await update_message()
 
 	@jsguidelines.error
