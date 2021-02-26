@@ -10,7 +10,7 @@ from .configs.configs import OWNER_ID
 from .utils.constants import DEFAULT_PREFIX, SPAM_LIMIT
 
 
-# CREDIT: @Rapptz (https://github.com/Rapptz/RoboDanny/blob/rewrite/bot.py#L44)
+# CRED: @Rapptz (https://github.com/Rapptz/RoboDanny/blob/rewrite/bot.py#L44)
 def _prefix_callable(bot, message):
 	_id = bot.user.id
 	base = [f'<@!{_id}> ', f'<@{_id}> ']
@@ -27,7 +27,7 @@ class JustABot(commands.Bot):
 		super().__init__(command_prefix=_prefix_callable, case_insensitive=True, owner_id=OWNER_ID)
 		self.was_ready_once = False
 
-	# CREDIT: @Tortoise-Community (https://github.com/Tortoise-Community/Tortoise-BOT/blob/master/bot/bot.py#L65)
+	# CRED: @Tortoise-Community (https://github.com/Tortoise-Community/Tortoise-BOT/blob/master/bot/bot.py#L65)
 	def load_extensions(self):
 		for extension_path in Path('bot/cogs').glob('*.py'):
 			extension_name = extension_path.stem

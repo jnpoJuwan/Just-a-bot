@@ -3,7 +3,7 @@ from discord.ext import commands
 from . import exceptions
 
 
-# CREDIT: @Rapptz (https://github.com/Rapptz/RoboDanny/blob/rewrite/cogs/utils/checks.py)
+# CRED: @Rapptz (https://github.com/Rapptz/RoboDanny/blob/rewrite/cogs/utils/checks.py)
 
 
 async def check_permissions(ctx, perms, *, check=all):

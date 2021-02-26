@@ -8,7 +8,7 @@ from discord.ext import commands
 from .constants import COLOUR, ARROW_TO_BEGINNING, LEFT_ARROW, DELETE_EMOJI, RIGHT_ARROW, ARROW_TO_END, PAGINATION_EMOJI
 
 
-# CREDIT: @Tortoise-Community (https://github.com/Tortoise-Community/Tortoise-BOT/blob/master/bot/utils/paginator.py)
+# CRED: @Tortoise-Community (https://github.com/Tortoise-Community/Tortoise-BOT/blob/master/bot/utils/paginator.py)
 class Paginator:
 	def __init__(
 			self, *,

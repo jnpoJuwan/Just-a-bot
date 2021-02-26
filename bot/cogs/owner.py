@@ -17,7 +17,7 @@ class Owner(commands.Cog, command_attrs=dict(hidden=True)):
 		await ctx.send('**change da world**\n**my final message. Goodb ye**')
 		await self.bot.logout()
 
-	# CREDIT: @Rapptz (https://github.com/Rapptz/RoboDanny/blob/rewrite/cogs/admin.py#L116)
+	# CRED: @Rapptz (https://github.com/Rapptz/RoboDanny/blob/rewrite/cogs/admin.py#L116)
 	@commands.command()
 	@checks.is_bot_owner()
 	async def load(self, ctx, module):
