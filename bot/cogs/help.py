@@ -15,7 +15,7 @@ LAST_EMOJI = '\u23ed'
 PAGINATION_EMOJI = (FIRST_EMOJI, LEFT_EMOJI, DELETE_EMOJI, RIGHT_EMOJI, LAST_EMOJI)
 
 
-# CREDIT: @Tortoise-Community (https://github.com/Tortoise-Community/Tortoise-BOT/blob/master/bot/cogs/help.py)
+# CRED: @Tortoise-Community (https://github.com/Tortoise-Community/Tortoise-BOT/blob/master/bot/cogs/help.py)
 class PrettyHelpCommand(commands.MinimalHelpCommand):
 	def __init__(self, **options):
 		super().__init__()
@@ -63,20 +63,28 @@ class Help(commands.Cog):
 	def __init__(self, bot):
 		self.bot = bot
 		bot.help_command = None
+		self.original_help_command = bot.help_command
 		bot.help_command = PrettyHelpCommand()
 		bot.help_command.command_not_found('Sorry. I could\'t find that command.')
 		bot.help_command.cog = self
+
+	def cog_unload(self):
+		"""Revert to default help command if cog is unloaded."""
+		self.bot.help_command = self.original_help_command
 
 	@commands.command()
 	async def info(self, ctx):
 		"""Sends information about the bot."""
 		file = open('configs/prefixes.json')
 		p = json.load(file)[str(ctx.message.guild.id)]
-		msg = ('A personal general purpose bot developed for tinkering with creating a bot for '
-		       '[Just a chat...](https://aminoapps.com/c/conlang-conscript/home/) servers. '
-		       f'Use `{p}help` to see its commands.\n\n'
-		       '[Bot Invite](https://discord.com/api/oauth2/authorize?client_id=764106437701140490&permissions=8'
-		       '&scope=bot) | [Source Code](https://github.com/jnpoJuwan/Just-a-bot)')
+
+		msg = (
+			'A personal general purpose bot developed for tinkering with creating a bot for Just a chat... servers. '
+			f'Use `{p}help` to see its commands.\n\n'
+			'[Bot Invite](https://discord.com/api/oauth2/authorize?client_id=764106437701140490&permissions=8'
+			'&scope=bot) | [Source Code](https://github.com/jnpoJuwan/Just-a-bot)'
+		)
+
 		embed = discord.Embed(title='About Just a bot...', description=msg, colour=COLOUR)
 		embed.set_footer(text=f'Requested by {ctx.author.name}', icon_url=ctx.author.avatar_url)
 		await ctx.send(embed=embed)
