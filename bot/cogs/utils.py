@@ -34,7 +34,7 @@ class Utils(commands.Cog):
 		# Remove `foo`.
 		return content.strip('` \n')
 
-	# CREDIT: @Rapptz (https://github.com/Rapptz/RoboDanny/blob/rewrite/cogs/admin.py#L216)
+	# CRED: @Rapptz (https://github.com/Rapptz/RoboDanny/blob/rewrite/cogs/admin.py#L216)
 	@commands.command(name='eval', pass_context=True)
 	async def _eval(self, ctx, *, body: str):
 		"""Evaluates Python code."""
@@ -92,8 +92,8 @@ class Utils(commands.Cog):
 		await ctx.send(f'This server\'s prefix is `{p}`.')
 
 	# Siúlann An Troll#1517 challenged me to make this.
-	# CREDIT: @Tortoise-Community (https://github.com/Tortoise-Community/Tortoise-BOT/blob/master/bot/cogs/utility.py#L19)
-	# FIXME: Google's Custom Search JSON API provides only 100 search queries per day for free.
+	# CRED: @Tortoise-Community (https://github.com/Tortoise-Community/Tortoise-BOT/blob/master/bot/cogs/utility.py#L19)
+	# CAVEAT: Google's Custom Search JSON API provides only 100 search queries per day for free.
 	@commands.command()
 	async def google(self, ctx, *, query='query'):
 		"""Searches Google for a query."""
@@ -115,6 +115,26 @@ class Utils(commands.Cog):
 
 		paginator = ListPaginator(ctx, page_list)
 		await paginator.start()
+
+	@commands.command()
+	async def poll(self, ctx, *, question):
+		"""Creates a basic yes/no poll."""
+		embed = discord.Embed(title='Poll', description=question, colour=COLOUR)
+		embed.set_footer(text=f'Requested by {ctx.author.display_name}', icon_url=ctx.author.avatar_url)
+		message = await ctx.send(embed=embed)
+		await message.add_reaction('👍')
+		await message.add_reaction('👎')
+		await message.add_reaction('🤷')
+
+	@commands.command(aliases=['poll_num'])
+	async def pollnum(self, ctx, *, question):
+		"""Creates a basic poll with numbers."""
+		embed = discord.Embed(title='Poll', description=question, colour=COLOUR)
+		embed.set_footer(text=f'Requested by {ctx.author.display_name}', icon_url=ctx.author.avatar_url)
+		message = await ctx.send(embed=embed)
+		await message.add_reaction('1️⃣')
+		await message.add_reaction('2️⃣')
+		await message.add_reaction('3️⃣')
 
 	@commands.command(aliases=['dice', 'randint'])
 	async def roll(self, ctx, *, b: int = 20, amount: int = 1):
