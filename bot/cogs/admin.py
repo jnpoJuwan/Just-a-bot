@@ -14,26 +14,26 @@ class Admin(commands.Cog):
 	@commands.command()
 	@commands.guild_only()
 	@checks.is_admin()
-	async def ban(self, ctx, member: discord.Member, *, reason=None):
+	async def ban(self, ctx, member: discord.Member, *, reason='No specific reason.'):
 		"""Bans the member."""
-		if member == ctx.author:
-			await ctx.send('You can\'t ban yourself.')
-			return
-
-		await member.ban(reason=reason)
-		await ctx.send(f'{member.name} was banned by {ctx.author.name}.')
+		try:
+			await member.ban(reason=reason)
+		except discord.Forbidden:
+			await ctx.send(f'Unable to ban {member.name}.')
+		else:
+			await ctx.send(f'{member.name} was successfully banned.')
 
 	@commands.command()
 	@commands.guild_only()
 	@checks.is_admin()
-	async def kick(self, ctx, member: discord.Member, *, reason=None):
+	async def kick(self, ctx, member: discord.Member, *, reason='No specific reason.'):
 		"""Kicks the member."""
-		if member == ctx.author:
-			await ctx.send('You can\'t kick yourself.')
-			return
-
-		await member.kick(reason=reason)
-		await ctx.send(f'{member.name} was kicked by {ctx.author.name}.')
+		try:
+			await member.kick(reason=reason)
+		except discord.Forbidden:
+			await ctx.send(f'Unable to kick {member.name}.')
+		else:
+			await ctx.send(f'{member.name} was successfully banned.')
 
 	@ban.error
 	@kick.error
