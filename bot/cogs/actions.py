@@ -10,6 +10,18 @@ class Actions(commands.Cog):
 
 	@commands.command()
 	@commands.cooldown(3, 60.0, commands.BucketType.user)
+	async def bonk(self, ctx, member: discord.Member = None):
+		"""Bonks someone."""
+		if not member or member == ctx.author:
+			await ctx.send('You cuddled your pillow, since you\'re alone and lonely.')
+		elif member == self.bot.user:
+			await ctx.send('You bonked me.')
+		else:
+			await ctx.send(f'You bonked {member.display_name} to horny jail.')
+			await member.send(f'{ctx.author.name} bonk you to horny jail.')
+
+	@commands.command()
+	@commands.cooldown(3, 60.0, commands.BucketType.user)
 	async def cuddle(self, ctx, member: discord.Member = None):
 		"""Cuddles someone."""
 		if not member:
@@ -29,7 +41,7 @@ class Actions(commands.Cog):
 		image = discord.File(open('bot/data/cry.jpg', 'rb'))
 		await ctx.send(file=image)
 
-	@commands.command(aliases=['ejaculate', 'cream', 'jizz', 'nut', 'splooge'])
+	@commands.command(aliases=['ejaculate', 'cream', 'jizz', 'nut', 'sperm', 'splooge'])
 	@commands.cooldown(3, 60.0, commands.BucketType.user)
 	async def cum(self, ctx, member: discord.Member = None):
 		"""Cums or creams someone."""
@@ -41,10 +53,12 @@ class Actions(commands.Cog):
 		elif member == self.bot.user:
 			await ctx.send('Y-you want to c-cum inside my tiny robot bussy, master? o///o')
 		else:
-			await ctx.send((f'You creamed {member.display_name}\' little bussy. '
-			                'You\'re under arrest to horny jail.' if member.display_name.lower().endswith('s')
-			                else f'You creamed {member.display_name}\'s little bussy. '
-			                     'You\'re under arrest to horny jail.'))
+			await ctx.send(
+				(f'You creamed {member.display_name}\' little bussy. '
+				 'You\'re under arrest to horny jail.' if member.display_name.lower().endswith('s')
+				 else f'You creamed {member.display_name}\'s little bussy. '
+				      'You\'re under arrest to horny jail.')
+			)
 			await member.send(f'{ctx.author.name} creamed you.')
 
 	@commands.command()
@@ -71,10 +85,12 @@ class Actions(commands.Cog):
 		elif member == self.bot.user:
 			await ctx.send('You fucking destroyed my fragile robot bussy.')
 		else:
-			await ctx.send((f'You destroyed {member.display_name}\' fragile asshole. '
-			                'You\'re under arrest to horny jail.' if member.display_name.lower().endswith('s')
-			                else f'You destroyed {member.display_name}\'s fragile asshole. '
-			                     'You\'re under arrest to horny jail.'))
+			await ctx.send(
+				(f'You destroyed {member.display_name}\' fragile asshole. '
+				 'You\'re under arrest to horny jail.' if member.display_name.lower().endswith('s')
+				 else f'You destroyed {member.display_name}\'s fragile asshole. '
+				      'You\'re under arrest to horny jail.')
+			)
 			await member.send(f'{ctx.author.name} fucking destroyed your fragile asshole.')
 
 	@commands.command(aliases=['hand_hold', 'hold_hands'])
@@ -112,7 +128,7 @@ class Actions(commands.Cog):
 		elif member == ctx.author:
 			await ctx.send('Do you want to talk about this, master?')
 		elif member == self.bot.user:
-			await ctx.send('But m-master... \\*is killed\\*')
+			await ctx.send('But m-master... \\*is brutally killed\\*')
 		else:
 			await ctx.send(f'You have murdered {member.display_name}. You\'re now on the Magnvs\' wanted list.')
 			await member.send(f'{ctx.author.name} killed you.')
@@ -126,17 +142,17 @@ class Actions(commands.Cog):
 		elif member == ctx.author:
 			await ctx.send('You kissed yourself.')
 		elif member == self.bot.user:
-			await ctx.send('You kissed me. <:oniichan:808866738812878858>')
+			await ctx.send('You kissed me, master. 🥺')
 		else:
-			await ctx.send(f'You kissed {member.display_name}.')
+			await ctx.send(f'You kissed {member.display_name}. 😳 👉👈')
 			await member.send(f'{ctx.author.name} kissed you.')
 
 	@commands.command()
 	@commands.cooldown(3, 60.0, commands.BucketType.user)
 	async def love(self, ctx):
-		"""Love :heart: :two_hearts:."""
+		"""Love ❤️ 💕."""
 		image = discord.File(open('bot/data/love.jpg', 'rb'))
-		await ctx.send(':heart: :two_hearts:', file=image)
+		await ctx.send('❤️ 💕', file=image)
 
 	@commands.command()
 	@commands.cooldown(3, 60.0, commands.BucketType.user)
@@ -162,7 +178,7 @@ class Actions(commands.Cog):
 	async def reject(self, ctx, member: discord.Member = None):
 		"""Reject someone."""
 		if not member or member == ctx.author:
-			await ctx.send('You rejected yourself.')
+			await ctx.send('You rejected yourself. <:noooooooo:809935851052072980>')
 		elif member == self.bot.user:
 			await ctx.send('You rejected me. <:noooooooo:809935851052072980>')
 		else:
@@ -195,24 +211,23 @@ class Actions(commands.Cog):
 	@commands.cooldown(3, 60.0, commands.BucketType.user)
 	async def slap(self, ctx, member: discord.Member = None):
 		"""Slaps someone's face or juicy arse."""
-		# HACK: I'm sure it's not the best solution, but it's good enough.
+		# HACK: Probably not the best solution, but it's good enough.
 		choices = [
 			('You facepalmed.',
 			 'You slapped me.',
 			 f'You slapped {member.display_name}.',
 			 f'{ctx.author.name} slapped you.'),
 
-			('You slapped your own thicc juicy arse',
+			('You slapped your own thicc, juicy arse',
 			 'You slapped my arse.',
-			 (f'You slapped {member.display_name}\' thicc juicy arse.' if member.display_name.lower().endswith('s')
-			  else f'You slapped {member.display_name}\'s thicc juicy arse.'),
-			 f'{ctx.author.name} slapped your thicc juicy arse.')
+			 (f'You slapped {member.display_name}\' thicc, juicy arse.' if member.display_name.lower().endswith('s')
+			  else f'You slapped {member.display_name}\'s thicc, juicy arse.'),
+			 f'{ctx.author.name} slapped your thicc, juicy arse.')
 		]
 
 		output = random.choice(choices)
 		if not member:
-			image = discord.File(open('bot/data/slap.png', 'rb'))
-			await ctx.send(file=image)
+			await ctx.send('It hurt itself in its confusion!')
 		elif member == ctx.author:
 			await ctx.send(output[0])
 		elif member == self.bot.user:
