@@ -1,5 +1,3 @@
-import json
-
 import discord
 from discord.ext import commands
 
@@ -75,18 +73,15 @@ class Help(commands.Cog):
 	@commands.command()
 	async def info(self, ctx):
 		"""Sends information about the bot."""
-		file = open('configs/prefixes.json')
-		p = json.load(file)[str(ctx.message.guild.id)]
-
 		msg = (
 			'A personal general purpose bot developed for tinkering with creating a bot for Just a chat... servers. '
-			f'Use `{p}help` to see its commands.\n\n'
+			f'Use `{ctx.prefix}help [command]` to see its commands.\n\n'
 			'[Bot Invite](https://discord.com/api/oauth2/authorize?client_id=764106437701140490&permissions=8'
 			'&scope=bot) | [Source Code](https://github.com/jnpoJuwan/Just-a-bot)'
 		)
 
 		embed = discord.Embed(title='About Just a bot...', description=msg, colour=COLOUR)
-		embed.set_footer(text=f'Requested by {ctx.author.name}', icon_url=ctx.author.avatar_url)
+		embed.set_footer(text=f'Requested by {ctx.author.display_name}', icon_url=ctx.author.avatar_url)
 		await ctx.send(embed=embed)
 
 
