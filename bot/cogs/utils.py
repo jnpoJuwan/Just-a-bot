@@ -116,7 +116,7 @@ class Utils(commands.Cog):
 		paginator = ListPaginator(ctx, page_list)
 		await paginator.start()
 
-	@commands.command()
+	@commands.command(aliases=['vote'])
 	async def poll(self, ctx, *, question):
 		"""Creates a basic yes/no poll."""
 		embed = discord.Embed(title='Poll', description=question, colour=COLOUR)
