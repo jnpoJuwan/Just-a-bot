@@ -145,7 +145,7 @@ class Paginator:
 			pass
 
 	async def _start_listener(self, author: t.Union[discord.User, discord.Member], bot_reference):
-		def react_check(reaction_, user_):
+		def check(reaction_, user_):
 			return (
 					str(reaction_) in PAGINATION_EMOJI and
 					user_.id == author.id and
@@ -154,7 +154,7 @@ class Paginator:
 
 		while True:
 			try:
-				reaction, user = await bot_reference.wait_for('reaction_add', timeout=self._timeout, check=react_check)
+				reaction, user = await bot_reference.wait_for('reaction_add', timeout=self._timeout, check=check)
 			except asyncio.TimeoutError:
 				await self.clear_all_reactions()
 				break
