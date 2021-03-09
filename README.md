@@ -1,6 +1,23 @@
-# Just-a-bot
+![Python Version](https://img.shields.io/badge/python-3.8-blue?style=flat-square)
+![discord.py Version](https://img.shields.io/badge/discord.py-1.6.0-blue?style=flat-square)
 
-A personal general purpose Discord bot developed for tinkering with creating a bot for [Just a chat...](https://aminoapps.com/c/conlang-conscript/home/) users' servers.
+# Just-a-bot
+**A personal general purpose Discord bot.**
+
+<img alt="Just a bot... avatar" align="right" src="https://i.imgur.com/XNZAznD.png" width=40%/>
+
+This bot is only meant to work only in servers of Just a chat... and Just a mess... members.
+
+Code here serves for transparency.
+
+I would prefer if you don't run an instance of my bot, instead use the 
+[invite link](https://discord.com/api/oauth2/authorize?client_id=764106437701140490&permissions=8&scope=bot) 
+to have it on your server.
 
 ## Help
-If you need help with the bot or need to report bugs, post an issue [here](https://github.com/jnpoJuwan/Just-a-bot/issues).
+If you need help with the bot or need to report bugs, post an issue 
+[here](https://github.com/jnpoJuwan/Just-a-bot/issues).
+
+## License
+
+MIT – see [LICENSE](https://github.com/jnpoJuwan/Just-a-bot/blob/main/LICENSE) for details.
