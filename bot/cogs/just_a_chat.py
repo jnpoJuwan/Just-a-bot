@@ -21,20 +21,30 @@ class JustAChat(commands.Cog, name='Just a chat...'):
 		"""Sends Just some documents...."""
 		docs_dict = {
 			'Just some documents...': {
-				'Just a bot...': 'https://github.com/jnpoJuwan/Just-a-bot',
-				'Just a map...': 'https://goo.gl/maps/Z3VDj5JkwpVrDUSd7',
+				'Just a bot...':
+					'https://github.com/jnpoJuwan/Just-a-bot',
+				'Just a map...':
+					'https://goo.gl/maps/Z3VDj5JkwpVrDUSd7',
 				'Just some (fuck-able) ages...':
 					'https://docs.google.com/document/d/1xeAlaHXVZ4PfFm_BrOuAxXrO-0SBZZZvZndCpI0rkDc/edit?usp=sharing',
 				'Just some guidelines...':
 					'https://docs.google.com/document/d/1NAH6GZNC0UNFHdBmAd0u9U5keGhAgnxY-vqiRaATL8c/edit?usp=sharing',
+				'Just some history...':
+					'https://docs.google.com/document/d/1g6-8aTLQ4ct6SR88GJA1hrQkIgB5_tU1CQGh4s3I9cM/edit?usp=sharing',
 				'Just some languages...':
 					'https://docs.google.com/document/d/1ay2Ue2D6teOY4XjO-tqThffzYgwV-WHKaxJlZCU4DDA/edit?usp=sharing',
 				'Just some penises...':
 					'https://docs.google.com/document/d/1gUoTqg4uzdSG_0eqoERcbMBFBrWdIEw6IBy_L3OrRnQ/edit?usp=sharing',
 				'Just some stories...':
 					'https://docs.google.com/document/d/1EGwg2vBL6VHaXK0B0u1mEXGV8SE9w6Xr1axlN8rB-Ic/edit?usp=sharing',
+			},
+
+			'Just some documents... (Continuation)': {
 				'Just some units of measurement...':
 					'https://docs.google.com/document/d/1Zk1unIM76WaBvOh1ew04nEbSPxH1Gq54M3Tu4Znj05A/edit?usp=sharing',
+				'(Extended) International Phonetic Alphabet':
+					'https://docs.google.com/spreadsheets/d/1Rx8ui5eug2Qk__B9IQkxVxFkdZaxbDkgGI2xNicqbtM'
+					'/edit?usp=sharing'
 			},
 
 			'*Boyfriends* Extra Chapters': {
@@ -43,12 +53,6 @@ class JustAChat(commands.Cog, name='Just a chat...'):
 				'Extra Chapter 02 (Jock x Prep)':
 					'https://drive.google.com/file/d/1wdU-XGUCcNXAm1QmpRDxa_vZMgljiQok/view?usp=drivesdk'
 			},
-
-			'Other documents': {
-				'(Extended) International Phonetic Alphabet':
-					'https://docs.google.com/spreadsheets/d/1Rx8ui5eug2Qk__B9IQkxVxFkdZaxbDkgGI2xNicqbtM'
-					'/edit?usp=sharing'
-			}
 		}
 
 		pages = [{k: v} for k, v in docs_dict.items()]
@@ -62,8 +66,10 @@ class JustAChat(commands.Cog, name='Just a chat...'):
 
 		embed = discord.Embed(title='Just some guidelines...', colour=COLOUR)
 		for k, v in pages[i].items():
-			docs_urls = [f'• **[{_k}]({_v})**' for _k, _v in v.items()]
-			embed.add_field(name=k, value='\n'.join(docs_urls), inline=False)
+			docs_links = [f'• **[{text}]({url})**' for text, url in v.items()]
+			embed.title = k
+			embed.description = '\n'.join(docs_links)
+
 		embed.set_footer(text=f'Requested by {ctx.author.display_name} | {page_counter()}',
 		                 icon_url=ctx.author.avatar_url)
 		message = await ctx.send(embed=embed)
@@ -72,15 +78,23 @@ class JustAChat(commands.Cog, name='Just a chat...'):
 			await message.add_reaction(emoji)
 
 		async def update_message():
-			embed.clear_fields()
 			for _k, _v in pages[i].items():
-				_docs_urls = [f'• **[{_k}]({_v})**' for _k, _v in _v.items()]
-				embed.add_field(name=k, value='\n'.join(_docs_urls), inline=False)
+				_docs_links = [f'• **[{text}]({url})**' for text, url in _v.items()]
+				embed.title = _k
+				embed.description = '\n'.join(_docs_links)
+
 			embed.set_footer(text=f'Requested by {ctx.author.display_name} | {page_counter()}',
 			                 icon_url=ctx.author.avatar_url)
 			await message.edit(embed=embed)
 
-		def react_check(reaction_, member):
+		async def clear_all_reactions():
+			try:
+				await message.clear_reactions()
+			except discord.HTTPException:
+				# Silently ignore if no permission to remove reaction.
+				pass
+
+		def check(reaction_, member):
 			return (
 					str(reaction_) in PAGINATION_EMOJI and
 					member.id == ctx.author.id and
@@ -89,9 +103,9 @@ class JustAChat(commands.Cog, name='Just a chat...'):
 
 		while True:
 			try:
-				reaction, user = await self.bot.wait_for('reaction_add', timeout=300, check=react_check)
+				reaction, user = await self.bot.wait_for('reaction_add', timeout=300, check=check)
 			except asyncio.TimeoutError:
-				await message.clear_reactions()
+				await clear_all_reactions()
 				break
 
 			if str(reaction) == ARROW_TO_BEGINNING:
@@ -183,7 +197,7 @@ class JustAChat(commands.Cog, name='Just a chat...'):
 		lines = file.readlines()
 		pages = []
 
-		# HACK: Probably not the best solution.
+		# XXX: Probably not the best solution.
 		# FIXME: There's still manual pagination.
 		for line in lines:
 			# Loop over the lines, turn headings level 1 and headings level 2 into dictionaries,
@@ -192,11 +206,9 @@ class JustAChat(commands.Cog, name='Just a chat...'):
 				pages.append({})
 			elif line.startswith('## '):
 				current_line = lines.index(line)
-
 				# Join up the three lines of content after the heading.
 				# XXX: Adding a new line breaks the "pseudo-paginator".
 				page_content = ''.join(lines[current_line + 1: current_line + 4])[:-1]
-
 				# Find the last page and append the section into it.
 				dict_indices = [i for i, v in enumerate(pages) if isinstance(v, dict)]
 				pages[dict_indices[-1]][line[3:-1]] = page_content
@@ -238,7 +250,14 @@ class JustAChat(commands.Cog, name='Just a chat...'):
 				                 icon_url=ctx.author.avatar_url)
 				await message.edit(embed=embed)
 
-			def react_check(reaction_, member):
+			async def clear_all_reactions():
+				try:
+					await message.clear_reactions()
+				except discord.HTTPException:
+					# Silently ignore if no permission to remove reaction.
+					pass
+
+			def check(reaction_, member):
 				return (
 						str(reaction_) in PAGINATION_EMOJI and
 						member.id == ctx.author.id and
@@ -247,9 +266,9 @@ class JustAChat(commands.Cog, name='Just a chat...'):
 
 			while True:
 				try:
-					reaction, user = await self.bot.wait_for('reaction_add', timeout=300, check=react_check)
+					reaction, user = await self.bot.wait_for('reaction_add', timeout=300, check=check)
 				except asyncio.TimeoutError:
-					await message.clear_reactions()
+					await clear_all_reactions()
 					break
 
 				if str(reaction) == ARROW_TO_BEGINNING:
