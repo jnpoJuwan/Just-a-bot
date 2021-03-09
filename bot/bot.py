@@ -70,13 +70,13 @@ class JustABot(commands.Bot):
 			await ctx.send(f'That\'s too much spam. The amount can\'t exceed {SPAM_LIMIT}.')
 
 	async def on_guild_join(self, guild):
-		prefixes = json.load(open('configs/prefixes.json'))
+		prefixes = json.load(open('bot/configs/prefixes.json'))
 		with open('configs/prefixes.json', 'w') as f:
 			prefixes[str(guild.id)] = DEFAULT_PREFIX
-			json.dump(prefixes, f, indent=2)
+			json.dump(prefixes, f, indent=2, sort_keys=True)
 
 	async def on_guild_remove(self, guild):
-		prefixes = json.load(open('configs/prefixes.json'))
+		prefixes = json.load(open('bot/configs/prefixes.json'))
 		with open('configs/prefixes.json', 'w') as f:
 			prefixes.pop(str(guild.id))
 			json.dump(prefixes, f, indent=2, sort_keys=True)
