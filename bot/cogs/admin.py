@@ -58,22 +58,25 @@ class Admin(commands.Cog):
 	@commands.command()
 	@commands.guild_only()
 	@checks.is_admin()
-	async def unban(self, ctx, user_id: int = None):
+	async def unban(self, ctx, *, member=None):
 		"""Unbans the user."""
-		if user_id is None:
+		if member is None:
 			raise commands.BadArgument
 
-		user = self.bot.get_user(user_id=user_id)
-		await ctx.guild.unban(user)
-		await ctx.send(f'{user} was unbanned by {ctx.author.mention}.')
+		banned_users = await ctx.guild.bans()
+		member_name, member_discriminator = member.split('#')
+
+		for ban_entry in banned_users:
+			user = ban_entry.user
+
+			if (user.name, user.discriminator) == (member_name, member_discriminator):
+				await ctx.guild.unban(user)
+				await ctx.send(f'{user} was unbanned by {ctx.author.mention}.')
 
 	@unban.error
 	async def unban_error(self, ctx, error):
 		if isinstance(error, commands.BadArgument):
-			await ctx.send(
-				'Please insert a valid user ID.\nHow to get an user ID:'
-				'https://support.discord.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID-'
-			)
+			await ctx.send('Please enter the username of a member.')
 
 
 def setup(bot):
