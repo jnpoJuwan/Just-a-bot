@@ -5,7 +5,6 @@ import discord
 from discord.ext import commands
 from pytz import timezone, utc
 
-from ..utils import checks
 from ..utils.constants import COLOUR, ARROW_TO_BEGINNING, LEFT_ARROW, DELETE_EMOJI, RIGHT_ARROW, ARROW_TO_END, \
 	PAGINATION_EMOJI
 
@@ -64,12 +63,16 @@ class JustAChat(commands.Cog, name='Just a chat...'):
 		def page_counter():
 			return f'Page {i + 1}/{len(pages)}'
 
-		embed = discord.Embed(title='Just some guidelines...', colour=COLOUR)
-		for k, v in pages[i].items():
-			docs_links = [f'• **[{text}]({url})**' for text, url in v.items()]
-			embed.title = k
-			embed.description = '\n'.join(docs_links)
+		def get_page_title():
+			for heading, _ in pages[i].items():
+				return heading
 
+		def get_page_content():
+			for _, content in pages[i].items():
+				docs_links = [f'• **[{text}]({url})**' for text, url in content.items()]
+				return '\n'.join(docs_links)
+
+		embed = discord.Embed(title=get_page_title(), description=get_page_content(), colour=COLOUR)
 		embed.set_footer(text=f'Requested by {ctx.author.display_name} | {page_counter()}',
 		                 icon_url=ctx.author.avatar_url)
 		message = await ctx.send(embed=embed)
@@ -78,11 +81,8 @@ class JustAChat(commands.Cog, name='Just a chat...'):
 			await message.add_reaction(emoji)
 
 		async def update_message():
-			for _k, _v in pages[i].items():
-				_docs_links = [f'• **[{text}]({url})**' for text, url in _v.items()]
-				embed.title = _k
-				embed.description = '\n'.join(_docs_links)
-
+			embed.title = get_page_title()
+			embed.description = get_page_content()
 			embed.set_footer(text=f'Requested by {ctx.author.display_name} | {page_counter()}',
 			                 icon_url=ctx.author.avatar_url)
 			await message.edit(embed=embed)
@@ -179,9 +179,8 @@ class JustAChat(commands.Cog, name='Just a chat...'):
 		embed.set_footer(text=f'Requested by {ctx.author.display_name}', icon_url=ctx.author.avatar_url)
 		await ctx.send(embed=embed)
 
-	@commands.command(aliases=['jsg'])
+	@commands.command(aliases=['jacguidelines', 'jsg'])
 	@commands.cooldown(1, 60.0, commands.BucketType.user)
-	@checks.is_mod()
 	async def jsguidelines(self, ctx, paginator='on'):
 		"""
 		Sends the Just a chat... guidelines from Amino.
@@ -195,21 +194,16 @@ class JustAChat(commands.Cog, name='Just a chat...'):
 
 		file = open('bot/data/languages.md', encoding='utf-8')
 		lines = file.readlines()
-		pages = []
+		pages = [{}]
 
-		# XXX: Probably not the best solution.
-		# FIXME: There's still manual pagination.
-		for line in lines:
-			# Loop over the lines, turn headings level 1 and headings level 2 into dictionaries,
-			# add the text content into them, and append it into pages.
-			if line.startswith('# '):
+		for line in lines[1:]:
+			if len(pages[-1]) >= 24 or line.startswith('# '):
 				pages.append({})
-			elif line.startswith('## '):
-				current_line = lines.index(line)
-				# Join up the three lines of content after the heading.
-				# XXX: Adding a new line breaks the "pseudo-paginator".
-				page_content = ''.join(lines[current_line + 1: current_line + 4])[:-1]
-				# Find the last page and append the section into it.
+
+			if line.startswith('## '):
+				heading_line = lines.index(line)
+				page_content = ''.join(lines[heading_line + 1: heading_line + 4])[:-1]
+				# Find the last dictionary and append this section into it.
 				dict_indices = [i for i, v in enumerate(pages) if isinstance(v, dict)]
 				pages[dict_indices[-1]][line[3:-1]] = page_content
 
