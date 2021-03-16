@@ -61,7 +61,7 @@ penis_aliases = [
 	'middle_leg',
 	'Mr._Happy',
 	'Mr._Microphone',
-	'morning missile',
+	'morning_missile',
 	'the_monster',
 	'main_muscle',
 	'monkey',
@@ -89,7 +89,7 @@ penis_aliases = [
 	'schmuck',
 	'schwantz',
 	'stiffy',
-	'third leg',
+	'third_leg',
 	'tinkler',
 	'wee-wee',
 	'weiner',
@@ -131,9 +131,9 @@ class Fun(commands.Cog):
 		)
 
 		if not question:
-			await ctx.send(random.choice(outcomes))
+			await ctx.send(f'**{random.choice(outcomes)}**')
 		else:
-			await ctx.send(f'> {question}\n{random.choice(outcomes)}')
+			await ctx.send(f'> {question}\n**{random.choice(outcomes)}**')
 
 	@commands.command()
 	async def cbt(self, ctx):
