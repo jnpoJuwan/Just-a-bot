@@ -4,24 +4,16 @@ from discord.ext import commands
 from ..utils.constants import COLOUR
 from ..utils.paginator import EmbedPaginator
 
-FIRST_EMOJI = '\u23ee'
-LEFT_EMOJI = '\u2b05'
-DELETE_EMOJI = '\U0001f5d1\ufe0f'
-RIGHT_EMOJI = '\u27a1'
-LAST_EMOJI = '\u23ed'
-
-PAGINATION_EMOJI = (FIRST_EMOJI, LEFT_EMOJI, DELETE_EMOJI, RIGHT_EMOJI, LAST_EMOJI)
-
 
 # CRED: @Tortoise-Community (https://github.com/Tortoise-Community/Tortoise-BOT/blob/master/bot/cogs/help.py)
 class PrettyHelpCommand(commands.MinimalHelpCommand):
 	def __init__(self, **options):
 		super().__init__()
 		self.aliases_heading = options.pop('aliases_heading', 'aliases: ')
-		self.paginator = EmbedPaginator(embed_title='Help', page_size=500)
+		self.paginator = EmbedPaginator(embed_title='Help', page_size=1000)
 
 	def add_aliases_formatting(self, aliases):
-		self.paginator.add_line(f' ({self.aliases_heading}{", ".join(map(lambda x: f"`{x}`", aliases))})')
+		self.paginator.add_line(f'({self.aliases_heading}{"; ".join(map(lambda x: f"*`{x}`*", aliases))})')
 
 	def add_command_formatting(self, command):
 		if command.description:
@@ -29,10 +21,10 @@ class PrettyHelpCommand(commands.MinimalHelpCommand):
 
 		signature = self.get_command_signature(command)
 		if command.aliases:
-			self.paginator.add_line(f'`{signature.strip()}`')
+			self.paginator._embed_title = f'*`{signature.strip()}`*'
 			self.add_aliases_formatting(command.aliases)
 		else:
-			self.paginator.add_line(f'`{signature.strip()}`', empty=True)
+			self.paginator._embed_title = f'*`{signature.strip()}`*'
 
 		if command.help:
 			try:
@@ -47,7 +39,7 @@ class PrettyHelpCommand(commands.MinimalHelpCommand):
 
 	def add_bot_commands_formatting(self, commands_, heading):
 		if commands_:
-			outputs = [f'`{c.name}` ◆ {c.short_doc}' for c in commands_]
+			outputs = [f'`{c.name}` – {c.short_doc}' for c in commands_]
 			joined = "\n".join(outputs)
 			self.paginator.add_line(f'\n\n**{heading}**\n')
 			self.paginator.add_line(joined)
