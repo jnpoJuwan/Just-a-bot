@@ -203,7 +203,7 @@ class Actions(commands.Cog):
 
 	@commands.command()
 	async def reject(self, ctx, member: discord.Member = None):
-		"""Reject someone."""
+		"""Rejects someone."""
 		if not member:
 			await ctx.send('You didn\'t reject anyone.')
 		elif member == ctx.author:
@@ -223,7 +223,7 @@ class Actions(commands.Cog):
 
 	@commands.command()
 	async def shoot(self, ctx, member: discord.Member = None):
-		"""Shoot someone."""
+		"""Shoots someone."""
 		if not member:
 			await ctx.send('You didn\'t shoot anyone.')
 		elif member == ctx.author:
@@ -249,7 +249,7 @@ class Actions(commands.Cog):
 
 	@commands.command()
 	async def slap(self, ctx, member: discord.Member = None):
-		"""Slaps someone's face or juicy arse."""
+		"""Slaps someone's face or their thicc, juicy arse."""
 		# XXX: Probably not the best solution.
 		choices = [
 			('You facepalmed.',
@@ -275,7 +275,7 @@ class Actions(commands.Cog):
 
 	@commands.command()
 	async def stab(self, ctx, member: discord.Member = None):
-		"""Stab someone."""
+		"""Stabs someone."""
 		if not member:
 			await ctx.send('You didn\'t stab anyone.')
 		elif member == ctx.author:
