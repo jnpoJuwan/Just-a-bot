@@ -155,7 +155,8 @@ class JustAChat(commands.Cog, name='Just a chat...'):
 
 		embed = discord.Embed(title='Just some time zones...', colour=COLOUR)
 		for k, v in tz_dict.items():
-			embed.add_field(name=k, value=str(dt.astimezone(v).strftime('%A, %B %d **%H:%M** UTC%z')))
+			tz = str(dt.astimezone(v).strftime('%A, %B %d **%H:%M** UTC%z'))
+			embed.add_field(name=k, value=tz[:-2] + ':' + tz[-2:])
 
 		embed.set_footer(text=f'Requested by {ctx.author.display_name}', icon_url=ctx.author.avatar_url)
 		await message.edit(embed=embed)
@@ -192,11 +193,12 @@ class JustAChat(commands.Cog, name='Just a chat...'):
 		if paginator not in ['off', 'on']:
 			raise commands.BadArgument
 
-		file = open('bot/data/languages.md', encoding='utf-8')
-		lines = file.readlines()
+		with open('bot/data/languages.md', encoding='utf-8') as f:
+			lines = f.readlines()
 		pages = [{}]
 
-		for line in lines[1:]:
+		for line in lines[2:]:
+			# Ignore the first heading and comment.
 			if len(pages[-1]) >= 24 or line.startswith('# '):
 				pages.append({})
 
