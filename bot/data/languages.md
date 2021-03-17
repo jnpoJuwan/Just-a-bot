@@ -65,9 +65,9 @@ Les regles del Amino s'apliquen aquí!
 L'humor negre està permès, però no ofenguis ningú.  
 Pau i amor. Siguem tots amics! :D
 ## 🇵🇾 Avañe'ẽ
-Amíno tekorã ojeporu ko'ápe avei!  
-Ore rohechakuaáta tykue pytũ, anínte remoñemyrõi ambue tapicha.  
-Py'aguapy ha mborayhu. Javy'ákena ko'ápe! :D
+Amíno rekorãnguéra ojeporu ko'ápe avei!
+Ore rohechakuaáta tykue pytũ, anínte remoñemyrõi ambue tapicha.
+Py'aguapy ha mborayhu. Ñañomoangirũkena ko'ápe!
 ## Lombard
 I regol del Amino i se applichen anca chì!  
 El humor negher a l’è permiss, ma offend minga nissun.  
@@ -157,6 +157,10 @@ An e lib isi. Wi bi pwend beto! :D
 Libiim Aminoermet kamamt dare  
 Imiem tashfem mhort nihdir, na n'eblesh neam.  
 Imildesh Fash ne hish, berostem! :D
+## naia ivik
+amino v uxrdvömeŋaadrŋre dru xalŋdöŋ!
+ŋomÿüŋÿreŋiraölöŋadrkonura n iŋur, gÿrÿŋ kö uxr döreŋadru öliŋö.
+xalŋarmöŋl yeŋa tarudöŋ. döre döŋureŋa dru iŋur n! :D
 ## Ndu Biliva
 Bularu Vamimu mi rula lurawa bu ndu ba!  
 Ndima munli ramba wuva ba. Wuva bularu li ba.  
@@ -165,10 +169,6 @@ Lamvi dida ridandi. Mimu bularu rami bu ba! :D
 Komeko Amino-Ikke keta hahā ef fika.  
 Lakko bala ef teu, tayo imi(imy) mafa ach.  
 Kemi teuta koni teu. Lalaik mam ach fika teu! :D
-## Ommem
-’ꜛ3ꜛ1ꜜ2ꜛ4400  ꜜ50  ’ꜛ2ꜛ44ꜜ4ꜜ2ꜛ6ꜜ22  ꜜꜜ200！  
-ꜛ3ꜜ1’0’ꜜ11  ꜜꜜ1’ꜛ2  ꜜ1ꜛ2ꜜ1’ꜛ1’  ’ꜛ3’  ꜜꜜ2ꜛ2  ꜛ66ꜜ50  ꜜ6  ꜜ2ꜛ550  ꜛ1ꜜ1ꜛ2ꜛ3’  
-ꜛ44ꜜ11  0  ꜛ3ꜜ1’0’ .  ꜜꜜ2ꜛ2  ꜛ3ꜜ11ꜛ2  ꜜꜜ1 ꜜꜜ1 ꜜꜜ1ꜜ5ꜛ2ꜛ3’！:D
 ## Ommem
 Ŏfsmiitt irer Ŏmiimotss iisess!  
 Ofm’em’oo lls’i salil’ ŏf’ iisi ottrer id ariit oroml’.  
@@ -221,6 +221,10 @@ Frid ok æst. All erm frændar hér! :D
 Löv​Zis​Vun​Ðyt​Prs​Grp​Viz​Vim​Cin​Ðis​Plw!  
 Vöt​Wys​Fun​Nis​Viz​Key.​Nöt​Ply​Köz"​Cen​Prs​Viz​Vöt​Hap".  
 Vöt​Wor​Van​Luv​Nis.Ply​Let​"Cöl​Nuy​Viz​Fen​Zis​"Cin​Ðis​Plw! :D
+## наиа ивик
+амино в ухрдвөмеңаадрңре дру халңдөң! 
+үңыреңыреңираөлөңадрконура н иңур, гырың ухр дөреңадру өлиңө.
+халңармөңл йэңа тарудөң. дөрэ н дөңурэңа дру иңур н! :D
 ## ⲘOΡΑΒИ
 ¡Ⲗαs ρиɣⲗαs Ⲇ̃ εⲗ Αⲙиⲛo S̃ απⲗиϧαⲛ ακи ταнεⲙ!  
 Ⲙoz ταⲙиⲗαⲙos εⲗ uⲙoρ ⲇαϧκⲛo, soⲗo ⲛo ιραинεs ⲛατα.  
@@ -229,6 +233,10 @@ Sуⲗⲙα uε ⲙαuⲇα. ¡sεαⲙos τoⲇos αⲙεκos! :D
 「Amino」拥法文此処在振用前!  
 酸笑者寛容愔、怒不命人或。  
 平和及愛。我全友是命! :D
+## ꜛ220
+’ꜛ3ꜛ1ꜜ2ꜛ4400  ꜜ50  ’ꜛ2ꜛ44ꜜ4ꜜ2ꜛ6ꜜ22  ꜜꜜ200！  
+ꜛ3ꜜ1’0’ꜜ11  ꜜꜜ1’ꜛ2  ꜜ1ꜛ2ꜜ1’ꜛ1’  ’ꜛ3’  ꜜꜜ2ꜛ2  ꜛ66ꜜ50  ꜜ6  ꜜ2ꜛ550  ꜛ1ꜜ1ꜛ2ꜛ3’  
+ꜛ44ꜜ11  0  ꜛ3ꜜ1’0’ .  ꜜꜜ2ꜛ2  ꜛ3ꜜ11ꜛ2  ꜜꜜ1 ꜜꜜ1 ꜜꜜ1ꜜ5ꜛ2ꜛ3’！:D
 ## 강서말
 아미노워 왕추미 죵댠!  
 운엥 유민 햐샌디, 걍 단 인간 환다메 학 마드레 망세비.  
