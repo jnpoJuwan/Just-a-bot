@@ -41,8 +41,6 @@ class PrettyHelpCommand(commands.MinimalHelpCommand):
         if commands_:
             outputs = [f'`{c.name}` – {c.short_doc}' for c in commands_]
             joined = '\n'.join(outputs)
-            # outputs = [f'`{c.name}`' for c in commands_]
-            # joined = ' | '.join(outputs)
             self.paginator.add_line(f'\n\n**{heading}**\n')
             self.paginator.add_line(joined)
 

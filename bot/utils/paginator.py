@@ -1,11 +1,11 @@
 import asyncio
-import typing as t
+from typing import List, Union
 
 import discord
 from discord.abc import Messageable
 from discord.ext import commands
 
-from .constants import COLOUR, ARROW_TO_BEGINNING, LEFT_ARROW, DELETE_EMOJI, RIGHT_ARROW, ARROW_TO_END, \
+from .constants import COLOUR, TIMEOUT, ARROW_TO_BEGINNING, LEFT_ARROW, DELETE_EMOJI, RIGHT_ARROW, ARROW_TO_END, \
     PAGINATION_EMOJI
 
 
@@ -15,7 +15,7 @@ class Paginator:
             self, *,
             page_size: int = 2000,
             separator: str = '\n',
-            timeout: int = 300,
+            timeout: int = TIMEOUT,
             prefix: str = '',
             suffix: str = ''
     ):
@@ -55,7 +55,7 @@ class Paginator:
         return pages
 
     @staticmethod
-    def break_long_entries(chunk_list: t.List[str], max_chunk_size: int):
+    def break_long_entries(chunk_list: List[str], max_chunk_size: int):
         """
         We further break down chunk_list in case any of the entries are larger than max_chunk_size.
         Modifies passed list in place!
@@ -76,7 +76,7 @@ class Paginator:
                 Paginator.break_long_entries(chunk_list, max_chunk_size)
                 break
 
-    async def start(self, destination: Messageable, author: t.Union[discord.User, discord.Member], bot_reference):
+    async def start(self, destination: Messageable, author: Union[discord.User, discord.Member], bot_reference):
         self._pages = self._make_pages()
         await self.create_message(destination)
         if len(self._pages) > 1:
@@ -126,7 +126,6 @@ class Paginator:
         try:
             await self._message.clear_reactions()
         except discord.HTTPException:
-            # Silently ignore if no permission to remove reaction.
             pass
 
     async def create_message(self, destination: Messageable):
@@ -138,14 +137,13 @@ class Paginator:
     def get_message_content(self):
         return f'{self.prefix}{self._pages[self._page_index]}{self.suffix}'
 
-    async def _remove_reaction(self, reaction, author: t.Union[discord.User, discord.Member]):
+    async def _remove_reaction(self, reaction, author: Union[discord.User, discord.Member]):
         try:
             await self._message.remove_reaction(reaction, author)
         except discord.HTTPException:
-            # Silently ignore if no permission to remove reaction (e.g. in DMs).
             pass
 
-    async def _start_listener(self, author: t.Union[discord.User, discord.Member], bot_reference):
+    async def _start_listener(self, author: Union[discord.User, discord.Member], bot_reference):
         def check(reaction_, user_):
             return (
                     str(reaction_) in PAGINATION_EMOJI and
@@ -252,7 +250,7 @@ class ListPaginator:
 
         while True:
             try:
-                reaction, user = await self.bot.wait_for('reaction_add', timeout=300, check=check)
+                reaction, user = await self.bot.wait_for('reaction_add', timeout=TIMEOUT, check=check)
 
                 if str(reaction.emoji) == ARROW_TO_BEGINNING:
                     await msg.edit(embed=pages[0])
@@ -279,5 +277,5 @@ class ListPaginator:
                     await msg.edit(embed=prev_page)
                     current_page = prev_page
                     await msg.remove_reaction(LEFT_ARROW, ctx.author)
-            except TimeoutError:
+            except asyncio.TimeoutError:
                 await msg.clear_reactions()

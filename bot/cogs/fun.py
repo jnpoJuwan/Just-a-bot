@@ -63,7 +63,8 @@ class Fun(commands.Cog):
 
     @commands.command(aliases=['say'])
     async def echo(self, ctx, *, message='echo'):
-        """Echoes the user's message."""
+        """Echoes the user's message while also deleting it."""
+        await ctx.message.delete()
         await ctx.send(message)
 
     @commands.command(aliases=['fuckyou', 'f*ck_you'], hidden=True)
@@ -106,7 +107,7 @@ class Fun(commands.Cog):
 
         if member == self.bot.user:
             await ctx.send(f'{member.display_name}\'s micropenis is 32 µm long: **8D**')
-        if n < 5:
+        elif n < 5:
             await ctx.send(f'{member.display_name}\'s micropenis is {n} cm long: {_penis}')
         elif n < 20:
             await ctx.send(f'{member.display_name}\'s penis is {n} cm long: {_penis}')
