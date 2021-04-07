@@ -1,4 +1,3 @@
-<!-- SEE: https://docs.google.com/document/d/1NAH6GZNC0UNFHdBmAd0u9U5keGhAgnxY-vqiRaATL8c/edit?usp=sharing -->
 # Just some guidelines...
 ## 🇬🇧🇺🇸 English
 The Amino's guidelines apply here!  
