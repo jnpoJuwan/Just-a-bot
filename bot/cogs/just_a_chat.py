@@ -1,4 +1,3 @@
-import asyncio
 import datetime
 import json
 
@@ -6,8 +5,11 @@ import discord
 from discord.ext import commands
 from pytz import timezone, utc
 
-from ..utils.constants import COLOUR, ARROW_TO_BEGINNING, LEFT_ARROW, DELETE_EMOJI, RIGHT_ARROW, ARROW_TO_END, \
-    PAGINATION_EMOJI
+from ..utils.constants import COLOUR
+from ..utils.paginator import ListPaginator
+
+TRUE_VALUES = ['1', 'on', 'true', 'yes']
+FALSE_VALUES = ['0', 'false', 'no', 'off']
 
 
 class JustAChat(commands.Cog, name='Just a chat...'):
@@ -16,90 +18,91 @@ class JustAChat(commands.Cog, name='Just a chat...'):
 
     # GLOSS: 'js' means 'Just some', not 'JavaScript'.
 
-    @commands.command(aliases=['jacdocs', 'jsd', 'just_some_documents'])
-    async def jsdocs(self, ctx):
+    @commands.command(aliases=['jacdocs', 'jsd', 'jsdocs'])
+    async def just_some_docs(self, ctx):
         """Sends Just some documents...."""
-        docs_dict = json.load(open('bot/assets/text/jsdocs.json'))
-
-        pages = [{k: v} for k, v in docs_dict.items()]
-
         # CRED: @Tortoise-Community
         # (https://github.com/Tortoise-Community/Tortoise-BOT/blob/master/bot/utils/paginator.py)
-        i = 0
+        page_list = []
 
-        def page_counter():
-            return f'Page {i + 1}/{len(pages)}'
+        await ctx.trigger_typing()
+        raw_page_list = json.load(open('bot/assets/text/just_some_docs.json'))
+        i = 1
 
-        def get_page_title():
-            for heading, _ in pages[i].items():
-                return heading
+        def add_content_formatting(content):
+            docs_links = [f'• **[{text}]({url})**' for text, url in content.items()]
+            return '\n'.join(docs_links)
 
-        def get_page_content():
-            for _, content in pages[i].items():
-                docs_links = [f'• **[{text}]({url})**' for text, url in content.items()]
-                return '\n'.join(docs_links)
-
-        embed = discord.Embed(title=get_page_title(), description=get_page_content(), colour=COLOUR)
-        embed.set_footer(text=f'Requested by {ctx.author.display_name} | {page_counter()}',
-                         icon_url=ctx.author.avatar_url)
-        message = await ctx.send(embed=embed)
-
-        for emoji in PAGINATION_EMOJI:
-            await message.add_reaction(emoji)
-
-        async def update_message():
-            embed.title = get_page_title()
-            embed.description = get_page_content()
-            embed.set_footer(text=f'Requested by {ctx.author.display_name} | {page_counter()}',
+        for k, v in raw_page_list.items():
+            embed = discord.Embed(title=k, description=add_content_formatting(v), colour=COLOUR)
+            embed.set_footer(text=f'Requested by {ctx.author.display_name} | Page {i}/{len(raw_page_list)}',
                              icon_url=ctx.author.avatar_url)
-            await message.edit(embed=embed)
 
-        async def clear_all_reactions():
-            try:
-                await message.clear_reactions()
-            except discord.HTTPException:
-                # Silently ignore if no permission to remove reaction.
-                pass
+            page_list.append(embed)
+            i += 1
 
-        def check(reaction_, member):
-            return (
-                    str(reaction_) in PAGINATION_EMOJI and
-                    member.id == ctx.author.id and
-                    reaction_.message.id == message.id
-            )
+        paginator = ListPaginator(ctx, page_list)
+        await paginator.start()
 
-        while True:
-            try:
-                reaction, user = await self.bot.wait_for('reaction_add', timeout=300, check=check)
-            except asyncio.TimeoutError:
-                await clear_all_reactions()
-                break
+    @commands.command(aliases=['jacguidelines', 'jsg', 'jsguidelines'])
+    @commands.cooldown(1, 60.0, commands.BucketType.user)
+    async def just_some_guidelines(self, ctx, is_paginated='on'):
+        """Sends Just some guidelines....
 
-            if str(reaction) == ARROW_TO_BEGINNING:
-                await message.remove_reaction(ARROW_TO_BEGINNING, ctx.author)
-                if i > 0:
-                    i = 0
-                    await update_message()
-            elif str(reaction) == LEFT_ARROW:
-                await message.remove_reaction(LEFT_ARROW, ctx.author)
-                if i > 0:
-                    i -= 1
-                    await update_message()
-            elif str(reaction) == DELETE_EMOJI:
-                return await message.delete()
-            elif str(reaction) == RIGHT_ARROW:
-                await message.remove_reaction(RIGHT_ARROW, ctx.author)
-                if i < len(pages) - 1:
-                    i += 1
-                    await update_message()
-            elif str(reaction) == ARROW_TO_END:
-                await message.remove_reaction(ARROW_TO_END, ctx.author)
-                if i < len(pages) - 1:
-                    i = len(pages) - 1
-                    await update_message()
+        The is_paginated setting can be turned either on or off.
+        """
+        is_paginated = is_paginated.lower()
 
-    @commands.command(aliases=['jactimezones', 'jactz', 'jstz'])
-    async def jstimezones(self, ctx):
+        if is_paginated not in TRUE_VALUES and is_paginated not in FALSE_VALUES:
+            raise commands.BadArgument
+
+        # SEE: https://docs.google.com/document/d/1NAH6GZNC0UNFHdBmAd0u9U5keGhAgnxY-vqiRaATL8c/edit?usp=sharing
+        guideline_lines = open('bot/assets/text/amino_guidelines.md', encoding='utf-8').readlines()
+        # raw_page_list is made of dictionaries (pages) containing the heading and contents.
+        raw_page_list = [{}]
+
+        for index, value in enumerate(guideline_lines[1:]):
+            # Ignore the first heading.
+            if value.startswith('# ') or len(raw_page_list[-1]) >= 24:
+                raw_page_list.append({})
+
+            if value.startswith('## '):
+                page_content = ''.join(guideline_lines[index + 3: index + 6])[:-1]
+                raw_page_list[-1][value[3:-1]] = page_content
+
+        if is_paginated in FALSE_VALUES:
+            for page in raw_page_list:
+                embed = discord.Embed(title='Just some guidelines...', colour=COLOUR)
+                for k, v in page.items():
+                    embed.add_field(name=k, value=v)
+
+                if page == raw_page_list[-1]:
+                    embed.set_footer(text=f'Requested by {ctx.author.display_name}', icon_url=ctx.author.avatar_url)
+                await ctx.send(embed=embed)
+        else:
+            page_list = []
+            i = 1
+
+            for page in raw_page_list:
+                embed = discord.Embed(title='Just some guidelines...', colour=COLOUR)
+                for k, v in page.items():
+                    embed.add_field(name=k, value=v)
+                embed.set_footer(text=f'Requested by {ctx.author.display_name} | Page {i}/{len(raw_page_list)}',
+                                 icon_url=ctx.author.avatar_url)
+
+                page_list.append(embed)
+                i += 1
+
+            paginator = ListPaginator(ctx, page_list)
+            await paginator.start()
+
+    @just_some_guidelines.error
+    async def just_some_guidelines_error(self, ctx, error):
+        if isinstance(error, commands.BadArgument):
+            await ctx.send('The paginated setting must be turned either on or off.')
+
+    @commands.command(aliases=['jactimezones', 'jactz', 'jstimezones', 'jstz'])
+    async def just_some_timezones(self, ctx):
         """Sends Just a chat... users' time zones."""
         message = await ctx.send('Calculating times...')
 
@@ -123,14 +126,13 @@ class JustAChat(commands.Cog, name='Just a chat...'):
         embed = discord.Embed(title='Just some time zones...', colour=COLOUR)
         for k, v in tz_dict.items():
             tz = str(dt.astimezone(v).strftime('%A, %B %d **%H:%M** UTC%z'))
-            # FIXME: Time zone offsets should be, for example, UTC+1, not UTC+01.
-            embed.add_field(name=k, value=(tz[:-2] if tz[-2:] == '00' else tz[:-2] + ':' + tz[-2:]))
+            embed.add_field(name=k, value=tz[:-2] + ':' + tz[-2:])
 
         embed.set_footer(text=f'Requested by {ctx.author.display_name}', icon_url=ctx.author.avatar_url)
         await message.edit(embed=embed)
 
-    @commands.command(aliases=['jacyoutube', 'jacyt', 'jsyt'])
-    async def jsyoutube(self, ctx):
+    @commands.command(aliases=['jacyoutube', 'jacyt', 'jsyoutube', 'jsyt'])
+    async def just_some_youtube(self, ctx):
         """Send some Just a chat... users' YouTube channels."""
         channels_dict = {
             'Aurora': 'https://www.youtube.com/channel/UCmDE7oQp2wzTLxd7lc4mA9A',
@@ -147,119 +149,6 @@ class JustAChat(commands.Cog, name='Just a chat...'):
 
         embed.set_footer(text=f'Requested by {ctx.author.display_name}', icon_url=ctx.author.avatar_url)
         await ctx.send(embed=embed)
-
-    @commands.command(aliases=['jacguidelines', 'jsg'])
-    @commands.cooldown(1, 60.0, commands.BucketType.user)
-    async def jsguidelines(self, ctx, paginator='on'):
-        """Sends Just some guidelines....
-
-        The paginator can be turned either on or off.
-        """
-        if paginator not in ['off', 'on']:
-            raise commands.BadArgument
-
-        # SEE: https://docs.google.com/document/d/1NAH6GZNC0UNFHdBmAd0u9U5keGhAgnxY-vqiRaATL8c/edit?usp=sharing
-        lines = open('bot/assets/languages.md', encoding='utf-8').readlines()
-        pages = [{}]
-
-        for line in lines[2:]:
-            # Ignore the first heading and comment.
-            if len(pages[-1]) >= 24 or line.startswith('# '):
-                pages.append({})
-
-            if line.startswith('## '):
-                current_line = lines.index(line)
-                page_content = ''.join(lines[current_line + 1: current_line + 4])[:-1]
-                # Find the last dictionary and append this section into it.
-                dict_indices = [i for i, v in enumerate(pages) if isinstance(v, dict)]
-                pages[dict_indices[-1]][line[3:-1]] = page_content
-
-        if paginator == 'off':
-            embed = discord.Embed(title='Just some guidelines...', colour=COLOUR)
-
-            for page in pages[:-1]:
-                for k, v in page.items():
-                    embed.add_field(name=k, value=v)
-                await ctx.send(embed=embed)
-                embed.clear_fields()
-
-            # Only the last embed needs a footer.
-            for k, v in pages[-1].items():
-                embed.add_field(name=k, value=v)
-            embed.set_footer(text=f'Requested by {ctx.author.display_name}', icon_url=ctx.author.avatar_url)
-            await ctx.send(embed=embed)
-        else:
-            i = 0
-
-            def page_counter():
-                return f'Page {i + 1}/{len(pages)}'
-
-            embed = discord.Embed(title='Just some guidelines...', colour=COLOUR)
-            for k, v in pages[i].items():
-                embed.add_field(name=k, value=v)
-            embed.set_footer(text=f'Requested by {ctx.author.display_name} | {page_counter()}',
-                             icon_url=ctx.author.avatar_url)
-            message = await ctx.send(embed=embed)
-
-            for emoji in PAGINATION_EMOJI:
-                await message.add_reaction(emoji)
-
-            async def update_message():
-                embed.clear_fields()
-                for _k, _v in pages[i].items():
-                    embed.add_field(name=_k, value=_v)
-                embed.set_footer(text=f'Requested by {ctx.author.display_name} | {page_counter()}',
-                                 icon_url=ctx.author.avatar_url)
-                await message.edit(embed=embed)
-
-            async def clear_all_reactions():
-                try:
-                    await message.clear_reactions()
-                except discord.HTTPException:
-                    # Silently ignore if no permission to remove reaction.
-                    pass
-
-            def check(reaction_, member):
-                return (
-                        str(reaction_) in PAGINATION_EMOJI and
-                        member.id == ctx.author.id and
-                        reaction_.message.id == message.id
-                )
-
-            while True:
-                try:
-                    reaction, user = await self.bot.wait_for('reaction_add', timeout=300, check=check)
-                except asyncio.TimeoutError:
-                    await clear_all_reactions()
-                    break
-
-                if str(reaction) == ARROW_TO_BEGINNING:
-                    await message.remove_reaction(ARROW_TO_BEGINNING, ctx.author)
-                    if i > 0:
-                        i = 0
-                        await update_message()
-                elif str(reaction) == LEFT_ARROW:
-                    await message.remove_reaction(LEFT_ARROW, ctx.author)
-                    if i > 0:
-                        i -= 1
-                        await update_message()
-                elif str(reaction) == DELETE_EMOJI:
-                    return await message.delete()
-                elif str(reaction) == RIGHT_ARROW:
-                    await message.remove_reaction(RIGHT_ARROW, ctx.author)
-                    if i < len(pages) - 1:
-                        i += 1
-                        await update_message()
-                elif str(reaction) == ARROW_TO_END:
-                    await message.remove_reaction(ARROW_TO_END, ctx.author)
-                    if i < len(pages) - 1:
-                        i = len(pages) - 1
-                        await update_message()
-
-    @jsguidelines.error
-    async def jsguidelines_error(self, ctx, error):
-        if isinstance(error, commands.BadArgument):
-            await ctx.send('The paginator setting must be turned either on or off.')
 
 
 def setup(bot):
