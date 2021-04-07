@@ -5,7 +5,7 @@
 
 **A personal general purpose Discord bot.**
 
-<img alt="Just a bot... avatar" align="right" src="https://i.imgur.com/XNZAznD.png" width=30%/>
+<img alt="Just a bot... avatar" align="right" src="https://i.imgur.com/fBbNmfg.png" width=30%/>
 
 This bot is only meant to work only in servers of Just a chat... and Just a mess... members.
 Code here serves for transparency.
