@@ -1,8 +1,8 @@
 import io
 import json
+import random
 import textwrap
 import traceback
-import random
 from contextlib import redirect_stdout
 
 import discord
@@ -10,13 +10,15 @@ from async_cse import Search
 from discord.ext import commands
 from googletrans import Translator
 from wiktionaryparser import WiktionaryParser
+from youtube_search import YoutubeSearch
 
 from ..configs.configs import GOOGLE_API_KEY
 from ..utils import exceptions
 from ..utils.constants import COLOUR, SPAM_LIMIT
 from ..utils.paginator import ListPaginator
 
-LANGUAGE_CODES = json.load(open('bot/assets/text/language_codes.json'))
+LANGUAGES = json.load(open('bot/assets/text/language_codes.json'))
+LANG_CODES = {v: k for k, v in LANGUAGES.items()}
 
 
 class Utils(commands.Cog):
@@ -42,7 +44,7 @@ class Utils(commands.Cog):
 
     # CRED: @Rapptz (https://github.com/Rapptz/RoboDanny/blob/rewrite/cogs/admin.py#L216)
     @commands.command(name='eval', pass_context=True)
-    async def _eval(self, ctx, *, body: str):
+    async def eval_(self, ctx, *, body: str):
         """Evaluates Python code."""
         env = {
             'bot': self.bot,
@@ -97,13 +99,12 @@ class Utils(commands.Cog):
         p = json.load(file)[str(ctx.message.guild.id)]
         await ctx.send(f'This server\'s prefix is `{p}`.')
 
-    # frogges#1517 <@519950654555553806> challenged me to make this.
     # CRED: @Tortoise-Community (https://github.com/Tortoise-Community/Tortoise-BOT/blob/master/bot/cogs/utility.py#L19)
-    # CAVEAT: Google's Custom Search JSON API provides only 100 search queries per day for free.
+    # NOTE: Google's Custom Search JSON API provides only 100 search queries per day for free.
     @commands.command()
-    async def google(self, ctx, *, query='query'):
+    async def google(self, ctx, *, query):
         """Searches Google for a query."""
-        pages = []
+        page_list = []
 
         await ctx.trigger_typing()
         results = await self.google_client.search(query)
@@ -116,10 +117,10 @@ class Utils(commands.Cog):
             embed.set_footer(text=f'Requested by {ctx.author.display_name} | Page {i}/{len(results)} | {query}',
                              icon_url=ctx.author.avatar_url)
 
-            pages.append(embed)
+            page_list.append(embed)
             i += 1
 
-        paginator = ListPaginator(ctx, pages)
+        paginator = ListPaginator(ctx, page_list)
         await paginator.start()
 
     @commands.command(aliases=['vote'])
@@ -137,12 +138,12 @@ class Utils(commands.Cog):
         """Creates a basic poll with numbers."""
         embed = discord.Embed(title='Poll', description=question, colour=COLOUR)
         embed.set_footer(text=f'Requested by {ctx.author.display_name}', icon_url=ctx.author.avatar_url)
-        message = await ctx.send(embed=embed)
+        -message = await ctx.send(embed=embed)
         await message.add_reaction('1️⃣')
         await message.add_reaction('2️⃣')
         await message.add_reaction('3️⃣')
 
-    @commands.command()
+    @commands.command(aliases=['gt'])
     async def translate(self, ctx, source=None, destination=None, *, query=None):
         """Translate text into a language.
 
@@ -151,14 +152,15 @@ class Utils(commands.Cog):
         """
         if not (source and destination and query):
             # Fetch all valid language codes.
-            pages = []
+            page_list = []
 
-            codes = [f'{language} – `{code}`\n' for code, language in LANGUAGE_CODES.items()]
+            await ctx.trigger_typing()
+            codes = sorted([f'{language} – `{code}`\n' for language, code in LANG_CODES.items()])
             code_list = ['']
             i = 1
 
+            # Join up the codes into bigger chunks.
             for code in codes:
-                # Join up the codes into bigger blocks.
                 if code_list[-1].count('\n') >= 20:
                     code_list.append('')
                 code_list[-1] += code
@@ -168,49 +170,65 @@ class Utils(commands.Cog):
                 embed.set_footer(text=f'Requested by {ctx.author.display_name} | Page {i}/{len(code_list)}',
                                  icon_url=ctx.author.avatar_url)
 
-                pages.append(embed)
+                page_list.append(embed)
                 i += 1
 
-            paginator = ListPaginator(ctx, pages)
+            paginator = ListPaginator(ctx, page_list)
             await paginator.start()
         else:
             source = source.lower()
             destination = destination.lower()
 
-            if (source or destination) not in LANGUAGE_CODES.keys():
-                await ctx.send('Invalid language code.')
-            else:
-                await ctx.trigger_typing()
+            if source not in LANGUAGES.keys() or destination not in LANGUAGES.keys():
+                await ctx.send('Invalid language code(s).')
+                return
+
+            await ctx.trigger_typing()
+            try:
                 translation = self.translator.translate(query, dest=destination, src=source)
+            except TypeError:
+                await ctx.send('Something went wrong while translating.')
+                return
 
-                embed = discord.Embed(title='Translate', colour=COLOUR)
-                embed.add_field(name=LANGUAGE_CODES[source] + ':', value=translation.origin, inline=False)
-                embed.add_field(name=LANGUAGE_CODES[destination] + ':', value=translation.text, inline=False)
-                embed.set_footer(text=f'Requested by {ctx.author.display_name} | Powered by Google Translate',
-                                 icon_url=ctx.author.avatar_url)
+            translated_text = translation.text
 
-                await ctx.send(embed=embed)
+            if translation.pronunciation:
+                if not isinstance(translation.pronunciation, str):
+                    pass
+                elif (translation.pronunciation == translation.origin
+                        or translation.pronunciation == translation.text):
+                    pass
+                else:
+                    translated_text += f'\n({translation.pronunciation})'
+
+            embed = discord.Embed(title='Translate', colour=COLOUR)
+            embed.add_field(name=LANGUAGES[source] + ':', value=translation.origin, inline=False)
+            embed.add_field(name=LANGUAGES[destination] + ':', value=translated_text, inline=False)
+            embed.set_footer(text=f'Requested by {ctx.author.display_name} | Powered by Google Translate',
+                             icon_url=ctx.author.avatar_url)
+
+            await ctx.send(embed=embed)
 
     @commands.command(aliases=['dice', 'randint'])
-    async def roll(self, ctx, *, b: int = 20, amount: int = 1):
-        """Rolls the given number-sided dice."""
-        if b < 1:
+    async def roll(self, ctx, faces: int = 20, amount: int = 1):
+        """Rolls the number-sided dice."""
+        if faces < 1:
             await ctx.send('Please enter a non-negative whole number.')
             return
         if amount >= SPAM_LIMIT:
             raise exceptions.SpamError
 
         for _ in range(amount):
-            await ctx.send(f'**{random.randint(1, b)}**')
+            await ctx.send(f'**{random.randint(1, faces)}**')
 
     @roll.error
     async def roll_error(self, ctx, error):
         if isinstance(error, commands.BadArgument):
             await ctx.send('Please enter a non-negative whole number.')
 
-    @commands.command(aliases=['dict', 'dictionary'])
+    @commands.command(aliases=['dict', 'dictionary', 'wikt'])
     async def wiktionary(self, ctx, language, *, query):
-        """Search a word on Wiktionary."""
+        """Search Wiktionary for a query."""
         await ctx.trigger_typing()
         results = self.parser.fetch(query, language)
 
@@ -233,7 +251,8 @@ class Utils(commands.Cog):
         part_of_speech = top_definition['partOfSpeech'].title()
         definition = definition[:1000]
 
-        embed = discord.Embed(title=query, url=f'https://en.wiktionary.com/wiki/{query}', colour=COLOUR)
+        embed = discord.Embed(title=query, url=f'https://en.wiktionary.org/wiki/{query.replace(" ", "_")}'
+                              f'#{language.title().replace(" ", "_")}', colour=COLOUR)
 
         if pronunciation:
             embed.add_field(name='Pronunciation', value=pronunciation, inline=False)
@@ -244,6 +263,32 @@ class Utils(commands.Cog):
         embed.set_footer(text=f'Requested by {ctx.author.display_name} | Powered by Wiktionary',
                          icon_url=ctx.author.avatar_url)
         await ctx.send(embed=embed)
+
+    @commands.command()
+    async def youtube(self, ctx, *, query):
+        """Search YouTube for a query."""
+        try:
+            page_list = []
+
+            await ctx.trigger_typing()
+            results = YoutubeSearch(query, max_results=20).to_dict()
+            i = 1
+
+            for result in results:
+                embed = discord.Embed(title=result['title'], description=result['long_desc'],
+                                      url=f'https://youtu.be/{result["id"]}', colour=COLOUR)
+                embed.set_thumbnail(url=result['thumbnails'][0])
+                embed.set_footer(text=f'Requested by {ctx.author.display_name} | Page {i}/{len(results)} | {query}',
+                                 icon_url=ctx.author.avatar_url)
+
+                page_list.append(embed)
+                i += 1
+
+            paginator = ListPaginator(ctx, page_list)
+            await paginator.start()
+        except Exception as e:
+            traceback_msg = ''.join(traceback.format_exception(etype=type(e), value=e, tb=e.__traceback__))
+            await ctx.send(f'Traceback:\n```{traceback_msg}```')
 
 
 def setup(bot):
