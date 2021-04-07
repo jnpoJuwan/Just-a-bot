@@ -18,7 +18,7 @@ class Admin(commands.Cog):
         """Bans the member."""
         try:
             await member.ban(reason=reason)
-        except discord.Forbidden:
+        except discord.HTTPException:
             await ctx.send(f'Unable to ban {member.display_name}.')
         else:
             await ctx.send(f'{member.name} was successfully banned.')
@@ -30,7 +30,7 @@ class Admin(commands.Cog):
         """Kicks the member."""
         try:
             await member.kick(reason=reason)
-        except discord.Forbidden:
+        except discord.HTTPException:
             await ctx.send(f'Unable to kick {member.display_name}.')
         else:
             await ctx.send(f'{member.name} was successfully kicked.')

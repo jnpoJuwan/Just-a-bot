@@ -3,6 +3,7 @@ import discord
 COLOUR = discord.Colour(0x8b0000)
 DEFAULT_PREFIX = '?'
 SPAM_LIMIT = 25
+TIMEOUT = 300
 
 # Pagination emoji
 ARROW_TO_BEGINNING = '⏪'
