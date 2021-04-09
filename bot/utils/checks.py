@@ -1,8 +1,5 @@
 from discord.ext import commands
 
-from . import exceptions
-
-
 # CRED: @Rapptz (https://github.com/Rapptz/RoboDanny/blob/rewrite/cogs/utils/checks.py)
 
 
@@ -63,6 +60,6 @@ def is_in_guilds(*guild_ids):
     def predicate(ctx):
         guild = ctx.guild
         if guild is None:
-            raise exceptions.ServerNotFoundError
+            return False
         return guild.id in guild_ids
     return commands.check(predicate)
