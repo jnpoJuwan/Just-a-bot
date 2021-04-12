@@ -16,6 +16,8 @@ class Actions(commands.Cog):
         for obj in member_or_roles:
             if isinstance(obj, discord.Member):
                 name = obj.display_name
+            elif obj.name == '@everyone':
+                name = '@\u200beveryone'
             elif isinstance(obj, discord.Role):
                 name = obj.name
             else:
@@ -41,21 +43,22 @@ class Actions(commands.Cog):
         else:
             return ', '.join(members_or_roles[:-1]) + ' and ' + members_or_roles[-1]
 
-    async def interact(self, ctx, messages, members=None):
-        if not members:
+    async def interact(self, ctx, messages, members_or_roles=None):
+        if not members_or_roles:
             if isinstance(messages[0], discord.File):
                 await ctx.send(file=messages[0])
             else:
                 await ctx.send(messages[0])
-        elif members[0] == ctx.author:
+        elif members_or_roles[0] == ctx.author:
             await ctx.send(messages[1])
-        elif members[0] == self.bot.user:
+        elif members_or_roles[0] == self.bot.user:
             await ctx.send(messages[2])
         else:
             await ctx.send(messages[3])
-            for member in members:
+            for member_or_role in members_or_roles:
                 try:
-                    await member.send(messages[4])
+                    # FIXME: When member_or_role is a role, it doesn't send to its members.
+                    await member_or_role.send(messages[4])
                 except discord.HTTPException:
                     pass
 
@@ -151,7 +154,7 @@ class Actions(commands.Cog):
             'You fucked your pillow, since you\'re alone and lonely, and officially became PD6.',
             'You self-fucked.',
             'You fucked my tiny robot bussy. 🥺',
-            f'You fucked tiny {self.add_list_formatting(members_or_roles, is_genitive=True)} þussy.'
+            f'You fucked {self.add_list_formatting(members_or_roles, is_genitive=True)} tiny þussy.'
             f'You\'re under arrest to horny jail.',
             f'{ctx.author.name} fucked your tiny þussy.'
         ]
@@ -189,7 +192,7 @@ class Actions(commands.Cog):
         """Brutally kills someone."""
         messages = [
             'You didn\'t kill anyone.',
-            '<:gunpoint:804365552801677312> <:cry2:825451191345348648>',
+            '<:gunpoint:804365552801677312> <:cry2:829114403961438249>',
             'But m-master... \\*is brutally killed\\*',
             f'You have murdered {self.add_list_formatting(members_or_roles)}. You\'re now on MAGNVS\' wanted list.',
             f'{ctx.author.name} killed you.'
@@ -269,7 +272,7 @@ class Actions(commands.Cog):
         messages = [
             'You didn\'t reject anyone.',
             'You rejected yourself. <:noooooooo:809935851052072980>',
-            'You rejected me. <:cry2:825451191345348648>',
+            'You rejected me. <:cry2:829114403961438249>',
             f'You rejected {self.add_list_formatting(members_or_roles)}.',
             f'{ctx.author.name} rejected you.'
         ]
@@ -288,7 +291,7 @@ class Actions(commands.Cog):
         """Shoots someone."""
         messages = [
             'You didn\'t shoot anyone.',
-            '<:gunpoint:804365552801677312> <:cry2:825451191345348648>',
+            '<:gunpoint:804365552801677312> <:cry2:829114403961438249>',
             'But m-master... \\*gets shot\\*',
             f'You shot {self.add_list_formatting(members_or_roles)}.',
             f'{ctx.author.name} shot you.'
@@ -315,7 +318,7 @@ class Actions(commands.Cog):
         choices = [
             ['You facepalmed.',
              'You facepalmed.',
-             'You slapped me. <:cry2:825451191345348648>',
+             'You slapped me. <:cry2:829114403961438249>',
              f'You slapped {self.add_list_formatting(members_or_roles)}.',
              f'{ctx.author.name} slapped you.'],
 
@@ -334,7 +337,7 @@ class Actions(commands.Cog):
         """Stabs someone."""
         messages = [
             'You didn\'t stab anyone.',
-            '<:gunpoint:804365552801677312> <:cry2:825451191345348648>',
+            '<:gunpoint:804365552801677312> <:cry2:829114403961438249>',
             '\\*gets stabbed 23 times\\* Et tu, dominus? \\*dies\\*.',
             f'You brutally stabbed {self.add_list_formatting(members_or_roles)}.',
             f'{ctx.author.name} stabbed your heart.'
