@@ -77,8 +77,8 @@ class Meta(commands.Cog):
 
     @commands.command(aliases=['source'])
     async def source_code(self, ctx):
-        """Sends an URL the bot's GitHub repo."""
-        embed = discord.Embed(title='Source Code', description='https://github.com/jnpoJuwan/just_a_bot',
+        """Sends the URL of the bot's GitHub repo."""
+        embed = discord.Embed(title='Source Code', description='https://github.com/jnpoJuwan/Just-a-bot',
                               colour=COLOUR)
         embed.set_footer(text=f'Requested by {ctx.author.display_name}', icon_url=ctx.author.avatar_url)
         await ctx.send(embed=embed)
