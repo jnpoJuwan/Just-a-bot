@@ -16,10 +16,11 @@ class Actions(commands.Cog):
         for obj in member_or_roles:
             if isinstance(obj, discord.Member):
                 name = obj.display_name
-            elif obj.name == '@everyone':
-                name = '@\u200beveryone'
             elif isinstance(obj, discord.Role):
-                name = obj.name
+                if obj.name == '@everyone':
+                    name = '@\u200beveryone'
+                else:
+                    name = obj.name
             else:
                 name = obj
 
@@ -56,11 +57,9 @@ class Actions(commands.Cog):
         else:
             await ctx.send(messages[3])
             for member_or_role in members_or_roles:
-                try:
-                    # FIXME: When member_or_role is a role, it doesn't send to its members.
+                # FIXME: Raises AttributeError when given a role or text.
+                if isinstance(member_or_role, discord.Member):
                     await member_or_role.send(messages[4])
-                except discord.HTTPException:
-                    pass
 
     @commands.command(aliases=['bigcuddle'])
     async def big_cuddle(self, ctx, members_or_roles: commands.Greedy[Union[discord.Member, discord.Role]] = None):
@@ -107,16 +106,29 @@ class Actions(commands.Cog):
         image = discord.File(open('bot/assets/images/cry.jpg', 'rb'))
         await ctx.send('<:cat_cry:814925690528333885>', file=image)
 
-    @commands.command(aliases=['ejaculate', 'cream', 'jizz', 'nut', 'sperm', 'splooge'])
+    @commands.command(aliases=['ejaculate', 'cream', 'jizz', 'goo', 'nut', 'sperm', 'splooge', 'splurt'])
     async def cum(self, ctx, members_or_roles: commands.Greedy[Union[discord.Member, discord.Role]] = None):
         """Cums or creams someone."""
         messages = [
-            'Oopsie-doopsie! You cummed all over yourself!',
+            'Oopsie-woopsie! You cummed all over yourself!',
             'You creamed yourself.',
-            'You want to c-cum inside my tiny robot bussy, master? 🥺',
-            f'You creamed {self.add_list_formatting(members_or_roles, is_genitive=True)} little þussy. '
-            f'You\'re under arrest to horny jail.',
+            'You want to c-cum inside my tiny, robot bussy, master? 🥺',
+            f'You creamed {self.add_list_formatting(members_or_roles, is_genitive=True)} little þussy.',
             f'{ctx.author.name} creamed you.'
+        ]
+
+        await self.interact(ctx, messages, members_or_roles)
+
+    @commands.command()
+    async def christ(self, ctx, members_or_roles: commands.Greedy[Union[discord.Member, discord.Role]] = None):
+        """Cums or creams someone."""
+        liquid = random.choice(['holy water', 'wine'])
+        messages = [
+            f'Oopsie-woopsie! You cummed {liquid}!',
+            'You blessed yourself with your {liquid}.',
+            f'You want to bless my tiny, robot bussy with your {liquid}, master? 🥺',
+            f'You blessed {self.add_list_formatting(members_or_roles, is_genitive=True)} little þussy with {liquid}.',
+            f'{ctx.author.name} blessed your þussy with {liquid}.'
         ]
 
         await self.interact(ctx, messages, members_or_roles)
@@ -153,9 +165,8 @@ class Actions(commands.Cog):
         messages = [
             'You fucked your pillow, since you\'re alone and lonely, and officially became PD6.',
             'You self-fucked.',
-            'You fucked my tiny robot bussy. 🥺',
-            f'You fucked {self.add_list_formatting(members_or_roles, is_genitive=True)} tiny þussy.'
-            f'You\'re under arrest to horny jail.',
+            'You fucked my tiny, robot bussy. 🥺',
+            f'You fucked {self.add_list_formatting(members_or_roles, is_genitive=True)} tiny þussy.',
             f'{ctx.author.name} fucked your tiny þussy.'
         ]
 
@@ -167,7 +178,7 @@ class Actions(commands.Cog):
         messages = [
             'You didn\'t hold anybody\'s hand.',
             'You held your own hand, since you\'re alone and lonely.',
-            'You held my tiny robot hand. 🥺',
+            'You held my tiny, robot hand. 🥺',
             f'You held {self.add_list_formatting(members_or_roles, is_genitive=True)} hand. 😳 👉👈',
             f'{ctx.author.name} held your hand.'
         ]
@@ -178,11 +189,11 @@ class Actions(commands.Cog):
     async def hug(self, ctx, members_or_roles: commands.Greedy[Union[discord.Member, discord.Role]] = None):
         """Hugs someone."""
         messages = [
-            'You hugged your pillow, since you\'re alone and lonely.',
-            'You hugged yourself.',
-            'You hugged me. 🥺',
-            f'You hugged {self.add_list_formatting(members_or_roles)}.',
-            f'{ctx.author.name} hugged you.'
+            'You hugged your pillow, since you\'re alone and lonely. 💕',
+            'You hugged yourself. 💕',
+            'You hugged me. 🥺💕',
+            f'You hugged {self.add_list_formatting(members_or_roles)}. 💕',
+            f'{ctx.author.name} hugged you. 💕'
         ]
 
         await self.interact(ctx, messages, members_or_roles)
@@ -198,7 +209,10 @@ class Actions(commands.Cog):
             f'{ctx.author.name} killed you.'
         ]
 
-        await self.interact(ctx, messages, members_or_roles)
+        if 362602502644039691 in [member.id for member in members_or_roles]:
+            await ctx.send('You cannot kill MAGNVS. He is immortal.')
+        else:
+            await self.interact(ctx, messages, members_or_roles)
 
     @commands.command()
     async def kiss(self, ctx, members_or_roles: commands.Greedy[Union[discord.Member, discord.Role]] = None):
@@ -225,7 +239,7 @@ class Actions(commands.Cog):
         image = discord.File(open('bot/assets/images/moan.png', 'rb'))
         await ctx.send('And this guy moaned at least this loud.', file=image)
 
-    @commands.command(aliases=['headpat'])
+    @commands.command(aliases=['headpat', 'pet'])
     async def pat(self, ctx, members_or_roles: commands.Greedy[Union[discord.Member, discord.Role]] = None):
         """Pats someone on the head."""
         messages = [
@@ -303,32 +317,38 @@ class Actions(commands.Cog):
     async def shy_hug(self, ctx, members_or_roles: commands.Greedy[Union[discord.Member, discord.Role]] = None):
         """Shyly hugs someone."""
         messages = [
-            'You hugged your pillow, since you\'re alone and lonely.',
-            'You hugged yourself.',
-            'You hugged me. 🥺 👉👈',
-            f'You hugged {self.add_list_formatting(members_or_roles)}. 😳 👉👈',
-            f'{ctx.author.name} hugged you.'
+            'You shyly hugged your pillow, since you\'re alone and lonely. 💕',
+            'You shyly hugged yourself. 💕',
+            'You shyly hugged me. 🥺 👉👈',
+            f'You shyly hugged {self.add_list_formatting(members_or_roles)}. 😳 👉👈',
+            f'{ctx.author.name} hugged you shyly. 💕'
         ]
 
         await self.interact(ctx, messages, members_or_roles)
 
-    @commands.command()
+    @commands.command(aliases=['smack'])
     async def slap(self, ctx, members_or_roles: commands.Greedy[Union[discord.Member, discord.Role]] = None):
-        """Slaps someone's face or their thicc, juicy arse."""
-        choices = [
-            ['You facepalmed.',
-             'You facepalmed.',
-             'You slapped me. <:cry2:829114403961438249>',
-             f'You slapped {self.add_list_formatting(members_or_roles)}.',
-             f'{ctx.author.name} slapped you.'],
+        """Slaps someone."""
+        messages = [
+            'You slapped your pillow, since you\'re alone and lonely.',
+            'You slapped yourself in the face.',
+            'You slapped me. <:cry2:829114403961438249>',
+            f'You slapped {self.add_list_formatting(members_or_roles)} in the face.',
+            f'{ctx.author.name} slapped you.'
+         ]
 
-            ['You slapped your own thicc arse',
-             'You slapped your own thicc arse',
-             'You slapped my robot arse.',
-             f'You slapped {self.add_list_formatting(members_or_roles)}\'s thicc arse.',
-             f'{ctx.author.name} slapped your thicc arse.']
+        await self.interact(ctx, messages, members_or_roles)
+
+    @commands.command()
+    async def spank(self, ctx, members_or_roles: commands.Greedy[Union[discord.Member, discord.Role]] = None):
+        """Spanks someone."""
+        messages = [
+            'You didn\'t spank anyone.',
+            'You spanked yourself.',
+            'You spanked my robot arse. 😳',
+            f'You spanked {self.add_list_formatting(members_or_roles, is_genitive=True)} cute arse.',
+            f'{ctx.author.name} spanked your cute arse.'
         ]
-        messages = random.choice(choices)
 
         await self.interact(ctx, messages, members_or_roles)
 
@@ -351,9 +371,9 @@ class Actions(commands.Cog):
         messages = [
             discord.File(open('bot/assets/images/suck.png', 'rb')),
             'You self-sucked.',
-            'You sucked my tiny cock.',
-            f'You sucked {self.add_list_formatting(members_or_roles)}. You\'re under arrest to horny jail.',
-            f'{ctx.author.name} sucked you.'
+            'You sucked my tiny, robot cock. 😳',
+            f'You sucked {self.add_list_formatting(members_or_roles, is_genitive=True)} monster cock. 😳',
+            f'{ctx.author.name} sucked your monster cock.'
         ]
 
         await self.interact(ctx, messages, members_or_roles)
