@@ -104,7 +104,7 @@ class JustAChat(commands.Cog, name='Just a chat...'):
     @commands.command(aliases=['jactimezones', 'jactz', 'jstimezones', 'jstz'])
     async def just_some_timezones(self, ctx):
         """Sends Just a chat... users' time zones."""
-        message = await ctx.send('Calculating times...')
+        await ctx.send('Calculating times...')
 
         await ctx.trigger_typing()
         dt = datetime.datetime.now(tz=utc)
@@ -129,7 +129,7 @@ class JustAChat(commands.Cog, name='Just a chat...'):
             embed.add_field(name=k, value=tz[:-2] + ':' + tz[-2:])
 
         embed.set_footer(text=f'Requested by {ctx.author.display_name}', icon_url=ctx.author.avatar_url)
-        await message.edit(embed=embed)
+        await ctx.send(embed=embed)
 
     @commands.command(aliases=['jacyoutube', 'jacyt', 'jsyoutube', 'jsyt'])
     async def just_some_youtube(self, ctx):
