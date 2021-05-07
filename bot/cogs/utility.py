@@ -39,7 +39,7 @@ class Utility(commands.Cog):
             page_list = []
 
             await ctx.trigger_typing()
-            url = (f'http://www.bolor-toli.com/dictionary/word?search={query}'
+            url = (f'http://www.bolor-toli.com/dictionary/word?search={query.replace(" ", "%20")}'
                    f'&selected_lang=4-1&see_usages=false&see_variants=undefined')
             request = requests.get(url)
             soup = BeautifulSoup(request.text, 'lxml')
@@ -219,7 +219,7 @@ class Utility(commands.Cog):
             i = 1
 
             for code in code_list:
-                if chunk_list[-1].count('\n') >= 20:
+                if chunk_list[-1].count('\n') >= 10:
                     chunk_list.append('')
                 chunk_list[-1] += code
 
@@ -353,7 +353,7 @@ class Utility(commands.Cog):
         paginator = ListPaginator(ctx, page_list)
         await paginator.start()
 
-    @commands.command()
+    @commands.command(aliases=['yt'])
     async def youtube(self, ctx, *, query):
         """Search YouTube for a query."""
         page_list = []
