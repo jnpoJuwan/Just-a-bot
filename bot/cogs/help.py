@@ -10,7 +10,7 @@ class PrettyHelpCommand(commands.MinimalHelpCommand):
     def __init__(self, **options):
         super().__init__()
         self.aliases_heading = options.pop('aliases_heading', 'aliases: ')
-        self.paginator = EmbedPaginator(embed_title='Help', page_size=500)
+        self.paginator = EmbedPaginator(embed_title='Help', page_size=300)
 
     def add_aliases_formatting(self, aliases):
         self.paginator.add_line(f'({self.aliases_heading}{"; ".join(map(lambda x: f"*`{x}`*", aliases))})')
