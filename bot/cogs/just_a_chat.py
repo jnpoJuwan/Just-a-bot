@@ -8,9 +8,6 @@ from pytz import timezone, utc
 from ..utils.constants import COLOUR
 from ..utils.paginator import ListPaginator
 
-TRUE_VALUES = ['1', 'on', 'true', 'yes']
-FALSE_VALUES = ['0', 'false', 'no', 'off']
-
 
 class JustAChat(commands.Cog, name='Just a chat...'):
     def __init__(self, bot):
@@ -30,7 +27,7 @@ class JustAChat(commands.Cog, name='Just a chat...'):
         i = 1
 
         def add_content_formatting(content):
-            docs_links = [f'• **[{text}]({url})**' for text, url in content.items()]
+            docs_links = [f'[{text}]({url})' for text, url in content.items()]
             return '\n'.join(docs_links)
 
         for k, v in raw_page_list.items():
@@ -46,16 +43,8 @@ class JustAChat(commands.Cog, name='Just a chat...'):
 
     @commands.command(aliases=['jacguidelines', 'jsg', 'jsguidelines'])
     @commands.cooldown(1, 60.0, commands.BucketType.user)
-    async def just_some_guidelines(self, ctx, is_paginated='on'):
-        """Sends Just some guidelines....
-
-        The is_paginated setting can be turned either on or off.
-        """
-        is_paginated = is_paginated.lower()
-
-        if is_paginated not in TRUE_VALUES and is_paginated not in FALSE_VALUES:
-            raise commands.BadArgument
-
+    async def just_some_guidelines(self, ctx):
+        """Sends Just some guidelines...."""
         # SEE: https://docs.google.com/document/d/1NAH6GZNC0UNFHdBmAd0u9U5keGhAgnxY-vqiRaATL8c/edit?usp=sharing
         guideline_lines = open('bot/assets/text/amino_guidelines.md', encoding='utf-8').readlines()
         # raw_page_list is made of dictionaries (pages) containing the heading and contents.
@@ -70,31 +59,21 @@ class JustAChat(commands.Cog, name='Just a chat...'):
                 page_content = ''.join(guideline_lines[index + 3: index + 6])[:-1]
                 raw_page_list[-1][value[3:-1]] = page_content
 
-        if is_paginated in FALSE_VALUES:
-            for page in raw_page_list:
-                embed = discord.Embed(title='Just some guidelines...', colour=COLOUR)
-                for k, v in page.items():
-                    embed.add_field(name=k, value=v)
+        page_list = []
+        i = 1
 
-                if page == raw_page_list[-1]:
-                    embed.set_footer(text=f'Requested by {ctx.author.display_name}', icon_url=ctx.author.avatar_url)
-                await ctx.send(embed=embed)
-        else:
-            page_list = []
-            i = 1
+        for page in raw_page_list:
+            embed = discord.Embed(title='Just some guidelines...', colour=COLOUR)
+            for k, v in page.items():
+                embed.add_field(name=k, value=v)
+            embed.set_footer(text=f'Requested by {ctx.author.display_name} | Page {i}/{len(raw_page_list)}',
+                             icon_url=ctx.author.avatar_url)
 
-            for page in raw_page_list:
-                embed = discord.Embed(title='Just some guidelines...', colour=COLOUR)
-                for k, v in page.items():
-                    embed.add_field(name=k, value=v)
-                embed.set_footer(text=f'Requested by {ctx.author.display_name} | Page {i}/{len(raw_page_list)}',
-                                 icon_url=ctx.author.avatar_url)
+            page_list.append(embed)
+            i += 1
 
-                page_list.append(embed)
-                i += 1
-
-            paginator = ListPaginator(ctx, page_list)
-            await paginator.start()
+        paginator = ListPaginator(ctx, page_list)
+        await paginator.start()
 
     @just_some_guidelines.error
     async def just_some_guidelines_error(self, ctx, error):
