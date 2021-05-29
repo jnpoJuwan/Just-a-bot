@@ -1,10 +1,7 @@
-import json
-
 import discord
 from discord.ext import commands
 
 from ..utils import checks
-from ..utils.constants import DEFAULT_PREFIX
 
 
 class Admin(commands.Cog):
@@ -40,20 +37,6 @@ class Admin(commands.Cog):
     async def kickban_error(self, ctx, error):
         if isinstance(error, commands.BadArgument):
             await ctx.send('Please @mention a member.')
-
-    @commands.command(aliases=['change_prefix'])
-    @commands.guild_only()
-    @checks.is_admin()
-    async def set_prefix(self, ctx, prefix=None):
-        """Sets the server's prefix."""
-        prefix = prefix or DEFAULT_PREFIX
-        prefixes = json.load(open('bot/configs/prefixes.json'))
-
-        prefixes[str(ctx.guild.id)] = prefix
-        with open('bot/configs/prefixes.json', 'w') as f:
-            json.dump(prefixes, f, indent=2, sort_keys=True)
-
-        await ctx.send(f'The server\'s prefix has been changed to `{prefix}`.')
 
     @commands.command()
     @commands.guild_only()

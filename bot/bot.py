@@ -1,24 +1,18 @@
-import json
-import traceback
 from pathlib import Path
 
 import discord
+import traceback
 from discord.ext import commands
 
-from .utils import exceptions
 from .configs.configs import OWNER_ID
+from .utils import exceptions
 from .utils.constants import DEFAULT_PREFIX, SPAM_LIMIT
 
 
 # CRED: @Rapptz (https://github.com/Rapptz/RoboDanny/blob/rewrite/bot.py#L44)
 def _prefix_callable(bot, message):
     _id = bot.user.id
-    base = [f'<@!{_id}> ', f'<@{_id}> ']
-    if message.guild is None:
-        base.append(DEFAULT_PREFIX)
-    else:
-        prefixes = json.load(open('bot/configs/prefixes.json'))
-        base.append(prefixes[str(message.guild.id)])
+    base = [f'<@!{_id}> ', f'<@{_id}> ', DEFAULT_PREFIX]
     return base
 
 
@@ -61,25 +55,13 @@ class JustABot(commands.Bot):
 
     async def on_command_error(self, ctx, error):
         if isinstance(error, commands.MissingRequiredArgument):
-            await ctx.send('Please insert all required arguments.')
+            await ctx.send('Please enter all required arguments.')
         elif isinstance(error, commands.CheckFailure):
             await ctx.send('You don\'t have permission to use that command.')
         elif isinstance(error, commands.CommandOnCooldown):
             await ctx.send(f'You\'re using this command too much. Try again in {round(error.retry_after)} seconds.')
         elif isinstance(error, exceptions.SpamError):
             await ctx.send(f'The amount can\'t exceed {SPAM_LIMIT}.')
-
-    async def on_guild_join(self, guild):
-        prefixes = json.load(open('bot/configs/prefixes.json'))
-        with open('configs/prefixes.json', 'w') as f:
-            prefixes[str(guild.id)] = DEFAULT_PREFIX
-            json.dump(prefixes, f, indent=2, sort_keys=True)
-
-    async def on_guild_remove(self, guild):
-        prefixes = json.load(open('bot/configs/prefixes.json'))
-        with open('configs/prefixes.json', 'w') as f:
-            prefixes.pop(str(guild.id))
-            json.dump(prefixes, f, indent=2, sort_keys=True)
 
     async def on_message(self, message):
         if message.author.bot:
