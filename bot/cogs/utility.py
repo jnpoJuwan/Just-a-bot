@@ -2,12 +2,12 @@ import io
 import json
 import random
 import textwrap
-import traceback
 from contextlib import redirect_stdout
 
 import discord
 import googletrans
 import requests
+import traceback
 from async_cse import Search
 from bs4 import BeautifulSoup
 from discord.ext import commands
@@ -31,60 +31,57 @@ class Utility(commands.Cog):
         self.parser = WiktionaryParser()
         self.translator = Translator()
 
+    # XXX: There's so much broken with this command.
+    # Its best use is creating a link to the Bolor website.
     @commands.command()
     async def bolor(self, ctx, *, query):
         """Searches Bolor Dictionary for a query."""
-        # I'll remove this try block when I'm sure this works.
-        try:
-            page_list = []
+        page_list = []
 
-            await ctx.trigger_typing()
-            url = (f'http://www.bolor-toli.com/dictionary/word?search={query.replace(" ", "%20")}'
-                   f'&selected_lang=4-1&see_usages=false&see_variants=undefined')
-            request = requests.get(url)
-            soup = BeautifulSoup(request.text, 'lxml')
+        await ctx.trigger_typing()
+        url = (f'http://www.bolor-toli.com/dictionary/word?search={query.replace(" ", "%20")}'
+               f'&selected_lang=4-1&see_usages=false&see_variants=undefined')
+        request = requests.get(url)
+        soup = BeautifulSoup(request.text, 'lxml')
 
-            if not soup.find('table', id='search_result_table'):
-                await ctx.send('The word you\'ve entered isn\'t in Bolor Dictionary.')
-                return
+        if not soup.find('table', id='search_result_table'):
+            await ctx.send('The word you\'ve entered isn\'t in Bolor Dictionary.')
+            return
 
-            raw_table = soup.find('table', id='search_result_table').find_all('tr')
-            definitions = []
+        raw_table = soup.find('table', id='search_result_table').find_all('tr')
+        definitions = []
 
-            for row in raw_table[1:]:
-                try:
-                    source_cell, destination_cell = row.findChildren('td', width='50%')
-                except ValueError:
-                    continue
+        for row in raw_table[1:]:
+            try:
+                source_cell, destination_cell = row.findChildren('td', width='50%')
+            except ValueError:
+                continue
 
-                if source_cell.sup:
-                    source_cell.sup.replace_with(' ')
-                if destination_cell.sup:
-                    destination_cell.sup.replace_with(' ')
+            if source_cell.sup:
+                source_cell.sup.replace_with(' ')
+            if destination_cell.sup:
+                destination_cell.sup.replace_with(' ')
 
-                definitions.append((source_cell.text.strip(), destination_cell.text.strip()))
+            definitions.append((source_cell.text.strip(), destination_cell.text.strip()))
 
-            chunk_list = ['']
-            for source, destination in definitions:
-                if len(chunk_list[-1]) > 1000:
-                    chunk_list.append('')
-                chunk_list[-1] += f'\n• {source}: **{destination}**'
+        chunk_list = ['']
+        for source, destination in definitions:
+            if len(chunk_list[-1]) > 1000:
+                chunk_list.append('')
+            chunk_list[-1] += f'\n• {source}: **{destination}**'
 
-            i = 1
+        i = 1
 
-            for chunk in chunk_list:
-                embed = discord.Embed(title='Bolor Dictionary', description=chunk, url=url, colour=COLOUR)
-                embed.set_footer(text=f'Requested by {ctx.author.display_name} | Page {i}/{len(chunk_list)}',
-                                 icon_url=ctx.author.avatar_url)
+        for chunk in chunk_list:
+            embed = discord.Embed(title='Bolor Dictionary', description=chunk, url=url, colour=COLOUR)
+            embed.set_footer(text=f'Requested by {ctx.author.display_name} | Page {i}/{len(chunk_list)}',
+                             icon_url=ctx.author.avatar_url)
 
-                page_list.append(embed)
-                i += 1
+            page_list.append(embed)
+            i += 1
 
-            paginator = ListPaginator(ctx, page_list)
-            await paginator.start()
-        except Exception as e:
-            traceback_msg = ''.join(traceback.format_exception(etype=type(e), value=e, tb=e.__traceback__))
-            await ctx.send(f'Something went wrong.\nTraceback:\n```{traceback_msg}```')
+        paginator = ListPaginator(ctx, page_list)
+        await paginator.start()
 
     @commands.command()
     async def choose(self, ctx, *args):
@@ -148,8 +145,8 @@ class Utility(commands.Cog):
         if amount >= SPAM_LIMIT:
             raise exceptions.SpamError
 
-        for _ in range(amount):
-            await ctx.send(f'**{random.choice(["Heads", "Tails"])}**')
+        output = ''.join([f'**{random.choice(["Heads", "Tails"])}**\n' for _ in range(amount)])
+        await ctx.send(output)
 
     @commands.command(aliases=['prefix'])
     async def get_prefix(self, ctx):
@@ -202,7 +199,7 @@ class Utility(commands.Cog):
         await message.add_reaction('2️⃣')
         await message.add_reaction('3️⃣')
 
-    @commands.command(aliases=['gt'])
+    @commands.command(aliases=['gt', 'tr'])
     async def translate(self, ctx, source=None, destination=None, *, query=None):
         """Translate query into a language.
 

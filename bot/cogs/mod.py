@@ -1,4 +1,3 @@
-import discord
 from discord.ext import commands
 
 from ..utils import checks
@@ -7,13 +6,6 @@ from ..utils import checks
 class Mod(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-
-    @commands.command()
-    @checks.is_mod()
-    async def mute(self, ctx, member: discord.Member):
-        """Mutes the member."""
-        await member.edit(mute=True)
-        await ctx.send(f'{member.display_name} has been muted.')
 
     @commands.command(aliases=['clear', 'delete'])
     @commands.cooldown(3, 60.0, commands.BucketType.user)
@@ -33,19 +25,6 @@ class Mod(commands.Cog):
     async def purge_error(self, ctx, error):
         if isinstance(error, commands.BadArgument):
             await ctx.send('Please enter an amount of messages.')
-
-    @commands.command()
-    @checks.is_mod()
-    async def unmute(self, ctx, member: discord.Member):
-        """Unmutes the member."""
-        await member.edit(mute=False)
-        await ctx.send(f'{member.display_name} has been unmuted.')
-
-    @mute.error
-    @unmute.error
-    async def member_error(self, ctx, error):
-        if isinstance(error, commands.BadArgument):
-            await ctx.send('Please @mention a member.')
 
 
 def setup(bot):
