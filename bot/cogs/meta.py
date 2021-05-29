@@ -14,6 +14,18 @@ class Meta(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
+    @commands.command(aliases=['github', 'invite', 'source_code'])
+    async def links(self, ctx):
+        """Sends the bot's invite link."""
+        msg = (
+            '[Bot Invite](https://discord.com/api/oauth2/authorize?client_id=764106437701140490&permissions=8'
+            '&scope=bot)\n'
+            '[Source code](https://github.com/jnpoJuwan/Just-a-bot)'
+        )
+
+        embed = discord.Embed(title='Links', description=msg, colour=COLOUR)
+        await ctx.send(embed=embed)
+
     @commands.command(aliases=['member', 'user', 'user_info'])
     async def member_info(self, ctx, member: discord.Member = None):
         """Sends some information about the member."""
@@ -72,14 +84,6 @@ class Meta(commands.Cog):
 
         embed = discord.Embed(title=title, colour=COLOUR)
         embed.set_image(url=member.avatar_url)
-        embed.set_footer(text=f'Requested by {ctx.author.display_name}', icon_url=ctx.author.avatar_url)
-        await ctx.send(embed=embed)
-
-    @commands.command(aliases=['source'])
-    async def source_code(self, ctx):
-        """Sends the URL of the bot's GitHub repo."""
-        embed = discord.Embed(title='Source Code', description='https://github.com/jnpoJuwan/Just-a-bot',
-                              colour=COLOUR)
         embed.set_footer(text=f'Requested by {ctx.author.display_name}', icon_url=ctx.author.avatar_url)
         await ctx.send(embed=embed)
 
