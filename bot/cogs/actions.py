@@ -1,8 +1,8 @@
 import random
-from typing import Union
 
 import discord
 from discord.ext import commands
+from typing import Union
 
 
 class Actions(commands.Cog):
@@ -56,20 +56,15 @@ class Actions(commands.Cog):
             await ctx.send(messages[2])
         else:
             await ctx.send(messages[3])
-            for member_or_role in members_or_roles:
-                # FIXME: Raises AttributeError when given a role or text.
-                if isinstance(member_or_role, discord.Member):
-                    await member_or_role.send(messages[4])
 
     @commands.command(aliases=['bigcuddle'])
     async def big_cuddle(self, ctx, members_or_roles: commands.Greedy[Union[discord.Member, discord.Role]] = None):
-        """Cuddles someone."""
+        """Gives someone a big cuddle."""
         messages = [
             'You gave your pillow cuddles and lots of love, since you\'re alone and lonely.',
             'You gave yourself cuddles and lots of love.',
             'You gave me cuddles and lots of love. 🥺 💖',
             f'You gave {self.add_list_formatting(members_or_roles)} a long intensive cuddle with a lots of love. 💖',
-            f'{ctx.author.name} gave you cuddles and lots of love. 💖'
         ]
 
         await self.interact(ctx, messages, members_or_roles)
@@ -82,39 +77,6 @@ class Actions(commands.Cog):
             'You bonked yourself to horny jail.',
             'You bonked me to horny jail.',
             f'You bonked {self.add_list_formatting(members_or_roles)} to horny jail.',
-            f'{ctx.author.name} bonk you to horny jail.'
-        ]
-
-        await self.interact(ctx, messages, members_or_roles)
-
-    @commands.command()
-    async def cuddle(self, ctx, members_or_roles: commands.Greedy[Union[discord.Member, discord.Role]] = None):
-        """Cuddles someone."""
-        messages = [
-            'You cuddled your pillow, since you\'re alone and lonely.',
-            'You cuddled yourself.',
-            'You cuddled me. 🥺',
-            f'You cuddled {self.add_list_formatting(members_or_roles)}.',
-            f'{ctx.author.name} cuddled you.'
-        ]
-
-        await self.interact(ctx, messages, members_or_roles)
-
-    @commands.command(aliases=["cri"])
-    async def cry(self, ctx):
-        """Cries."""
-        image = discord.File(open('bot/assets/images/cry.jpg', 'rb'))
-        await ctx.send('<:cat_cry:814925690528333885>', file=image)
-
-    @commands.command(aliases=['ejaculate', 'cream', 'jizz', 'goo', 'nut', 'sperm', 'splooge', 'splurt'])
-    async def cum(self, ctx, members_or_roles: commands.Greedy[Union[discord.Member, discord.Role]] = None):
-        """Cums or creams someone."""
-        messages = [
-            'Oopsie-woopsie! You cummed all over yourself!',
-            'You creamed yourself.',
-            'You want to c-cum inside my tiny, robot bussy, master? 🥺',
-            f'You creamed {self.add_list_formatting(members_or_roles, is_genitive=True)} little þussy.',
-            f'{ctx.author.name} creamed you.'
         ]
 
         await self.interact(ctx, messages, members_or_roles)
@@ -125,10 +87,51 @@ class Actions(commands.Cog):
         liquid = random.choice(['holy water', 'wine'])
         messages = [
             f'Oopsie-woopsie! You cummed {liquid}!',
-            'You blessed yourself with your {liquid}.',
+            f'You blessed yourself with your {liquid}.',
             f'You want to bless my tiny, robot bussy with your {liquid}, master? 🥺',
             f'You blessed {self.add_list_formatting(members_or_roles, is_genitive=True)} little þussy with {liquid}.',
-            f'{ctx.author.name} blessed your þussy with {liquid}.'
+        ]
+
+        await self.interact(ctx, messages, members_or_roles)
+
+    @commands.command(aliases=["cri"])
+    async def cry(self, ctx):
+        """Cries."""
+        image = discord.File(open('bot/assets/images/cry.jpg', 'rb'))
+        await ctx.send('<:cat_cry:814925690528333885>', file=image)
+
+    @commands.command()
+    async def cuddle(self, ctx, members_or_roles: commands.Greedy[Union[discord.Member, discord.Role]] = None):
+        """Cuddles someone."""
+        messages = [
+            'You cuddled your pillow, since you\'re alone and lonely.',
+            'You cuddled yourself.',
+            'You cuddled me. 🥺',
+            f'You cuddled {self.add_list_formatting(members_or_roles)}.',
+        ]
+
+        await self.interact(ctx, messages, members_or_roles)
+
+    @commands.command(aliases=['ejaculate', 'cream', 'jizz', 'goo', 'nut', 'sperm', 'splooge', 'splurt'])
+    async def cum(self, ctx, members_or_roles: commands.Greedy[Union[discord.Member, discord.Role]] = None):
+        """Cums or creams someone."""
+        messages = [
+            'Oopsie-woopsie! You cummed all over yourself!',
+            'You creamed yourself.',
+            'You want to c-cum inside my tiny, robot bussy, master? 🥺',
+            f'You creamed {self.add_list_formatting(members_or_roles, is_genitive=True)} little þussy.',
+        ]
+
+        await self.interact(ctx, messages, members_or_roles)
+
+    @commands.command(aliases=['cwtsh'])
+    async def cwtch(self, ctx, members_or_roles: commands.Greedy[Union[discord.Member, discord.Role]] = None):
+        """Cwtches someone."""
+        messages = [
+            'You cwtched your pillow in your arms, since you\'re alone and lonely.',
+            'You cwtched yourself. 💕',
+            'You cwtched me. 🥺 💕',
+            f'You cwtched {self.add_list_formatting(members_or_roles)} in your arms. 💕',
         ]
 
         await self.interact(ctx, messages, members_or_roles)
@@ -141,7 +144,6 @@ class Actions(commands.Cog):
             'You danced with yourself.',
             'You danced with me.',
             f'You danced with {self.add_list_formatting(members_or_roles)}.',
-            f'{ctx.author.name} danced with you.'
         ]
 
         await self.interact(ctx, messages, members_or_roles)
@@ -154,20 +156,18 @@ class Actions(commands.Cog):
             'You frosted yourself like a birthday cake.',
             'You frosted me like a birthday cake.',
             f'You frosted {self.add_list_formatting(members_or_roles, is_genitive=True)} like a birthday cake.',
-            f'{ctx.author.name} frosted you like a birthday cake.'
         ]
 
         await self.interact(ctx, messages, members_or_roles)
 
-    @commands.command(aliases=['fuq', 'fwk', 'destroy', 'sex'])
+    @commands.command(aliases=['destroy', 'frick', 'fuq', 'fwk', 'sex'])
     async def fuck(self, ctx, members_or_roles: commands.Greedy[Union[discord.Member, discord.Role]] = None):
         """Fucks someone."""
         messages = [
             'You fucked your pillow, since you\'re alone and lonely, and officially became PD6.',
-            'You self-fucked.',
+            'You went fuck yourself as someone asked.',
             'You fucked my tiny, robot bussy. 🥺',
             f'You fucked {self.add_list_formatting(members_or_roles, is_genitive=True)} tiny þussy.',
-            f'{ctx.author.name} fucked your tiny þussy.'
         ]
 
         await self.interact(ctx, messages, members_or_roles)
@@ -180,7 +180,6 @@ class Actions(commands.Cog):
             'You held your own hand, since you\'re alone and lonely.',
             'You held my tiny, robot hand. 🥺',
             f'You held {self.add_list_formatting(members_or_roles, is_genitive=True)} hand. 😳 👉👈',
-            f'{ctx.author.name} held your hand.'
         ]
 
         await self.interact(ctx, messages, members_or_roles)
@@ -189,11 +188,22 @@ class Actions(commands.Cog):
     async def hug(self, ctx, members_or_roles: commands.Greedy[Union[discord.Member, discord.Role]] = None):
         """Hugs someone."""
         messages = [
-            'You hugged your pillow, since you\'re alone and lonely. 💕',
+            'You hugged your pillow, since you\'re alone and lonely.',
             'You hugged yourself. 💕',
-            'You hugged me. 🥺💕',
+            'You hugged me. 🥺 💕',
             f'You hugged {self.add_list_formatting(members_or_roles)}. 💕',
-            f'{ctx.author.name} hugged you. 💕'
+        ]
+
+        await self.interact(ctx, messages, members_or_roles)
+
+    @commands.command(aliases=['jerk'])
+    async def jerk_off(self, ctx, members_or_roles: commands.Greedy[Union[discord.Member, discord.Role]] = None):
+        """Jerkes someone off."""
+        messages = [
+            'You jerked off, since you\'re alone and lonely.',
+            'You jerked yourself off.',
+            'You jerked me off.',
+            f'You jerked {self.add_list_formatting(members_or_roles)} off.',
         ]
 
         await self.interact(ctx, messages, members_or_roles)
@@ -206,7 +216,6 @@ class Actions(commands.Cog):
             '<:gunpoint:804365552801677312> <:cry2:829114403961438249>',
             'But m-master... \\*is brutally killed\\*',
             f'You have murdered {self.add_list_formatting(members_or_roles)}. You\'re now on MAGNVS\' wanted list.',
-            f'{ctx.author.name} killed you.'
         ]
 
         if 362602502644039691 in [member.id for member in members_or_roles]:
@@ -214,7 +223,7 @@ class Actions(commands.Cog):
         else:
             await self.interact(ctx, messages, members_or_roles)
 
-    @commands.command()
+    @commands.command(aliases=['kissie'])
     async def kiss(self, ctx, members_or_roles: commands.Greedy[Union[discord.Member, discord.Role]] = None):
         """Kisses someone."""
         messages = [
@@ -222,7 +231,6 @@ class Actions(commands.Cog):
             'You kissed yourself.',
             'You kissed me, master. 🥺',
             f'You kissed {self.add_list_formatting(members_or_roles)}. 😳 👉👈',
-            f'{ctx.author.name} kissed you.'
         ]
 
         await self.interact(ctx, messages, members_or_roles)
@@ -247,7 +255,6 @@ class Actions(commands.Cog):
             'You patted yourself.',
             'You patted me. 🥺',
             f'You patted {self.add_list_formatting(members_or_roles)} on the head.',
-            f'{ctx.author.name} patted you on the head.'
         ]
 
         await self.interact(ctx, messages, members_or_roles)
@@ -260,7 +267,6 @@ class Actions(commands.Cog):
             'You poked yourself.',
             'You poked me.',
             f'You poked {self.add_list_formatting(members_or_roles)}.',
-            f'{ctx.author.name} poked you.'
         ]
 
         await self.interact(ctx, messages, members_or_roles)
@@ -273,7 +279,6 @@ class Actions(commands.Cog):
             'You punished yourself for being naughty.',
             'You punished me for being naughty.',
             f'You punished {self.add_list_formatting(members_or_roles)} for being naughty.',
-            f'{ctx.author.name} punished you for being naughty.'
         ]
 
         await self.interact(ctx, messages, members_or_roles)
@@ -281,14 +286,12 @@ class Actions(commands.Cog):
     @commands.command()
     async def reject(self, ctx, members_or_roles: commands.Greedy[Union[discord.Member, discord.Role, str]] = None):
         """Rejects someone."""
-        # Fin#2372 (<@443551308692062209>) requested the feature to reject strings of text
-        # (e.g. ?reject capitalism).
+        # Someone requested the feature to reject strings of text, for example ?reject capitalism.
         messages = [
             'You didn\'t reject anyone.',
             'You rejected yourself. <:noooooooo:809935851052072980>',
             'You rejected me. <:cry2:829114403961438249>',
             f'You rejected {self.add_list_formatting(members_or_roles)}.',
-            f'{ctx.author.name} rejected you.'
         ]
 
         await self.interact(ctx, messages, members_or_roles)
@@ -308,7 +311,6 @@ class Actions(commands.Cog):
             '<:gunpoint:804365552801677312> <:cry2:829114403961438249>',
             'But m-master... \\*gets shot\\*',
             f'You shot {self.add_list_formatting(members_or_roles)}.',
-            f'{ctx.author.name} shot you.'
         ]
 
         await self.interact(ctx, messages, members_or_roles)
@@ -321,7 +323,6 @@ class Actions(commands.Cog):
             'You shyly hugged yourself. 💕',
             'You shyly hugged me. 🥺 👉👈',
             f'You shyly hugged {self.add_list_formatting(members_or_roles)}. 😳 👉👈',
-            f'{ctx.author.name} hugged you shyly. 💕'
         ]
 
         await self.interact(ctx, messages, members_or_roles)
@@ -334,7 +335,6 @@ class Actions(commands.Cog):
             'You slapped yourself in the face.',
             'You slapped me. <:cry2:829114403961438249>',
             f'You slapped {self.add_list_formatting(members_or_roles)} in the face.',
-            f'{ctx.author.name} slapped you.'
          ]
 
         await self.interact(ctx, messages, members_or_roles)
@@ -347,7 +347,6 @@ class Actions(commands.Cog):
             'You spanked yourself.',
             'You spanked my robot arse. 😳',
             f'You spanked {self.add_list_formatting(members_or_roles, is_genitive=True)} cute arse.',
-            f'{ctx.author.name} spanked your cute arse.'
         ]
 
         await self.interact(ctx, messages, members_or_roles)
@@ -360,7 +359,6 @@ class Actions(commands.Cog):
             '<:gunpoint:804365552801677312> <:cry2:829114403961438249>',
             '\\*gets stabbed 23 times\\* Et tu, dominus? \\*dies\\*.',
             f'You brutally stabbed {self.add_list_formatting(members_or_roles)}.',
-            f'{ctx.author.name} stabbed your heart.'
         ]
 
         await self.interact(ctx, messages, members_or_roles)
@@ -373,10 +371,22 @@ class Actions(commands.Cog):
             'You self-sucked.',
             'You sucked my tiny, robot cock. 😳',
             f'You sucked {self.add_list_formatting(members_or_roles, is_genitive=True)} monster cock. 😳',
-            f'{ctx.author.name} sucked your monster cock.'
         ]
 
         await self.interact(ctx, messages, members_or_roles)
+
+    @commands.command(aliases=['3some'])
+    async def threesome(self, ctx, members_or_roles: commands.Greedy[Union[discord.Member, discord.Role]] = None):
+        """Has a threesome with some people."""
+        if not members_or_roles:
+            await ctx.send('Dude, do you want a hug? <:cry2:829114403961438249>')
+        elif len(members_or_roles) == 1:
+            await ctx.send(f'You had a threesome with {self.add_list_formatting(members_or_roles)} and your pillow.')
+        elif len(members_or_roles) == 2:
+            await ctx.send(f'You had a threesome with {self.add_list_formatting(members_or_roles[:2])}.')
+        else:
+            await ctx.send(f'You had a threesome with {self.add_list_formatting(members_or_roles[:2])} and '
+                           f'{self.add_list_formatting(members_or_roles[2:])} watched you doing the naughties.')
 
 
 def setup(bot):
