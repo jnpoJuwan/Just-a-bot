@@ -42,10 +42,7 @@ class Fun(commands.Cog):
             'Very doubtful.'
         )
 
-        if not question:
-            await ctx.send(f'**{random.choice(outcomes)}**')
-        else:
-            await ctx.send(f'> {question}\n**{random.choice(outcomes)}**')
+        await ctx.message.reply(f'**{random.choice(outcomes)}**')
 
     @commands.command()
     async def cbt(self, ctx):
