@@ -1,13 +1,9 @@
-import io
 import json
 import random
-import textwrap
-from contextlib import redirect_stdout
 
 import discord
 import googletrans
 import requests
-import traceback
 from async_cse import Search
 from bs4 import BeautifulSoup
 from discord.ext import commands
@@ -89,56 +85,6 @@ class Utility(commands.Cog):
         map(lambda x: x.strip(','), args)
         await ctx.send(f'**{random.choice(args)}**')
 
-    @staticmethod
-    def cleanup_code(content):
-        # Remove ```py\n```.
-        if content.startswith('```') and content.endswith('```'):
-            return '\n'.join(content.split('\n')[1:-1])
-
-        # Remove `foo`.
-        return content.strip('` \n')
-
-    # CRED: @Rapptz (https://github.com/Rapptz/RoboDanny/blob/rewrite/cogs/admin.py#L216)
-    @commands.command(name='eval', pass_context=True)
-    async def eval_(self, ctx, *, body: str):
-        """Evaluates Python code."""
-        env = {
-            'bot': self.bot,
-            'ctx': ctx,
-            'channel': ctx.channel,
-            'author': ctx.author,
-            'guild': ctx.guild,
-            'message': ctx.message
-        }
-
-        env.update(globals())
-
-        body = self.cleanup_code(body)
-        stdout = io.StringIO()
-        to_compile = f'async def func():\n{textwrap.indent(body, "  ")}'
-
-        try:
-            exec(to_compile, env)
-        except Exception as e:
-            return await ctx.send(f'```\n{e.__class__.__name__}: {e}\n```')
-
-        func = env['func']
-        try:
-            with redirect_stdout(stdout):
-                ret = await func()
-        except:
-            value = stdout.getvalue()
-            await ctx.send(f'```\n{value}{traceback.format_exc()}\n```')
-        else:
-            value = stdout.getvalue()
-
-            if ret is None:
-                if value:
-                    await ctx.send(f'```py\n{value}\n```')
-            else:
-                self._last_result = ret
-                await ctx.send(f'```\n{value}{ret}\n```')
-
     @commands.command(aliases=['coin_flip', 'heads', 'tails'])
     async def flip_coin(self, ctx, amount=1):
         """Flips coins."""
@@ -190,14 +136,44 @@ class Utility(commands.Cog):
         await message.add_reaction('🤷')
 
     @commands.command(aliases=['poll_num'])
-    async def pollnum(self, ctx, *, question):
+    async def pollnum(self, ctx, num=3, *, question):
         """Creates a basic poll with numbers."""
+        if num > 10:
+            await ctx.send('The amount can\'t exceed 10.')
+            return
+
+        num_list = ['1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣', '7️⃣', '8️⃣', '9️⃣', '🔟']
         embed = discord.Embed(title='Poll', description=question, colour=COLOUR)
         embed.set_footer(text=f'Requested by {ctx.author.display_name}', icon_url=ctx.author.avatar_url)
         message = await ctx.send(embed=embed)
-        await message.add_reaction('1️⃣')
-        await message.add_reaction('2️⃣')
-        await message.add_reaction('3️⃣')
+
+        for i in range(num):
+            await message.add_reaction(num_list[i])
+
+    @staticmethod
+    async def send_lang_codes(ctx):
+        page_list = []
+
+        await ctx.trigger_typing()
+        code_list = sorted([f'{language.title()} – `{code}`\n' for language, code in LANG_CODES.items()])
+        chunk_list = ['']
+        i = 1
+
+        for code in code_list:
+            if chunk_list[-1].count('\n') >= 10:
+                chunk_list.append('')
+            chunk_list[-1] += code
+
+        for chunk in chunk_list:
+            embed = discord.Embed(title='Language Codes', description=chunk, colour=COLOUR)
+            embed.set_footer(text=f'Requested by {ctx.author.display_name} | Page {i}/{len(chunk_list)}',
+                             icon_url=ctx.author.avatar_url)
+
+            page_list.append(embed)
+            i += 1
+
+        paginator = ListPaginator(ctx, page_list)
+        await paginator.start()
 
     @commands.command(aliases=['gt', 'tr'])
     async def translate(self, ctx, source=None, destination=None, *, query=None):
@@ -207,29 +183,8 @@ class Utility(commands.Cog):
         Surround language names with more than 1 word in quotes.
         Type `?translate` to fetch all valid language codes.
         """
-        if not (source and destination and query):
-            page_list = []
-
-            await ctx.trigger_typing()
-            code_list = sorted([f'{language.title()} – `{code}`\n' for language, code in LANG_CODES.items()])
-            chunk_list = ['']
-            i = 1
-
-            for code in code_list:
-                if chunk_list[-1].count('\n') >= 10:
-                    chunk_list.append('')
-                chunk_list[-1] += code
-
-            for chunk in chunk_list:
-                embed = discord.Embed(title='Language Codes', description=chunk, colour=COLOUR)
-                embed.set_footer(text=f'Requested by {ctx.author.display_name} | Page {i}/{len(chunk_list)}',
-                                 icon_url=ctx.author.avatar_url)
-
-                page_list.append(embed)
-                i += 1
-
-            paginator = ListPaginator(ctx, page_list)
-            await paginator.start()
+        if not query:
+            await self.send_lang_codes(ctx)
         else:
             source = source.lower()
             destination = destination.lower()
@@ -252,16 +207,6 @@ class Utility(commands.Cog):
                 return
 
             translated_text = translation.text
-
-            if translation.pronunciation:
-                if not isinstance(translation.pronunciation, str):
-                    pass
-                elif (translation.pronunciation == translation.origin
-                      or translation.pronunciation == translation.text):
-                    pass
-                else:
-                    translated_text += f'\n({translation.pronunciation})'
-
             embed = discord.Embed(title='Translate', colour=COLOUR)
             embed.add_field(name=LANGUAGES[source].title(), value=translation.origin, inline=False)
             embed.add_field(name=LANGUAGES[destination].title(), value=translated_text, inline=False)
@@ -326,9 +271,11 @@ class Utility(commands.Cog):
             etymology = result['etymology'] or None
 
             for definition in result['definitions']:
-                content = definition['text'][0]
-                content += ''.join([f'\n\xa0\xa0\xa0\xa0{j + 1}. {line}'
-                                    for j, line in enumerate(definition['text'][1:])])
+                headword = definition['text'][0]
+                filler = '\xa0\xa0\xa0\xa0'
+                definitions = ''.join([f'{filler}{j + 1}. {line}\n' for j, line in enumerate(definition['text'][1:])])
+                content = headword + '\n' + definitions
+
                 part_of_speech = definition['partOfSpeech'].title() or 'Definitions'
 
                 embed = discord.Embed(title=query, url=url, colour=COLOUR)
