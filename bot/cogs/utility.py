@@ -1,4 +1,3 @@
-import json
 import random
 
 import discord
@@ -93,13 +92,6 @@ class Utility(commands.Cog):
 
         output = ''.join([f'**{random.choice(["Heads", "Tails"])}**\n' for _ in range(amount)])
         await ctx.send(output)
-
-    @commands.command(aliases=['prefix'])
-    async def get_prefix(self, ctx):
-        """Gets the server's prefix."""
-        file = open('bot/configs/prefixes.json')
-        p = json.load(file)[str(ctx.message.guild.id)]
-        await ctx.send(f'This server\'s prefix is `{p}`.')
 
     # CRED: @Tortoise-Community (https://github.com/Tortoise-Community/Tortoise-BOT/blob/master/bot/cogs/utility.py#L19)
     # NOTE: Google's Custom Search JSON API provides only 100 search queries per day for free.
