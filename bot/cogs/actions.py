@@ -1,8 +1,8 @@
 import random
+from typing import Union
 
 import discord
 from discord.ext import commands
-from typing import Union
 
 
 class Actions(commands.Cog):
@@ -184,7 +184,7 @@ class Actions(commands.Cog):
 
         await self.interact(ctx, messages, members_or_roles)
 
-    @commands.command()
+    @commands.command(aliases=['hacer_loch', 'loch'])
     async def hug(self, ctx, members_or_roles: commands.Greedy[Union[discord.Member, discord.Role]] = None):
         """Hugs someone."""
         messages = [
