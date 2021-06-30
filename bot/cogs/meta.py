@@ -79,10 +79,8 @@ class Meta(commands.Cog):
     async def avatar(self, ctx, member: discord.Member = None):
         """Sends the member's avatar."""
         member = member or ctx.author
-        title = (f'{member.display_name}\' profile picture' if member.display_name.lower().endswith('s')
-                 else f'{member.display_name}\'s profile picture')
 
-        embed = discord.Embed(title=title, colour=COLOUR)
+        embed = discord.Embed(title=f'{member.display_name}\'s profile picture', colour=COLOUR)
         embed.set_image(url=member.avatar_url)
         embed.set_footer(text=f'Requested by {ctx.author.display_name}', icon_url=ctx.author.avatar_url)
         await ctx.send(embed=embed)

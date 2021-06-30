@@ -26,7 +26,7 @@ class Utility(commands.Cog):
         self.parser = WiktionaryParser()
         self.translator = Translator()
 
-    # XXX: There's so much broken with this command.
+    # XXX: This isn't the best implementation.
     # Its best use is creating a link to the Bolor website.
     @commands.command()
     async def bolor(self, ctx, *, query):
@@ -46,6 +46,7 @@ class Utility(commands.Cog):
         raw_table = soup.find('table', id='search_result_table').find_all('tr')
         definitions = []
 
+        # FIXME: Sometimes cuts off the first entry.
         for row in raw_table[1:]:
             try:
                 source_cell, destination_cell = row.findChildren('td', width='50%')
@@ -105,7 +106,11 @@ class Utility(commands.Cog):
         i = 1
 
         for result in results:
-            embed = discord.Embed(title=result.title, description=result.description, url=result.url, colour=COLOUR)
+            embed = discord.Embed(colour=COLOUR)
+            embed.title = result.title
+            embed.description = result.description
+            embed.url = result.url
+
             embed.set_thumbnail(url=result.image_url)
             # TODO: Should be handled by paginator. <@Tortoise-Community>
             embed.set_footer(text=f'Requested by {ctx.author.display_name} | Page {i}/{len(results)} | {query}',
@@ -131,7 +136,7 @@ class Utility(commands.Cog):
     async def pollnum(self, ctx, num=3, *, question):
         """Creates a basic poll with numbers."""
         if num > 10:
-            await ctx.send('The amount can\'t exceed 10.')
+            await ctx.send('The amount of options can\'t exceed 10.')
             return
 
         num_list = ['1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣', '7️⃣', '8️⃣', '9️⃣', '🔟']
@@ -199,9 +204,20 @@ class Utility(commands.Cog):
                 return
 
             translated_text = translation.text
-            embed = discord.Embed(title='Translate', colour=COLOUR)
-            embed.add_field(name=LANGUAGES[source].title(), value=translation.origin, inline=False)
-            embed.add_field(name=LANGUAGES[destination].title(), value=translated_text, inline=False)
+
+            if translation.pronunciation:
+                if not isinstance(translation.pronunciation, str):
+                    pass
+                elif (translation.pronunciation == translation.origin
+                      or translation.pronunciation == translation.text):
+                    pass
+                else:
+                    translated_text += f'\n({translation.pronunciation})'
+
+            embed = discord.Embed(colour=COLOUR)
+            embed.title = f'Translate ({LANGUAGES[source].title()} > {LANGUAGES[destination].title()})'
+            embed.description = translated_text
+
             embed.set_footer(text=f'Requested by {ctx.author.display_name} | Powered by Google Translate',
                              icon_url=ctx.author.avatar_url)
 
