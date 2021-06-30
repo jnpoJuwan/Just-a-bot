@@ -25,7 +25,7 @@ class Actions(commands.Cog):
                 name = obj
 
             if is_genitive:
-                name_list.append(name + '\'' if name.lower().endswith('s') else name + '\'s')
+                name_list.append(name + '\'s')
             else:
                 name_list.append(name)
 
@@ -72,6 +72,10 @@ class Actions(commands.Cog):
     @commands.command()
     async def bonk(self, ctx, members_or_roles: commands.Greedy[Union[discord.Member, discord.Role]] = None):
         """Bonks someone."""
+        if ctx.author.id == 616812057186271233:
+            await ctx.send('No! Bad Eddie!')
+            return
+
         messages = [
             'You didn\'t bonk anyone.',
             'You bonked yourself to horny jail.',
@@ -213,7 +217,7 @@ class Actions(commands.Cog):
         """Brutally kills someone."""
         messages = [
             'You didn\'t kill anyone.',
-            '<:gunpoint:804365552801677312> <:cry2:829114403961438249>',
+            '<:gunpoint:859930591265161216> <:cry2:829114403961438249>',
             'But m-master... \\*is brutally killed\\*',
             f'You have murdered {self.add_list_formatting(members_or_roles)}. You\'re now on MAGNVS\' wanted list.',
         ]
@@ -308,7 +312,7 @@ class Actions(commands.Cog):
         """Shoots someone."""
         messages = [
             'You didn\'t shoot anyone.',
-            '<:gunpoint:804365552801677312> <:cry2:829114403961438249>',
+            '<:gunpoint:859930591265161216> <:cry2:829114403961438249>',
             'But m-master... \\*gets shot\\*',
             f'You shot {self.add_list_formatting(members_or_roles)}.',
         ]
@@ -356,7 +360,7 @@ class Actions(commands.Cog):
         """Stabs someone."""
         messages = [
             'You didn\'t stab anyone.',
-            '<:gunpoint:804365552801677312> <:cry2:829114403961438249>',
+            '<:gunpoint:859930591265161216> <:cry2:829114403961438249>',
             '\\*gets stabbed 23 times\\* Et tu, dominus? \\*dies\\*.',
             f'You brutally stabbed {self.add_list_formatting(members_or_roles)}.',
         ]
@@ -371,6 +375,22 @@ class Actions(commands.Cog):
             'You self-sucked.',
             'You sucked my tiny, robot cock. 😳',
             f'You sucked {self.add_list_formatting(members_or_roles, is_genitive=True)} monster cock. 😳',
+        ]
+
+        await self.interact(ctx, messages, members_or_roles)
+
+    @commands.command(aliases=['big_bonk', 'super_bonk'])
+    async def superbonk(self, ctx, members_or_roles: commands.Greedy[Union[discord.Member, discord.Role]] = None):
+        """Bonk someone to horny hell."""
+        if ctx.author.id == 616812057186271233:
+            await ctx.send('No! Bad Eddie!')
+            return
+
+        messages = [
+            'You didn\'t super-bonk anyone to horny hell.',
+            'You super-bonked anyone to horny hell.',
+            'You super-bonked me to horny hell.',
+            f'You super-bonked {self.add_list_formatting(members_or_roles)} to horny hell.',
         ]
 
         await self.interact(ctx, messages, members_or_roles)
