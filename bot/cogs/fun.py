@@ -2,10 +2,7 @@ import json
 import random
 
 import discord
-import wikipedia
 from discord.ext import commands
-
-from ..utils.constants import COLOUR
 
 # SEE: https://www.reddit.com/r/copypasta/comments/jai7dh/penis_synonyms/
 penis_aliases = json.load(open('bot/assets/text/penis_aliases.json'))
@@ -16,9 +13,8 @@ class Fun(commands.Cog):
         self.bot = bot
 
     @commands.command(name='8ball', aliases=['8-ball'])
-    async def _8ball(self, ctx, *, question=None):
+    async def _8ball(self, ctx):
         """Asks the question to the Magic 8-Ball."""
-        # SEE: https://en.wikipedia.org/wiki/Magic_8-Ball#Possible_answers
         outcomes = (
             'It is certain.',
             'It is decidedly so.',
@@ -44,30 +40,11 @@ class Fun(commands.Cog):
 
         await ctx.message.reply(f'**{random.choice(outcomes)}**')
 
-    @commands.command()
-    async def cbt(self, ctx):
-        """Send the Wikipedia article for 'Cock and ball torture'."""
-        # SEE: https://en.wikipedia.org/wiki/Cock_and_ball_torture
-        await ctx.trigger_typing()
-        embed = discord.Embed(
-            title='Cock and ball torture',
-            url='https://en.wikipedia.org/wiki/Cock_and_ball_torture',
-            description=wikipedia.summary('Cock_and_ball_torture'), colour=COLOUR
-        )
-        embed.set_footer(text=f'Requested by {ctx.author.display_name} | From Wikipedia, the free encyclopedia',
-                         icon_url=ctx.author.avatar_url)
-        await ctx.send(embed=embed)
-
     @commands.command(aliases=['say'])
     async def echo(self, ctx, *, message='echo'):
         """Echoes the user's message while also deleting it."""
         await ctx.message.delete()
         await ctx.send(message)
-
-    @commands.command(aliases=['fuckyou', 'f*ck_you'], hidden=True)
-    async def fuck_you(self, ctx):
-        """Responds to 'fuck you'."""
-        await ctx.send('Fuck my robot body yourself, you fucking coward :rage:.')
 
     @commands.command(aliases=['hey', 'hi'])
     async def hello(self, ctx):
@@ -125,11 +102,6 @@ class Fun(commands.Cog):
     async def pong(self, ctx):
         """Pongs back."""
         await ctx.send('No! This isn\'t how you\'re supposed to play the game.')
-
-    @commands.command(hidden=True)
-    async def spam(self, ctx):
-        """Spams."""
-        await ctx.send(f'I\'ve already said `{ctx.prefix}spam` is *not* an available command anymore.')
 
     @commands.command(aliases=['diaeresis'])
     async def umlaut(self, ctx, *, text='echo'):

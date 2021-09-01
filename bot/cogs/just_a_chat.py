@@ -47,11 +47,11 @@ class JustAChat(commands.Cog, name='Just a chat...'):
         """Sends Just some guidelines...."""
         # SEE: https://docs.google.com/document/d/1NAH6GZNC0UNFHdBmAd0u9U5keGhAgnxY-vqiRaATL8c/edit?usp=sharing
         guideline_lines = open('bot/assets/text/amino_guidelines.md', encoding='utf-8').readlines()
+
         # raw_page_list is made of dictionaries (pages) containing the heading and contents.
         raw_page_list = [{}]
 
         for index, value in enumerate(guideline_lines[1:]):
-            # Ignore the first heading.
             if value.startswith('# ') or len(raw_page_list[-1]) >= 24:
                 raw_page_list.append({})
 
@@ -88,23 +88,20 @@ class JustAChat(commands.Cog, name='Just a chat...'):
         await ctx.trigger_typing()
         dt = datetime.datetime.now(tz=utc)
         tz_dict = {
-            '🇲🇽 Mexico (Pacific)': timezone('Mexico/BajaSur'),
-            '🇺🇸 US (Mountain)': timezone('US/Mountain'),
-            '🇲🇽 Mexico (Central)': timezone('Mexico/General'),
-            '🇺🇸 US (Central)': timezone('US/Central'),
-            '🇺🇸 US (Eastern)': timezone('US/Eastern'),
-            '🇵🇾 Paraguay': timezone('America/Asuncion'),
-            '🇧🇷 Brazil (Brasília)': timezone('Brazil/East'),
-            '🇪🇺 Europe (Western)': timezone('Europe/London'),
-            '🇪🇺 Europe (Central)': timezone('Europe/Berlin'),
-            '🇪🇺 Europe (Eastern)': timezone('Europe/Athens'),
-            '🇦🇪 United Arab Emirates': timezone('Asia/Dubai'),
-            '🇰🇷 South Korea': timezone('Asia/Seoul'),
+            ':flag_mx: Mexico (Pacific)': timezone('Mexico/BajaSur'),
+            ':flag_us: US (Mountain)': timezone('US/Mountain'),
+            ':flag_mx: Mexico (Central)': timezone('Mexico/General'),
+            ':flag_us: US (Eastern)': timezone('US/Eastern'),
+            ':flag_py: Paraguay': timezone('America/Asuncion'),
+            ':flag_br: Brazil (Brasília)': timezone('Brazil/East'),
+            ':flag_eu: Europe (Western)': timezone('Europe/London'),
+            ':flag_eu: Europe (Central)': timezone('Europe/Berlin'),
+            ':flag_eu: Europe (Eastern)': timezone('Europe/Athens'),
         }
 
         embed = discord.Embed(title='Just some time zones...', colour=COLOUR)
         for k, v in tz_dict.items():
-            tz = str(dt.astimezone(v).strftime('%A, %B %d **%H:%M** UTC%z'))
+            tz = str(dt.astimezone(v).strftime('%A, %d %B **%H:%M** UTC%z'))
             embed.add_field(name=k, value=tz[:-2] + ':' + tz[-2:])
 
         embed.set_footer(text=f'Requested by {ctx.author.display_name}', icon_url=ctx.author.avatar_url)

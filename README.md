@@ -7,7 +7,7 @@
 
 <img alt="Just a bot... avatar" align="right" src="https://i.imgur.com/fBbNmfg.png" width=30%/>
 
-This bot is only meant to work only in servers of Just a chat... and Just a mess... members.
+This bot is only meant to work only in servers of Just a mess... members.
 Code here serves for transparency.
 
 I would prefer if you don't run an instance of my bot, instead use the 

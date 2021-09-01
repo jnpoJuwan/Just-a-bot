@@ -91,10 +91,11 @@ class Utility(commands.Cog):
         if amount >= SPAM_LIMIT:
             raise exceptions.SpamError
 
-        output = ''.join([f'**{random.choice(["Heads", "Tails"])}**\n' for _ in range(amount)])
+        output = '\n'.join([f'**{random.choice(["Heads", "Tails"])}**' for _ in range(amount)])
         await ctx.send(output)
 
-    # CRED: @Tortoise-Community (https://github.com/Tortoise-Community/Tortoise-BOT/blob/master/bot/cogs/utility.py#L19)
+    # CRED: @Tortoise-Community
+    # (https://github.com/Tortoise-Community/Tortoise-BOT/blob/master/bot/cogs/utility.py#L19)
     # NOTE: Google's Custom Search JSON API provides only 100 search queries per day for free.
     @commands.command(aliases=['g'])
     async def google(self, ctx, *, query):
@@ -122,6 +123,12 @@ class Utility(commands.Cog):
         paginator = ListPaginator(ctx, page_list)
         await paginator.start()
 
+    @commands.command()
+    async def ipa(self, ctx):
+        """Sends the link to the International Phonetic Association's interactive IPA chart."""
+        link = 'https://www.internationalphoneticassociation.org/IPAcharts/inter_chart_2018/IPA_2018.html'
+        await ctx.send(link)
+
     @commands.command(aliases=['vote'])
     async def poll(self, ctx, *, question):
         """Creates a basic yes/no poll."""
@@ -132,20 +139,24 @@ class Utility(commands.Cog):
         await message.add_reaction('👎')
         await message.add_reaction('🤷')
 
-    @commands.command(aliases=['poll_num'])
+    @commands.command(aliases=['poll_num', 'votenum', 'vote_num'])
     async def pollnum(self, ctx, num=3, *, question):
-        """Creates a basic poll with numbers."""
+        """Creates a basic poll with up to 20 multiple options."""
         if num > 10:
-            await ctx.send('The amount of options can\'t exceed 10.')
+            await ctx.send('The amount of options can\'t exceed 20.')
             return
 
-        num_list = ['1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣', '7️⃣', '8️⃣', '9️⃣', '🔟']
+        reactions = [
+            '1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣', '7️⃣', '8️⃣', '9️⃣', '🇦',
+            '🇧', '🇨', '🇩', '🇪', '🇫', '🇬', '🇭', '🇮', '🇯'
+        ]
+
         embed = discord.Embed(title='Poll', description=question, colour=COLOUR)
         embed.set_footer(text=f'Requested by {ctx.author.display_name}', icon_url=ctx.author.avatar_url)
         message = await ctx.send(embed=embed)
 
         for i in range(num):
-            await message.add_reaction(num_list[i])
+            await message.add_reaction(reactions[i])
 
     @staticmethod
     async def send_lang_codes(ctx):
@@ -153,17 +164,21 @@ class Utility(commands.Cog):
 
         await ctx.trigger_typing()
         code_list = sorted([f'{language.title()} – `{code}`\n' for language, code in LANG_CODES.items()])
-        chunk_list = ['']
+        joined_list = ['']
         i = 1
 
         for code in code_list:
-            if chunk_list[-1].count('\n') >= 10:
-                chunk_list.append('')
-            chunk_list[-1] += code
+            if joined_list[-1].count('\n') >= 10:
+                joined_list.append('')
+            joined_list[-1] += code
 
-        for chunk in chunk_list:
-            embed = discord.Embed(title='Language Codes', description=chunk, colour=COLOUR)
-            embed.set_footer(text=f'Requested by {ctx.author.display_name} | Page {i}/{len(chunk_list)}',
+        for joined in joined_list:
+            embed = discord.Embed(colour=COLOUR)
+            embed.title = 'Language Codes'
+            embed.description = (f'The following language codes supported by Google Translate, '
+                                 f'which conform to ISO 693-1 with some exceptions.\n{joined}')
+
+            embed.set_footer(text=f'Requested by {ctx.author.display_name} | Page {i}/{len(joined_list)}',
                              icon_url=ctx.author.avatar_url)
 
             page_list.append(embed)
@@ -183,10 +198,10 @@ class Utility(commands.Cog):
         if not query:
             await self.send_lang_codes(ctx)
         else:
+            # Change language names to language codes.
             source = source.lower()
             destination = destination.lower()
 
-            # Change language names to language codes.
             if source in LANGUAGES.values():
                 source = LANG_CODES[source]
             if destination in LANGUAGES.values():
@@ -232,8 +247,8 @@ class Utility(commands.Cog):
         if amount >= SPAM_LIMIT:
             raise exceptions.SpamError
 
-        for _ in range(amount):
-            await ctx.send(f'**{random.randint(1, faces)}**')
+        output = '\n'.join([f'**{random.randint(1, faces)}**' for _ in range(amount)])
+        await ctx.send(output)
 
     @roll.error
     async def roll_error(self, ctx, error):
@@ -247,42 +262,38 @@ class Utility(commands.Cog):
         The language argument can be a language code or name.
         Surround language names with more than 1 word in quotes.
         """
-        language = language.lower()
-        page_list = []
-
         # Change language codes to language names.
         # NOFIX: LANGUAGES and LANG_CODES are only the languages recognised by Google Translate,
-        # since there are 8 163 recognised language codes by Wiktionary.
+        # since there are 8 163 recognised language codes by Wiktionary alone.
+        language = language.lower()
         if language in LANG_CODES.values():
             language = LANGUAGES[language]
 
         await ctx.trigger_typing()
         results = self.parser.fetch(query, language)
+
+        page_list = []
         page_number = 0
         i = 1
 
-        if not results:
-            await ctx.send('Sorry. I couldn\'t find that word or language.')
-            return
-
-        # XXX: Looping around a list twice.
         for result in results:
-            if not result['definitions']:
+            page_number += len(result['definitions'])
+            if page_number < 1:
                 await ctx.send('Sorry. I couldn\'t find that word or language.')
                 return
 
-            page_number += len(result['definitions'])
-
         for result in results:
-            url = f'https://en.wiktionary.org/wiki/{query.replace(" ", "_")}#{language.title().replace(" ", "_")}'
+            path = f'{query.replace(" ", "_")}#{language.title().replace(" ", "_")}'
+            url = f'https://en.wiktionary.org/wiki/{path}'
+
             pronunciation = '\n'.join(['• ' + x for x in result['pronunciations']['text']]) or None
             etymology = result['etymology'] or None
 
             for definition in result['definitions']:
-                headword = definition['text'][0]
-                filler = '\xa0\xa0\xa0\xa0'
-                definitions = ''.join([f'{filler}{j + 1}. {line}\n' for j, line in enumerate(definition['text'][1:])])
-                content = headword + '\n' + definitions
+                headword = f'{definition["text"][0]}\n'
+                filler = '\xa0' * 4
+                definitions = [f'{filler}{j + 1}. {line}' for j, line in enumerate(definition['text'][1:])]
+                joined = headword + '\n'.join(definitions)
 
                 part_of_speech = definition['partOfSpeech'].title() or 'Definitions'
 
@@ -293,7 +304,7 @@ class Utility(commands.Cog):
                 if etymology:
                     embed.add_field(name='Etymology', value=etymology[:500], inline=False)
 
-                embed.add_field(name=part_of_speech, value=content[:1000], inline=False)
+                embed.add_field(name=part_of_speech, value=joined[:1000], inline=False)
 
                 embed.set_footer(text=f'Requested by {ctx.author.display_name} | '
                                       f'Page {i}/{page_number} | Powered by Wiktionary',

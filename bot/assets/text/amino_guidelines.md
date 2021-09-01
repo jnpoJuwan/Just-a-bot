@@ -4,11 +4,11 @@ The Amino's guidelines apply here!
 Dark humor is tolerated, just don't offend anyone.  
 Peace and love. Let's all be friends here! :D
 ## 🇨🇳 普通话
-「Amino」规则在这里适用！  
+Amino规则在这里适用！  
 黑暗的幽默容忍在这里，不要冒犯。  
 安和爱。让我们在这里成为朋友! :D
 ## 🇹🇼 國語
-「Amino」規則在這裡適用！  
+Amino規則在這裡適用！  
 黑暗的幽默容忍在這裡，不要冒犯。  
 安和愛。讓我們在這裡成為朋友! :D
 ## 🇪🇦 Español
@@ -28,7 +28,7 @@ Die Regeln von diesem Amino gelten auch hier!
 Schwarzer Humor ist erlaubt, solange keine Menschen verletzt werden.  
 Friede und Liebe. Lasst uns hier alle Freunde sein! :D
 ## 🇯🇵 日本語
-「Amino」ガイドラインがここに適用されます！  
+Aminoガイドラインがここに適用されます！  
 ダークユーモアは許容されます、唯誰かを怒らせないで下さい。  
 平和と愛。ここでみんな友達になりましょう！ :D
 ## 🇰🇷 한국말
@@ -87,7 +87,7 @@ Suaimhneas agus grá. Lig dúinn go léir a bheith cairde anseo! :D󠁢
 Na amino shariyah woe appliquées ici!  
 Humour noiri je autorisé, sha namntsi blessé personne.  
 Amani na kuishi. Sisi marafiki! :D
-## Euskara
+## <:basque_country:824434192157900830> Euskara
 Aminoaren erregelak hemen ere aplikatuak dira!  
 Umore beltza onartua da, baina ez ofenditu.  
 Bake eta maite. Lagunak izan! :D
