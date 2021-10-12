@@ -140,7 +140,7 @@ class Actions(commands.Cog):
             'You *dnaced*.',
             'You danced with yourself.',
             'You danced with me.',
-            f'You danced with {self.name_format(members_or_roles)}.'
+            f'You danced with {self.name_format(members_or_roles)}.',
             f'You danced with {self.name_format(members_or_roles)}.'
         ]
 
@@ -153,7 +153,7 @@ class Actions(commands.Cog):
             'You defenestrated your pillow.',
             'You defenestrated yourself.',
             'You defenestrated me.',
-            f'You defenestrated {self.name_format(members_or_roles)}.'
+            f'You defenestrated {self.name_format(members_or_roles)}.',
             f'You defenestrated {self.name_format(members_or_roles)}.'
         ]
 
@@ -183,7 +183,7 @@ class Actions(commands.Cog):
             'You fucked your pillow, since you\'re alone and lonely... Do you need a hug?',
             'You went fuck yourself as someone asked.',
             'You fucked my tiny, robot bussy. :pleading_face:',
-            f'You fucked {self.name_format(members_or_roles, gen=True)} tiny þussy.'
+            f'You fucked {self.name_format(members_or_roles, gen=True)} tiny þussy.',
             f'You fucked {self.name_format(members_or_roles, gen=True)} tiny þussies.'
         ]
 

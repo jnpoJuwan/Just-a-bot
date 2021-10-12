@@ -42,9 +42,20 @@ class JustAChat(commands.Cog, name='Just a chat...'):
         await paginator.start()
 
     @commands.command(aliases=['jacguidelines', 'jsg', 'jsguidelines'])
-    @commands.cooldown(1, 60.0, commands.BucketType.user)
-    async def just_some_guidelines(self, ctx):
-        """Sends Just some guidelines...."""
+    @commands.cooldown(2, 30.0, commands.BucketType.user)
+    async def just_some_guidelines(self, ctx, pagination='on'):
+        """Sends Just some guidelines....
+
+        The is_paginated setting can be turned either on or off.
+        """
+        true_values = ['1', 'on', 'true', 'yes']
+        false_values = ['0', 'off', 'false', 'no']
+
+        pagination = pagination.lower()
+
+        if pagination not in true_values and pagination not in false_values:
+            raise commands.BadArgument
+
         # SEE: https://docs.google.com/document/d/1NAH6GZNC0UNFHdBmAd0u9U5keGhAgnxY-vqiRaATL8c/edit?usp=sharing
         guideline_lines = open('bot/assets/text/amino_guidelines.md', encoding='utf-8').readlines()
 
@@ -56,24 +67,35 @@ class JustAChat(commands.Cog, name='Just a chat...'):
                 raw_page_list.append({})
 
             if value.startswith('## '):
-                page_content = ''.join(guideline_lines[index + 3: index + 6])[:-1]
+                page_content = ''.join(guideline_lines[index + 2: index + 5])[:-1]
                 raw_page_list[-1][value[3:-1]] = page_content
 
         page_list = []
         i = 1
 
-        for page in raw_page_list:
-            embed = discord.Embed(title='Just some guidelines...', colour=COLOUR)
-            for k, v in page.items():
-                embed.add_field(name=k, value=v)
-            embed.set_footer(text=f'Requested by {ctx.author.display_name} | Page {i}/{len(raw_page_list)}',
-                             icon_url=ctx.author.avatar_url)
+        if pagination in false_values:
+            for page in raw_page_list:
+                embed = discord.Embed(title='Just some guidelines...', colour=COLOUR)
+                for k, v in page.items():
+                    embed.add_field(name=k, value=v)
 
-            page_list.append(embed)
-            i += 1
+                if page == raw_page_list[-1]:
+                    embed.set_footer(text=f'Requested by {ctx.author.display_name}',
+                                     icon_url=ctx.author.avatar_url)
+                await ctx.send(embed=embed)
+        else:
+            for page in raw_page_list:
+                embed = discord.Embed(title='Just some guidelines...', colour=COLOUR)
+                for k, v in page.items():
+                    embed.add_field(name=k, value=v)
+                embed.set_footer(text=f'Requested by {ctx.author.display_name} | Page {i}/{len(raw_page_list)}',
+                                 icon_url=ctx.author.avatar_url)
 
-        paginator = ListPaginator(ctx, page_list)
-        await paginator.start()
+                page_list.append(embed)
+                i += 1
+
+            paginator = ListPaginator(ctx, page_list)
+            await paginator.start()
 
     @just_some_guidelines.error
     async def just_some_guidelines_error(self, ctx, error):
@@ -103,25 +125,6 @@ class JustAChat(commands.Cog, name='Just a chat...'):
         for k, v in tz_dict.items():
             tz = str(dt.astimezone(v).strftime('%A, %d %B **%H:%M** UTC%z'))
             embed.add_field(name=k, value=tz[:-2] + ':' + tz[-2:])
-
-        embed.set_footer(text=f'Requested by {ctx.author.display_name}', icon_url=ctx.author.avatar_url)
-        await ctx.send(embed=embed)
-
-    @commands.command(aliases=['jacyoutube', 'jacyt', 'jsyoutube', 'jsyt'])
-    async def just_some_youtube(self, ctx):
-        """Send some Just a chat... users' YouTube channels."""
-        channels_dict = {
-            'Aurora': 'https://www.youtube.com/channel/UCmDE7oQp2wzTLxd7lc4mA9A',
-            'D\'ignoranza': 'https://www.youtube.com/channel/UCI4ZJ0QmSokr6ctUfURqm5A',
-            'Dr. IPA': 'https://www.youtube.com/channel/UCfPYxsZHRBaW24q3pb9oOnA',
-            'Dracheneks': 'https://www.youtube.com/channel/UCiaOA8yjnuZX5wUqmlRDUuA',
-            'MAGNVS': 'https://www.youtube.com/channel/UC2AcuqQOPxH6pkbJs-xm_Qw',
-            'PD6': 'https://www.youtube.com/channel/UCuAsPOh-qA7wakswF6ioo4g',
-        }
-
-        embed = discord.Embed(name='Just some YouTube channels...', colour=COLOUR)
-        for k, v in channels_dict.items():
-            embed.add_field(name=k, value=v)
 
         embed.set_footer(text=f'Requested by {ctx.author.display_name}', icon_url=ctx.author.avatar_url)
         await ctx.send(embed=embed)

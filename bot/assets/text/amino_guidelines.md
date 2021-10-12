@@ -1,5 +1,5 @@
 # Just some guidelines...
-## 🇬🇧🇺🇸 English
+## 🇬🇧 🇺🇸 English
 The Amino's guidelines apply here!  
 Dark humor is tolerated, just don't offend anyone.  
 Peace and love. Let's all be friends here! :D
@@ -19,7 +19,7 @@ Paz y amor. ¡Seamos todos amigos! :D
 Les règles de l'Amino s'appliquent ici !  
 L'humour noir est toléré, ne blessez juste pas les gens.  
 Paix et amour. Soyons tous amis ici ! :D
-## 🇧🇷🇵🇹 Português
+## 🇧🇷 🇵🇹 Português
 As regras do Amino também aplicam-se aqui!  
 Toleramos humor negro, só não ofenda(s) os outros.  
 Paz e amor. Vamos todos ser amigos aqui! :D
@@ -51,7 +51,7 @@ Pokój i miłość. Bądźmy tu kolegami! :D
 De regels van de Amino zijn ook hier toegepast!  
 Zwarte humor is toegestaan, maar kwetst niemand.  
 Vrede en liefde. Laat ons vrienden zijn! :D
-## 🇲🇩🇷🇴 Limbă română
+## 🇲🇩 🇷🇴 Limbă română
 Regulile Aminolui se aplică și aici!  
 Umorul negru este permis, dar nu jigniți nimeni.  
 Pace și dragoste. Fiți amici aici! :D
@@ -59,6 +59,10 @@ Pace și dragoste. Fiți amici aici! :D
 Οι κανόνες αυτού του Άμινο ισχύουν σε αυτό το τσατ!  
 Το κρύο χιούμορ υπομένεται, απλά μην προσβάλλετε κανέναν.  
 Ειρήνη και αγάπη. Ας γίνουμε όλοι φίλοι εδώ! :D
+## 🇫🇮 🇸🇪 Svenska
+Aminots gajdlajnar applikar her!
+Svart humor tolereras, bara du inte förolämpar någon.
+Frid och kärlek. Låt oss vara vänner! :D
 ## 🇦🇩 Català
 Les regles del Amino s'apliquen aquí!  
 L'humor negre està permès, però no ofenguis ningú.  
@@ -66,7 +70,7 @@ Pau i amor. Siguem tots amics! :D
 ## 🇵🇾 Avañe'ẽ
 Amíno tekorã ojeporu ko'ápe avei!  
 Ore rohechakuaáta tykue pytũ, anínte remoñemyrõi ambue tapicha.  
-Py'aguapy ha mborayhu. Javy'ákena ko'ápe! :D
+Py'aguapy ha mborayhu. Ñamoirũmbákena! :D
 ## Lombard
 I regol del Amino i se applichen anca chì!  
 El humor negher a l’è permiss, ma offend minga nissun.  
@@ -83,7 +87,7 @@ Paz e amor. Sexamos todos amigos! :D
 Tá na rialacha an Amino i bhfeidhm anseo!  
 Glactar le greann dubh, ach ná cuir múisiam ar dhuine ar bith.  
 Suaimhneas agus grá. Lig dúinn go léir a bheith cairde anseo! :D󠁢
-## 🇰🇲🇾🇹 Shikomori
+## 🇰🇲 🇾🇹 Shikomori
 Na amino shariyah woe appliquées ici!  
 Humour noiri je autorisé, sha namntsi blessé personne.  
 Amani na kuishi. Sisi marafiki! :D

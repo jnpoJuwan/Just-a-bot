@@ -276,11 +276,16 @@ class Utility(commands.Cog):
         page_number = 0
         i = 1
 
+        if not results:
+            await ctx.send('Sorry. Wiktionary doesn\'t seem to have an entry for that.')
+            return
+
         for result in results:
-            page_number += len(result['definitions'])
-            if page_number < 1:
-                await ctx.send('Sorry. I couldn\'t find that word or language.')
+            if not result['definitions']:
+                await ctx.send('Sorry. Wiktionary doesn\'t seem to have an entry for that.')
                 return
+
+            page_number += len(result['definitions'])
 
         for result in results:
             path = f'{query.replace(" ", "_")}#{language.title().replace(" ", "_")}'
@@ -301,6 +306,7 @@ class Utility(commands.Cog):
 
                 if pronunciation:
                     embed.add_field(name='Pronunciation', value=pronunciation, inline=False)
+
                 if etymology:
                     embed.add_field(name='Etymology', value=etymology[:500], inline=False)
 
