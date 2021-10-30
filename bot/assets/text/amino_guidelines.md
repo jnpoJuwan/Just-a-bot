@@ -60,7 +60,7 @@ Pace și dragoste. Fiți amici aici! :D
 Το κρύο χιούμορ υπομένεται, απλά μην προσβάλλετε κανέναν.  
 Ειρήνη και αγάπη. Ας γίνουμε όλοι φίλοι εδώ! :D
 ## 🇫🇮 🇸🇪 Svenska
-Aminots gajdlajnar applikar her!
+Aminons riktlinjer gäller här!
 Svart humor tolereras, bara du inte förolämpar någon.
 Frid och kärlek. Låt oss vara vänner! :D
 ## 🇦🇩 Català
@@ -68,7 +68,7 @@ Les regles del Amino s'apliquen aquí!
 L'humor negre està permès, però no ofenguis ningú.  
 Pau i amor. Siguem tots amics! :D
 ## 🇵🇾 Avañe'ẽ
-Amíno tekorã ojeporu ko'ápe avei!  
+Amíno rekorã ojeporu ko'ápe avei!  
 Ore rohechakuaáta tykue pytũ, anínte remoñemyrõi ambue tapicha.  
 Py'aguapy ha mborayhu. Ñamoirũmbákena! :D
 ## Lombard

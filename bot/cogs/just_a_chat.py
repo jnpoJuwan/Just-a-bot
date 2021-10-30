@@ -15,7 +15,7 @@ class JustAChat(commands.Cog, name='Just a chat...'):
 
     # GLOSS: 'js' means 'Just some', not 'JavaScript'.
 
-    @commands.command(aliases=['jacdocs', 'jsd', 'jsdocs'])
+    @commands.command(aliases=['jsd', 'docs'])
     async def just_some_docs(self, ctx):
         """Sends Just some documents...."""
         # CRED: @Tortoise-Community
@@ -33,7 +33,7 @@ class JustAChat(commands.Cog, name='Just a chat...'):
         for k, v in raw_page_list.items():
             embed = discord.Embed(title=k, description=add_content_formatting(v), colour=COLOUR)
             embed.set_footer(text=f'Requested by {ctx.author.display_name} | Page {i}/{len(raw_page_list)}',
-                             icon_url=ctx.author.avatar_url)
+                             icon_url=ctx.author.avatar.url)
 
             page_list.append(embed)
             i += 1
@@ -41,7 +41,7 @@ class JustAChat(commands.Cog, name='Just a chat...'):
         paginator = ListPaginator(ctx, page_list)
         await paginator.start()
 
-    @commands.command(aliases=['jacguidelines', 'jsg', 'jsguidelines'])
+    @commands.command(aliases=['jsg', 'guidelines'])
     @commands.cooldown(2, 30.0, commands.BucketType.user)
     async def just_some_guidelines(self, ctx, pagination='on'):
         """Sends Just some guidelines....
@@ -81,7 +81,7 @@ class JustAChat(commands.Cog, name='Just a chat...'):
 
                 if page == raw_page_list[-1]:
                     embed.set_footer(text=f'Requested by {ctx.author.display_name}',
-                                     icon_url=ctx.author.avatar_url)
+                                     icon_url=ctx.author.avatar.url)
                 await ctx.send(embed=embed)
         else:
             for page in raw_page_list:
@@ -89,7 +89,7 @@ class JustAChat(commands.Cog, name='Just a chat...'):
                 for k, v in page.items():
                     embed.add_field(name=k, value=v)
                 embed.set_footer(text=f'Requested by {ctx.author.display_name} | Page {i}/{len(raw_page_list)}',
-                                 icon_url=ctx.author.avatar_url)
+                                 icon_url=ctx.author.avatar.url)
 
                 page_list.append(embed)
                 i += 1
@@ -102,7 +102,7 @@ class JustAChat(commands.Cog, name='Just a chat...'):
         if isinstance(error, commands.BadArgument):
             await ctx.send('The paginated setting must be turned either on or off.')
 
-    @commands.command(aliases=['jactimezones', 'jactz', 'jstimezones', 'jstz'])
+    @commands.command(aliases=['jstz', 'timezones', 'time_zones'])
     async def just_some_timezones(self, ctx):
         """Sends Just a chat... users' time zones."""
         await ctx.send('Calculating times...')
@@ -126,7 +126,7 @@ class JustAChat(commands.Cog, name='Just a chat...'):
             tz = str(dt.astimezone(v).strftime('%A, %d %B **%H:%M** UTC%z'))
             embed.add_field(name=k, value=tz[:-2] + ':' + tz[-2:])
 
-        embed.set_footer(text=f'Requested by {ctx.author.display_name}', icon_url=ctx.author.avatar_url)
+        embed.set_footer(text=f'Requested by {ctx.author.display_name}', icon_url=ctx.author.avatar.url)
         await ctx.send(embed=embed)
 
 

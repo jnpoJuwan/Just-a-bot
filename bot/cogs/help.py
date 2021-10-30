@@ -73,7 +73,7 @@ class Help(commands.Cog):
         )
 
         embed = discord.Embed(title='About Just a bot...', description=msg, colour=COLOUR)
-        embed.set_footer(text=f'Requested by {ctx.author.display_name}', icon_url=ctx.author.avatar_url)
+        embed.set_footer(text=f'Requested by {ctx.author.display_name}', icon_url=ctx.author.avatar.url)
         await ctx.send(embed=embed)
 
 

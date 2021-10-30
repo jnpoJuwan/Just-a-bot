@@ -71,7 +71,7 @@ class Utility(commands.Cog):
         for chunk in chunk_list:
             embed = discord.Embed(title='Bolor Dictionary', description=chunk, url=url, colour=COLOUR)
             embed.set_footer(text=f'Requested by {ctx.author.display_name} | Page {i}/{len(chunk_list)}',
-                             icon_url=ctx.author.avatar_url)
+                             icon_url=ctx.author.avatar.url)
 
             page_list.append(embed)
             i += 1
@@ -115,7 +115,7 @@ class Utility(commands.Cog):
             embed.set_thumbnail(url=result.image_url)
             # TODO: Should be handled by paginator. <@Tortoise-Community>
             embed.set_footer(text=f'Requested by {ctx.author.display_name} | Page {i}/{len(results)} | {query}',
-                             icon_url=ctx.author.avatar_url)
+                             icon_url=ctx.author.avatar.url)
 
             page_list.append(embed)
             i += 1
@@ -133,7 +133,7 @@ class Utility(commands.Cog):
     async def poll(self, ctx, *, question):
         """Creates a basic yes/no poll."""
         embed = discord.Embed(title='Poll', description=question, colour=COLOUR)
-        embed.set_footer(text=f'Requested by {ctx.author.display_name}', icon_url=ctx.author.avatar_url)
+        embed.set_footer(text=f'Requested by {ctx.author.display_name}', icon_url=ctx.author.avatar.url)
         message = await ctx.send(embed=embed)
         await message.add_reaction('👍')
         await message.add_reaction('👎')
@@ -152,7 +152,7 @@ class Utility(commands.Cog):
         ]
 
         embed = discord.Embed(title='Poll', description=question, colour=COLOUR)
-        embed.set_footer(text=f'Requested by {ctx.author.display_name}', icon_url=ctx.author.avatar_url)
+        embed.set_footer(text=f'Requested by {ctx.author.display_name}', icon_url=ctx.author.avatar.url)
         message = await ctx.send(embed=embed)
 
         for i in range(num):
@@ -179,7 +179,7 @@ class Utility(commands.Cog):
                                  f'which conform to ISO 693-1 with some exceptions.\n{joined}')
 
             embed.set_footer(text=f'Requested by {ctx.author.display_name} | Page {i}/{len(joined_list)}',
-                             icon_url=ctx.author.avatar_url)
+                             icon_url=ctx.author.avatar.url)
 
             page_list.append(embed)
             i += 1
@@ -234,7 +234,7 @@ class Utility(commands.Cog):
             embed.description = translated_text
 
             embed.set_footer(text=f'Requested by {ctx.author.display_name} | Powered by Google Translate',
-                             icon_url=ctx.author.avatar_url)
+                             icon_url=ctx.author.avatar.url)
 
             await ctx.send(embed=embed)
 
@@ -314,7 +314,7 @@ class Utility(commands.Cog):
 
                 embed.set_footer(text=f'Requested by {ctx.author.display_name} | '
                                       f'Page {i}/{page_number} | Powered by Wiktionary',
-                                 icon_url=ctx.author.avatar_url)
+                                 icon_url=ctx.author.avatar.url)
 
                 page_list.append(embed)
                 i += 1
@@ -339,7 +339,7 @@ class Utility(commands.Cog):
 
             embed.set_thumbnail(url=result['thumbnails'][0])
             embed.set_footer(text=f'Requested by {ctx.author.display_name} | Page {i}/{len(results)} | {query}',
-                             icon_url=ctx.author.avatar_url)
+                             icon_url=ctx.author.avatar.url)
 
             page_list.append(embed)
             i += 1
