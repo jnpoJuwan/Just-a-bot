@@ -91,7 +91,7 @@ class Actions(commands.Cog):
     @commands.command(aliases=['cri'])
     async def cry(self, ctx):
         """Cries."""
-        image = discord.File(open('bot/assets/images/cry.jpg', 'rb'))
+        image = discord.File('bot/assets/images/cry.jpg')
         await ctx.send('<:cat_cry:814925690528333885>', file=image)
 
     @commands.command(aliases=['big_cuddle', 'bigcuddle'])
@@ -163,7 +163,7 @@ class Actions(commands.Cog):
     async def frost(self, ctx, members_or_roles: commands.Greedy[Union[discord.Member, discord.Role]] = None):
         """Frosts someone."""
         messages = [
-            discord.File(open('bot/assets/images/frost.png', 'rb')),
+            discord.File('bot/assets/images/frost.png'),
             'You (somehow) frosted yourself like a birthday cake.',
             'You frosted me like a birthday cake.',
             f'You frosted {self.name_format(members_or_roles, gen=True)} like a birthday cake. :cake:'
@@ -173,9 +173,9 @@ class Actions(commands.Cog):
         await self.interact(ctx, messages, members_or_roles)
 
     @commands.command(
-        aliases=['bang', 'breed', 'bone', 'coition', 'copulate', 'destroy', 'fill', 'frick', 'fornicate', 'fuq', 'fwk',
-                 'lovemake', 'mate', 'penetrate', 'pound', 'rail', 'reproduce', 'screw', 'sex', 'shag', 'slay',
-                 'smash', 'snoo_snoo', 'top']
+        aliases=['bang', 'breed', 'boink', 'bone', 'coition', 'copulate', 'destroy', 'fill', 'frick', 'fornicate',
+                 'fuq', 'fwk', 'lovemake', 'mate', 'penetrate', 'pound', 'rail', 'reproduce', 'screw', 'sex', 'shag',
+                 'slay', 'smash', 'snoo_snoo', 'top']
     )
     async def fuck(self, ctx, members_or_roles: commands.Greedy[Union[discord.Member, discord.Role]] = None):
         """Fucks someone."""
@@ -257,13 +257,13 @@ class Actions(commands.Cog):
     @commands.command()
     async def love(self, ctx):
         """Love. :heart: :two_hearts:"""
-        image = discord.File(open('bot/assets/images/love.jpg', 'rb'))
+        image = discord.File('bot/assets/images/love.jpg')
         await ctx.send(':heart: :two_hearts:', file=image)
 
     @commands.command()
     async def moan(self, ctx):
         """Moans."""
-        image = discord.File(open('bot/assets/images/moan.png', 'rb'))
+        image = discord.File('bot/assets/images/moan.png')
         await ctx.send('And this guy moaned at least this loud.', file=image)
 
     @commands.command(aliases=['big_kiss', 'big_kissie', 'make_out', 'passion_kiss'])
@@ -324,7 +324,7 @@ class Actions(commands.Cog):
         # Someone requested the feature to reject strings of text, for example ?reject capitalism.
         messages = [
             'You didn\'t reject anyone.',
-            'You rejected yourself. <:noooooooo:809935851052072980>',
+            'You rejected yourself. <:cry2:829114403961438249>',
             'You rejected me. <:cry2:829114403961438249>',
             f'You rejected {self.name_format(members_or_roles)}.',
             f'You rejected {self.name_format(members_or_roles)}.'
@@ -335,8 +335,7 @@ class Actions(commands.Cog):
     @commands.command()
     async def scream(self, ctx):
         """Screams."""
-        file = open('bot/assets/images/scream.jpg', 'rb')
-        image = discord.File(file)
+        image = discord.File('bot/assets/images/scream.jpg')
         await ctx.send(file=image)
 
     @commands.command()
@@ -395,7 +394,7 @@ class Actions(commands.Cog):
     async def suck(self, ctx, members_or_roles: commands.Greedy[Union[discord.Member, discord.Role]] = None):
         """Sucks someone off."""
         messages = [
-            discord.File(open('bot/assets/images/suck.png', 'rb')),
+            discord.File('bot/assets/images/suck.png'),
             'You self-sucked.',
             'You sucked my tiny, robot cock. :flushed:',
             f'You sucked {self.name_format(members_or_roles, gen=True)} monster cock. :flushed:',
