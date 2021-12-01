@@ -15,8 +15,17 @@ from ..utils import exceptions
 from ..utils.constants import COLOUR, SPAM_LIMIT
 from ..utils.paginator import ListPaginator
 
-LANGUAGES = googletrans.LANGUAGES
-LANG_CODES = googletrans.LANGCODES
+GT_LANGUAGES = googletrans.LANGUAGES
+GT_LANGCODES = googletrans.LANGCODES
+
+# I couldn't find a JSON file with all language codes recognised by Wiktionary.
+# This list includes a few common ones not also recognised by Google Translate.
+LANGUAGES = GT_LANGUAGES
+LANGUAGES.update({
+    'ang': 'old english',
+    'non': 'old norse',
+    'zh': 'chinese'
+})
 
 
 class Utility(commands.Cog):
@@ -142,7 +151,7 @@ class Utility(commands.Cog):
     @commands.command(aliases=['poll_num', 'votenum', 'vote_num'])
     async def pollnum(self, ctx, num=3, *, question):
         """Creates a basic poll with up to 20 multiple options."""
-        if num > 10:
+        if num > 20:
             await ctx.send('The amount of options can\'t exceed 20.')
             return
 
@@ -163,7 +172,7 @@ class Utility(commands.Cog):
         page_list = []
 
         await ctx.trigger_typing()
-        code_list = sorted([f'{language.title()} – `{code}`\n' for language, code in LANG_CODES.items()])
+        code_list = sorted([f'{language.title()} – `{code}`\n' for language, code in GT_LANGCODES.items()])
         joined_list = ['']
         i = 1
 
@@ -176,7 +185,7 @@ class Utility(commands.Cog):
             embed = discord.Embed(colour=COLOUR)
             embed.title = 'Language Codes'
             embed.description = (f'The following language codes supported by Google Translate, '
-                                 f'which conform to ISO 693-1 with some exceptions.\n{joined}')
+                                 f'which all conform to ISO 693-1 (with some exceptions).\n{joined}')
 
             embed.set_footer(text=f'Requested by {ctx.author.display_name} | Page {i}/{len(joined_list)}',
                              icon_url=ctx.author.avatar.url)
@@ -202,12 +211,12 @@ class Utility(commands.Cog):
             source = source.lower()
             destination = destination.lower()
 
-            if source in LANGUAGES.values():
-                source = LANG_CODES[source]
-            if destination in LANGUAGES.values():
-                destination = LANG_CODES[destination]
+            if source in GT_LANGUAGES.values():
+                source = GT_LANGCODES[source]
+            if destination in GT_LANGUAGES.values():
+                destination = GT_LANGCODES[destination]
 
-            if source not in LANG_CODES.values() or destination not in LANG_CODES.values():
+            if source not in GT_LANGCODES.values() or destination not in GT_LANGCODES.values():
                 await ctx.send('Invalid language(s).')
                 return
 
@@ -230,7 +239,7 @@ class Utility(commands.Cog):
                     translated_text += f'\n({translation.pronunciation})'
 
             embed = discord.Embed(colour=COLOUR)
-            embed.title = f'Translate ({LANGUAGES[source].title()} > {LANGUAGES[destination].title()})'
+            embed.title = f'Translate ({GT_LANGUAGES[source].title()} > {GT_LANGUAGES[destination].title()})'
             embed.description = translated_text
 
             embed.set_footer(text=f'Requested by {ctx.author.display_name} | Powered by Google Translate',
@@ -263,10 +272,8 @@ class Utility(commands.Cog):
         Surround language names with more than 1 word in quotes.
         """
         # Change language codes to language names.
-        # NOFIX: LANGUAGES and LANG_CODES are only the languages recognised by Google Translate,
-        # since there are 8 163 recognised language codes by Wiktionary alone.
         language = language.lower()
-        if language in LANG_CODES.values():
+        if language in LANGUAGES.keys():
             language = LANGUAGES[language]
 
         await ctx.trigger_typing()
