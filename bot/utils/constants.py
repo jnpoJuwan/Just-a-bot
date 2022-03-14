@@ -5,7 +5,7 @@ DEFAULT_PREFIX = '?'
 SPAM_LIMIT = 25
 TIMEOUT = 300
 
-# Pagination emoji
+# Pagination emojis
 ARROW_TO_BEGINNING = '⏪'
 LEFT_ARROW = '◀️'
 DELETE_EMOJI = '🗑️'

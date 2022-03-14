@@ -4,7 +4,7 @@ import random
 import discord
 from discord.ext import commands
 
-# SEE: https://www.reddit.com/r/copypasta/comments/jai7dh/penis_synonyms/
+# https://www.reddit.com/r/copypasta/comments/jai7dh/penis_synonyms/
 penis_aliases = json.load(open('bot/assets/text/penis_aliases.json'))
 
 
@@ -15,7 +15,7 @@ class Fun(commands.Cog):
     @commands.command(name='8ball', aliases=['8-ball'])
     async def _8ball(self, ctx):
         """Asks the question to the Magic 8-Ball."""
-        outcomes = (
+        outcomes = [
             'It is certain.',
             'It is decidedly so.',
             'Without a doubt.',
@@ -36,7 +36,7 @@ class Fun(commands.Cog):
             'My sources say no.',
             'Outlook not so good.',
             'Very doubtful.'
-        )
+        ]
 
         await ctx.message.reply(f'**{random.choice(outcomes)}**')
 

@@ -1,4 +1,4 @@
-from pathlib import Path
+import os
 
 import discord
 import traceback
@@ -9,30 +9,32 @@ from .utils import exceptions
 from .utils.constants import DEFAULT_PREFIX, SPAM_LIMIT
 
 
-# CRED: @Rapptz (https://github.com/Rapptz/RoboDanny/blob/rewrite/bot.py#L44)
+# CRED: @Rapptz (https://github.com/Rapptz/RoboDanny/blob/rewrite/bot.py)
 def _prefix_callable(bot, message):
     _id = bot.user.id
     base = [f'<@!{_id}> ', f'<@{_id}> ', DEFAULT_PREFIX]
     return base
 
 
+    # CRED: @Tortoise-Community (https://github.com/Tortoise-Community/Tortoise-BOT/blob/master/bot/bot.py)
 class JustABot(commands.Bot):
     def __init__(self):
         super().__init__(command_prefix=_prefix_callable, case_insensitive=True, owner_id=OWNER_ID)
         self.was_ready_once = False
 
-    # CRED: @Tortoise-Community (https://github.com/Tortoise-Community/Tortoise-BOT/blob/master/bot/bot.py#L65)
     def load_extensions(self):
-        for extension_path in Path('bot/cogs').glob('*.py'):
-            extension_name = extension_path.stem
+        for extension_path in os.listdir('bot/cogs'):
+            if os.path.splitext(extension_path)[1] == '.py':
+                extension_name = os.path.splitext(extension_path)[0]
 
-            dotted_path = f'bot.cogs.{extension_name}'
+                dotted_path = f'bot.cogs.{extension_name}'
 
-            try:
-                self.load_extension(dotted_path)
-            except Exception as e:
-                traceback_msg = traceback.format_exception(etype=type(e), value=e, tb=e.__traceback__)
-                print(f'Failed to load cog {dotted_path}. Traceback:\n{"".join(traceback_msg)}')
+                try:
+                    self.load_extension(dotted_path)
+                    print(f'Loaded {dotted_path}.')
+                except Exception as e:
+                    traceback_msg = traceback.format_exception(type(e), value=e, tb=e.__traceback__)
+                    print(f'Failed to load cog {dotted_path}. Traceback:\n{"".join(traceback_msg)}')
 
     async def on_ready(self):
         print(f'Logged in as @{self.user.name}.')

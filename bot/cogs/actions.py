@@ -98,7 +98,7 @@ class Actions(commands.Cog):
     async def cuddle(self, ctx, members_or_roles: commands.Greedy[Union[discord.Member, discord.Role]] = None):
         """Gives someone a big cuddle."""
         messages = [
-            'You gave your pillow cuddles and lots of love, since you\'re alone and lonely.',
+            'You gave your pillow cuddles and lots of love, since you\'re lonely and alone.',
             'You gave yourself cuddles and lots of love.',
             'You gave me cuddles and lots of love. :pleading_face: :sparkling_heart: ',
             f'You gave {self.name_format(members_or_roles)} a long, intensive cuddle full of love. :sparkling_heart:',
@@ -124,7 +124,7 @@ class Actions(commands.Cog):
     async def cwtch(self, ctx, members_or_roles: commands.Greedy[Union[discord.Member, discord.Role]] = None):
         """Cwtches someone."""
         messages = [
-            'You cwtched your pillow in your arms, since you\'re alone and lonely.',
+            'You cwtched your pillow in your arms, since you\'re lonely and alone.',
             'You cwtched yourself. :two_hearts:',
             'You cwtched me. :pleading_face: :two_hearts:',
             f'You cwtched {self.name_format(members_or_roles)} in your arms. :two_hearts:',
@@ -148,7 +148,7 @@ class Actions(commands.Cog):
 
     @commands.command(aliasese=['throw', 'yeet'])
     async def defenestrate(self, ctx, members_or_roles: commands.Greedy[Union[discord.Member, discord.Role]] = None):
-        """Throws someone out the window."""
+        """Defenestrates someone."""
         messages = [
             'You defenestrated your pillow, confusing many passers-by outside.',
             'You defenestrated yourself onto the concrete sidewalk.',
@@ -161,7 +161,7 @@ class Actions(commands.Cog):
 
     @commands.command()
     async def frost(self, ctx, members_or_roles: commands.Greedy[Union[discord.Member, discord.Role]] = None):
-        """Frosts someone."""
+        """Frosts someone like a birthday cake."""
         messages = [
             discord.File('bot/assets/images/frost.png'),
             'You (somehow) frosted yourself like a birthday cake.',
@@ -180,7 +180,7 @@ class Actions(commands.Cog):
     async def fuck(self, ctx, members_or_roles: commands.Greedy[Union[discord.Member, discord.Role]] = None):
         """Fucks someone."""
         messages = [
-            'You fucked your pillow, since you\'re alone and lonely... Do you need a hug?',
+            'You fucked your pillow, since you\'re lonely and alone... Do you need a hug?',
             'You went and fucked yourself like they asked.',
             'You fucked my tiny, robot bussy. :pleading_face:',
             f'You fucked {self.name_format(members_or_roles, gen=True)} tiny þussy.',
@@ -194,7 +194,7 @@ class Actions(commands.Cog):
         """Holds hands with someone."""
         messages = [
             'You didn\'t hold anybody\'s hand.',
-            'You held hands with yourself, since you\'re alone and lonely.',
+            'You held hands with yourself, since you\'re lonely and alone.',
             'You held my tiny, robot hand. :pleading_face:',
             f'You held hands with {self.name_format(members_or_roles)}. :flushed: :point_right::point_left:',
             f'You held hands with {self.name_format(members_or_roles)}. :flushed: :point_right::point_left:'
@@ -206,7 +206,7 @@ class Actions(commands.Cog):
     async def hug(self, ctx, members_or_roles: commands.Greedy[Union[discord.Member, discord.Role]] = None):
         """Hugs someone."""
         messages = [
-            'You hugged your pillow, since you\'re alone and lonely.',
+            'You hugged your pillow, since you\'re lonely and alone.',
             'You hugged yourself. :two_hearts:',
             'You hugged me. :pleading_face: :two_hearts:',
             f'You hugged {self.name_format(members_or_roles)}. :two_hearts:',
@@ -219,7 +219,7 @@ class Actions(commands.Cog):
     async def jerk_off(self, ctx, members_or_roles: commands.Greedy[Union[discord.Member, discord.Role]] = None):
         """Jerkes someone off."""
         messages = [
-            'You jerked off, since you\'re alone and lonely.',
+            'You jerked off, since you\'re lonely and alone.',
             'You jerked yourself off.',
             'You jerked me off.',
             f'You jerked {self.name_format(members_or_roles)} off.',
@@ -245,7 +245,7 @@ class Actions(commands.Cog):
     async def kiss(self, ctx, members_or_roles: commands.Greedy[Union[discord.Member, discord.Role]] = None):
         """Kisses someone."""
         messages = [
-            'You kissed your pillow, since you\'re alone and lonely.',
+            'You kissed your pillow, since you\'re lonely and alone.',
             'You kissed your reflection on the mirror like a narcissist',
             'You kissed me, Master. :pleading_face:',
             f'You kissed {self.name_format(members_or_roles)}. :flushed: :point_right::point_left:',
@@ -270,7 +270,7 @@ class Actions(commands.Cog):
     async def passionate_kiss(self, ctx, members_or_roles: commands.Greedy[Union[discord.Member, discord.Role]] = None):
         """Passionately kisses someone."""
         messages = [
-            'You made out with your pillow, since you\'re alone and lonely.',
+            'You made out with your pillow, since you\'re lonely and alone.',
             'You made out with your reflection on the mirror like a narcissist.',
             'You made out with me, Master. :pleading_face:',
             f'You passionately kissed {self.name_format(members_or_roles)}. :flushed: :point_right::point_left:',
@@ -283,7 +283,7 @@ class Actions(commands.Cog):
     async def pat(self, ctx, members_or_roles: commands.Greedy[Union[discord.Member, discord.Role]] = None):
         """Pats someone on the head."""
         messages = [
-            'You patted your pillow, since you\'re alone and lonely.',
+            'You patted your pillow, since you\'re lonely and alone.',
             'You patted yourself.',
             'You patted me. :pleading_face:',
             f'You patted {self.name_format(members_or_roles)} on the head. :pleading_face:',
@@ -355,7 +355,7 @@ class Actions(commands.Cog):
     async def slap(self, ctx, members_or_roles: commands.Greedy[Union[discord.Member, discord.Role]] = None):
         """Slaps someone."""
         messages = [
-            'You slapped your pillow, since you\'re alone and lonely.',
+            'You slapped your pillow, since you\'re lonely and alone.',
             'You slapped yourself in the face.',
             'You slapped me. <:cry2:829114403961438249>',
             f'You slapped {self.name_format(members_or_roles)} in the face.',

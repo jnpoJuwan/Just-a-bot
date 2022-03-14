@@ -23,6 +23,8 @@ GT_LANGCODES = googletrans.LANGCODES
 LANGUAGES = GT_LANGUAGES
 LANGUAGES.update({
     'ang': 'old english',
+    'nb': 'norwegian bokmål',
+    'nn': 'norwegian nynorsk',
     'non': 'old norse',
     'zh': 'chinese'
 })
@@ -202,7 +204,7 @@ class Utility(commands.Cog):
 
         The source and destination language arguments can be language codes or names.
         Surround language names with more than 1 word in quotes.
-        Type `?translate` to fetch all valid language codes.
+        Use `?translate` to fetch all valid language codes.
         """
         if not query:
             await self.send_lang_codes(ctx)

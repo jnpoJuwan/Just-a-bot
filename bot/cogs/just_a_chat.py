@@ -58,6 +58,8 @@ class JustAChat(commands.Cog, name='Just a chat...'):
             ':flag_eu: Europe (Western)': timezone('Europe/London'),
             ':flag_eu: Europe (Central)': timezone('Europe/Berlin'),
             ':flag_eu: Europe (Eastern)': timezone('Europe/Athens'),
+            ':flag_ae: UAE': timezone('Asia/Dubai'),
+            ':flag_in: India': timezone('Asia/Kolkata'),
         }
 
         embed = discord.Embed(title='Just some time zones...', colour=COLOUR)

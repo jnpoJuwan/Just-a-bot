@@ -29,7 +29,7 @@ class Owner(commands.Cog, command_attrs=dict(hidden=True)):
         # Remove `foo`.
         return content.strip('` \n')
 
-    # CRED: @Rapptz (https://github.com/Rapptz/RoboDanny/blob/rewrite/cogs/admin.py#L216)
+    # CRED: @Rapptz (https://github.com/Rapptz/RoboDanny/blob/rewrite/cogs/admin.py)
     @commands.command(name='eval', pass_context=True)
     @checks.is_bot_owner()
     async def eval_(self, ctx, *, body: str):
@@ -71,7 +71,7 @@ class Owner(commands.Cog, command_attrs=dict(hidden=True)):
                 self._last_result = ret
                 await ctx.send(f'```\n{value}{ret}\n```')
 
-    # CRED: @Rapptz (https://github.com/Rapptz/RoboDanny/blob/rewrite/cogs/admin.py#L116)
+    # CRED: @Rapptz (https://github.com/Rapptz/RoboDanny/blob/rewrite/cogs/admin.py)
     @commands.command()
     @checks.is_bot_owner()
     async def load(self, ctx, module):

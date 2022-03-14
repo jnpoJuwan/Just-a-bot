@@ -14,6 +14,20 @@ I would prefer if you don't run an instance of my bot, instead use the
 [invite link](https://discord.com/api/oauth2/authorize?client_id=764106437701140490&permissions=8&scope=bot) 
 to have the bot on your server.
 
+### Configuration
+
+The `configs.py` file in the `configs` folder should look like this. Toggle `TEST` to debug using a test bot.
+
+```py
+TEST = 0
+
+BOT_TOKEN = ''
+TEST_BOT_TOKEN = ''
+OWNER_ID = int
+
+GOOGLE_API_KEY = ''
+```
+
 ## Help
 
 If you need help with the bot or need to report bugs, post an issue 
@@ -31,4 +45,3 @@ Images:
 
 Distributed under the MIT License.
 See [`LICENSE`](https://github.com/jnpoJuwan/Just-a-bot/blob/main/LICENSE) for more information.
-
