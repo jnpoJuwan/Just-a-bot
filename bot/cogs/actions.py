@@ -9,10 +9,10 @@ class Actions(commands.Cog):
         self.bot = bot
 
     @staticmethod
-    def get_names(member_or_roles, gen=False):
+    def get_names(member_or_role, genitive=False):
         name_list = []
 
-        for obj in member_or_roles:
+        for obj in member_or_role:
             if isinstance(obj, discord.Member):
                 name = obj.display_name
             elif isinstance(obj, discord.Role):
@@ -23,18 +23,18 @@ class Actions(commands.Cog):
             else:
                 name = obj
 
-            if gen:
+            if genitive:
                 name_list.append(name + '\'s')
             else:
                 name_list.append(name)
 
         return name_list
 
-    def name_format(self, members_or_roles=None, gen=False):
+    def name_format(self, members_or_roles=None, genitive=False):
         if not members_or_roles:
             return
 
-        members_or_roles = self.get_names(members_or_roles, gen)
+        members_or_roles = self.get_names(members_or_roles, genitive)
 
         if len(members_or_roles) == 1:
             return members_or_roles[0]
@@ -58,7 +58,7 @@ class Actions(commands.Cog):
         else:
             await ctx.send(messages[4])
 
-    @commands.command()
+    @commands.command(aliases=['superbonk'])
     async def bonk(self, ctx, members_or_roles: commands.Greedy[Union[discord.Member, discord.Role]] = None):
         """Bonks someone."""
         if ctx.author.id == 616812057186271233:
@@ -114,8 +114,8 @@ class Actions(commands.Cog):
             'Oopsie-woopsie! You cummed all over yourself!',
             'You creamed yourself.',
             'You want to c-cum inside my tiny, robot bussy, Master? :pleading_face:',
-            f'You creamed {self.name_format(members_or_roles, gen=True)} little þussy.',
-            f'You creamed {self.name_format(members_or_roles, gen=True)} little þussies.'
+            f'You creamed {self.name_format(members_or_roles, genitive=True)} little þussy.',
+            f'You creamed {self.name_format(members_or_roles, genitive=True)} little þussies.'
         ]
 
         await self.interact(ctx, messages, members_or_roles)
@@ -166,8 +166,8 @@ class Actions(commands.Cog):
             discord.File('bot/assets/images/frost.png'),
             'You (somehow) frosted yourself like a birthday cake.',
             'You frosted me like a birthday cake.',
-            f'You frosted {self.name_format(members_or_roles, gen=True)} like a birthday cake. :cake:'
-            f'You frosted {self.name_format(members_or_roles, gen=True)} like birthday cakes. :cake:'
+            f'You frosted {self.name_format(members_or_roles, genitive=True)} like a birthday cake. :cake:',
+            f'You frosted {self.name_format(members_or_roles, genitive=True)} like birthday cakes. :cake:'
         ]
 
         await self.interact(ctx, messages, members_or_roles)
@@ -183,8 +183,8 @@ class Actions(commands.Cog):
             'You fucked your pillow, since you\'re lonely and alone... Do you need a hug?',
             'You went and fucked yourself like they asked.',
             'You fucked my tiny, robot bussy. :pleading_face:',
-            f'You fucked {self.name_format(members_or_roles, gen=True)} tiny þussy.',
-            f'You fucked {self.name_format(members_or_roles, gen=True)} tiny þussies.'
+            f'You fucked {self.name_format(members_or_roles, genitive=True)} tiny þussy.',
+            f'You fucked {self.name_format(members_or_roles, genitive=True)} tiny þussies.'
         ]
 
         await self.interact(ctx, messages, members_or_roles)
@@ -371,8 +371,8 @@ class Actions(commands.Cog):
             'You didn\'t spank anyone.',
             'You spanked yourself.',
             'You spanked my robot arse. :flushed:',
-            f'You spanked {self.name_format(members_or_roles, gen=True)} cute arse.',
-            f'You spanked {self.name_format(members_or_roles, gen=True)} cute arses.'
+            f'You spanked {self.name_format(members_or_roles, genitive=True)} cute arse.',
+            f'You spanked {self.name_format(members_or_roles, genitive=True)} cute arses.'
         ]
 
         await self.interact(ctx, messages, members_or_roles)
@@ -397,8 +397,8 @@ class Actions(commands.Cog):
             discord.File('bot/assets/images/suck.png'),
             'You self-sucked.',
             'You sucked my tiny, robot cock. :flushed:',
-            f'You sucked {self.name_format(members_or_roles, gen=True)} monster cock. :flushed:',
-            f'You sucked {self.name_format(members_or_roles, gen=True)} monster cocks. :flushed:'
+            f'You sucked {self.name_format(members_or_roles, genitive=True)} monster cock. :flushed:',
+            f'You sucked {self.name_format(members_or_roles, genitive=True)} monster cocks. :flushed:'
         ]
 
         await self.interact(ctx, messages, members_or_roles)

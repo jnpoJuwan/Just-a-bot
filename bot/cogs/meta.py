@@ -34,7 +34,7 @@ class Meta(commands.Cog):
         top_role = (member.top_role.mention if member.top_role.name != '@everyone' else member.top_role.name)
 
         embed = discord.Embed(colour=COLOUR)
-        embed.set_author(name=str(member), icon_url=member.avatar.url)
+        embed.set_author(name=str(member), icon_url=member.avatar_url)
         embed.add_field(name='Nickname', value=member.display_name)
         embed.add_field(name='Top Role', value=top_role)
         embed.add_field(name=f'Roles ({len(roles)})',
@@ -42,8 +42,8 @@ class Meta(commands.Cog):
         embed.add_field(name='Created:', value=fmt(member.created_at))
         embed.add_field(name='Joined:', value=fmt(member.joined_at))
         embed.add_field(name='User ID', value=member.id)
-        embed.set_thumbnail(url=member.avatar.url)
-        embed.set_footer(text=f'Requested by {ctx.author.display_name}', icon_url=ctx.author.avatar.url)
+        embed.set_thumbnail(url=member.avatar_url)
+        embed.set_footer(text=f'Requested by {ctx.author.display_name}', icon_url=ctx.author.avatar_url)
         await ctx.send(embed=embed)
 
     @member_info.error
@@ -64,7 +64,7 @@ class Meta(commands.Cog):
         embed.add_field(name='Created:', value=fmt(guild.created_at))
         embed.add_field(name='Server ID', value=guild.id)
         embed.set_thumbnail(url=guild.icon_url)
-        embed.set_footer(text=f'Requested by {ctx.author.display_name}', icon_url=ctx.author.avatar.url)
+        embed.set_footer(text=f'Requested by {ctx.author.display_name}', icon_url=ctx.author.avatar_url)
         await ctx.send(embed=embed)
 
     @commands.command()
@@ -72,7 +72,7 @@ class Meta(commands.Cog):
         """Sends the server's icon."""
         embed = discord.Embed(title=f'Icon of {ctx.guild.name}', colour=COLOUR)
         embed.set_image(url=ctx.guild.icon_url)
-        embed.set_footer(text=f'Requested by {ctx.author.display_name}', icon_url=ctx.author.avatar.url)
+        embed.set_footer(text=f'Requested by {ctx.author.display_name}', icon_url=ctx.author.avatar_url)
         await ctx.send(embed=embed)
 
     @commands.command(aliases=['pfp'])
@@ -81,8 +81,8 @@ class Meta(commands.Cog):
         member = member or ctx.author
 
         embed = discord.Embed(title=f'{member.display_name}\'s profile picture', colour=COLOUR)
-        embed.set_image(url=member.avatar.url)
-        embed.set_footer(text=f'Requested by {ctx.author.display_name}', icon_url=ctx.author.avatar.url)
+        embed.set_image(url=member.avatar_url)
+        embed.set_footer(text=f'Requested by {ctx.author.display_name}', icon_url=ctx.author.avatar_url)
         await ctx.send(embed=embed)
 
 

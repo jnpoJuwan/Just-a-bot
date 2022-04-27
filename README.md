@@ -19,7 +19,7 @@ to have the bot on your server.
 The `configs.py` file in the `configs` folder should look like this. Toggle `TEST` to debug using a test bot.
 
 ```py
-TEST = 0
+TEST = False
 
 BOT_TOKEN = ''
 TEST_BOT_TOKEN = ''

@@ -16,7 +16,7 @@ def _prefix_callable(bot, message):
     return base
 
 
-    # CRED: @Tortoise-Community (https://github.com/Tortoise-Community/Tortoise-BOT/blob/master/bot/bot.py)
+# CRED: @Tortoise-Community (https://github.com/Tortoise-Community/Tortoise-BOT/blob/master/bot/bot.py)
 class JustABot(commands.Bot):
     def __init__(self):
         super().__init__(command_prefix=_prefix_callable, case_insensitive=True, owner_id=OWNER_ID)

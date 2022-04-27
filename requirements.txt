@@ -1,10 +1,14 @@
 aiohttp
 async-cse
 bs4
-git+https://github.com/rapptz/discord.py
+chardet
+charset-normalizer
+discord.py
 googletrans>=3.1.0a0
 lxml
 pytz
+requests
+urllib3
 wikipedia
 wiktionaryparser
 youtube-search

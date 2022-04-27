@@ -18,8 +18,6 @@ class JustAChat(commands.Cog, name='Just a chat...'):
     @commands.command(aliases=['jsd', 'docs'])
     async def just_some_docs(self, ctx):
         """Sends Just some documents...."""
-        # CRED: @Tortoise-Community
-        # (https://github.com/Tortoise-Community/Tortoise-BOT/blob/master/bot/utils/paginator.py)
         page_list = []
 
         await ctx.trigger_typing()
@@ -33,7 +31,7 @@ class JustAChat(commands.Cog, name='Just a chat...'):
         for k, v in raw_page_list.items():
             embed = discord.Embed(title=k, description=add_content_formatting(v), colour=COLOUR)
             embed.set_footer(text=f'Requested by {ctx.author.display_name} | Page {i}/{len(raw_page_list)}',
-                             icon_url=ctx.author.avatar.url)
+                             icon_url=ctx.author.avatar_url)
 
             page_list.append(embed)
             i += 1
@@ -65,9 +63,10 @@ class JustAChat(commands.Cog, name='Just a chat...'):
         embed = discord.Embed(title='Just some time zones...', colour=COLOUR)
         for k, v in tz_dict.items():
             tz = str(dt.astimezone(v).strftime('%A, %d %B **%H:%M** UTC%z'))
-            embed.add_field(name=k, value=tz[:-2] + ':' + tz[-2:])
+            tz = tz[:-2] + ':' + tz[-2:]
+            embed.add_field(name=k, value=tz)
 
-        embed.set_footer(text=f'Requested by {ctx.author.display_name}', icon_url=ctx.author.avatar.url)
+        embed.set_footer(text=f'Requested by {ctx.author.display_name}', icon_url=ctx.author.avatar_url)
         await ctx.send(embed=embed)
 
 
