@@ -131,11 +131,8 @@ class Utility(commands.Cog):
             page_list.append(embed)
             i += 1
 
-        print('ping 7')
-
         paginator = ListPaginator(ctx, page_list)
         await paginator.start()
-        print('ping 8')
 
 
     @commands.command()
