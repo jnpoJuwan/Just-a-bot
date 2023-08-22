@@ -13,8 +13,6 @@ class JustAChat(commands.Cog, name='Just a chat...'):
     def __init__(self, bot):
         self.bot = bot
 
-    # GLOSS: 'js' means 'Just some', not 'JavaScript'.
-
     @commands.command(aliases=['jsd', 'docs'])
     async def just_some_docs(self, ctx):
         """Sends Just some documents...."""
@@ -46,6 +44,7 @@ class JustAChat(commands.Cog, name='Just a chat...'):
 
         await ctx.trigger_typing()
         dt = datetime.datetime.now(tz=utc)
+        # TODO: Move to JSON file at /assets
         tz_dict = {
             ':flag_mx: Mexico (Pacific)': timezone('Mexico/BajaSur'),
             ':flag_us: US (Mountain)': timezone('US/Mountain'),

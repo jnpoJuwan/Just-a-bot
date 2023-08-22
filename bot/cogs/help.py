@@ -55,7 +55,8 @@ class Help(commands.Cog):
         bot.help_command = None
         self.original_help_command = bot.help_command
         bot.help_command = PrettyHelpCommand()
-        bot.help_command.command_not_found('Sorry. I could\'t find that command.')
+        bot.help_command.command_not_found(
+            'Sorry. I could\'t find that command.')
         bot.help_command.cog = self
 
     def cog_unload(self):

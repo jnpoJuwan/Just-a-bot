@@ -19,7 +19,8 @@ def _prefix_callable(bot, message):
 # CRED: @Tortoise-Community (https://github.com/Tortoise-Community/Tortoise-BOT/blob/master/bot/bot.py)
 class JustABot(commands.Bot):
     def __init__(self):
-        super().__init__(command_prefix=_prefix_callable, case_insensitive=True, owner_id=OWNER_ID)
+        super().__init__(command_prefix=_prefix_callable,
+                         case_insensitive=True, owner_id=OWNER_ID)
         self.was_ready_once = False
 
     def load_extensions(self):
@@ -33,8 +34,10 @@ class JustABot(commands.Bot):
                     self.load_extension(dotted_path)
                     print(f'Loaded {dotted_path}.')
                 except Exception as e:
-                    traceback_msg = traceback.format_exception(type(e), value=e, tb=e.__traceback__)
-                    print(f'Failed to load cog {dotted_path}. Traceback:\n{"".join(traceback_msg)}')
+                    traceback_msg = traceback.format_exception(
+                        type(e), value=e, tb=e.__traceback__)
+                    print(
+                        f'Failed to load cog {dotted_path}. Traceback:\n{"".join(traceback_msg)}')
 
     async def on_ready(self):
         print(f'Logged in as @{self.user.name}.')

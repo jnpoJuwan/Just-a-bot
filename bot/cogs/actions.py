@@ -360,7 +360,7 @@ class Actions(commands.Cog):
             'You slapped me. <:cry2:829114403961438249>',
             f'You slapped {self.name_format(members_or_roles)} in the face.',
             f'You slapped {self.name_format(members_or_roles)} in their faces.'
-         ]
+        ]
 
         await self.interact(ctx, messages, members_or_roles)
 

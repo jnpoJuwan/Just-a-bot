@@ -18,11 +18,10 @@ from ..utils.paginator import ListPaginator
 GT_LANGUAGES = googletrans.LANGUAGES
 GT_LANGCODES = googletrans.LANGCODES
 
-# I couldn't find a JSON file with all language codes recognised by Wiktionary.
-# This list includes a few common ones not also recognised by Google Translate.
 LANGUAGES = GT_LANGUAGES
 LANGUAGES.update({
     'ang': 'old english',
+    'grc': 'ancient greek',
     'nb': 'norwegian bokmål',
     'nn': 'norwegian nynorsk',
     'non': 'old norse',
@@ -60,7 +59,8 @@ class Utility(commands.Cog):
         # FIXME: Sometimes cuts off the first entry.
         for row in raw_table[1:]:
             try:
-                source_cell, destination_cell = row.findChildren('td', width='50%')
+                source_cell, destination_cell = row.findChildren(
+                    'td', width='50%')
             except ValueError:
                 continue
 
@@ -69,7 +69,8 @@ class Utility(commands.Cog):
             if destination_cell.sup:
                 destination_cell.sup.replace_with(' ')
 
-            definitions.append((source_cell.text.strip(), destination_cell.text.strip()))
+            definitions.append(
+                (source_cell.text.strip(), destination_cell.text.strip()))
 
         chunk_list = ['']
         for source, destination in definitions:
@@ -80,7 +81,8 @@ class Utility(commands.Cog):
         i = 1
 
         for chunk in chunk_list:
-            embed = discord.Embed(title='Bolor Dictionary', description=chunk, url=url, colour=COLOUR)
+            embed = discord.Embed(title='Bolor Dictionary',
+                                  description=chunk, url=url, colour=COLOUR)
             embed.set_footer(text=f'Requested by {ctx.author.display_name} | Page {i}/{len(chunk_list)}',
                              icon_url=ctx.author.avatar_url)
 
@@ -102,7 +104,8 @@ class Utility(commands.Cog):
         if amount >= SPAM_LIMIT:
             raise exceptions.SpamError
 
-        output = '\n'.join([f'**{random.choice(["Heads", "Tails"])}**' for _ in range(amount)])
+        output = '\n'.join(
+            [f'**{random.choice(["Heads", "Tails"])}**' for _ in range(amount)])
         await ctx.send(output)
 
     # CRED: @Tortoise-Community
@@ -134,24 +137,25 @@ class Utility(commands.Cog):
         paginator = ListPaginator(ctx, page_list)
         await paginator.start()
 
-
     @commands.command()
     async def ipa(self, ctx):
         """Sends the link to the International Phonetic Association's interactive IPA chart."""
         link = 'https://www.internationalphoneticassociation.org/IPAcharts/inter_chart_2018/IPA_2018.html'
         await ctx.send(link)
 
-    @commands.command(aliases=['vote'])
+    @commands.command()
     async def poll(self, ctx, *, question):
         """Creates a basic yes/no poll."""
-        embed = discord.Embed(title='Poll', description=question, colour=COLOUR)
-        embed.set_footer(text=f'Requested by {ctx.author.display_name}', icon_url=ctx.author.avatar_url)
+        embed = discord.Embed(
+            title='Poll', description=question, colour=COLOUR)
+        embed.set_footer(
+            text=f'Requested by {ctx.author.display_name}', icon_url=ctx.author.avatar_url)
         message = await ctx.send(embed=embed)
         await message.add_reaction('👍')
         await message.add_reaction('👎')
         await message.add_reaction('🤷')
 
-    @commands.command(aliases=['poll_num', 'votenum', 'vote_num'])
+    @commands.command(aliases=['poll_num'])
     async def pollnum(self, ctx, num=3, *, question):
         """Creates a basic poll with up to 20 multiple options."""
         if num > 20:
@@ -159,12 +163,14 @@ class Utility(commands.Cog):
             return
 
         reactions = [
-            '1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣', '7️⃣', '8️⃣', '9️⃣', '🇦',
-            '🇧', '🇨', '🇩', '🇪', '🇫', '🇬', '🇭', '🇮', '🇯'
+            '1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣', '7️⃣', '8️⃣', '9️⃣',
+            '🇦', '🇧', '🇨', '🇩', '🇪', '🇫', '🇬', '🇭', '🇮', '🇯'
         ]
 
-        embed = discord.Embed(title='Poll', description=question, colour=COLOUR)
-        embed.set_footer(text=f'Requested by {ctx.author.display_name}', icon_url=ctx.author.avatar_url)
+        embed = discord.Embed(
+            title='Poll', description=question, colour=COLOUR)
+        embed.set_footer(
+            text=f'Requested by {ctx.author.display_name}', icon_url=ctx.author.avatar_url)
         message = await ctx.send(embed=embed)
 
         for i in range(num):
@@ -175,7 +181,8 @@ class Utility(commands.Cog):
         page_list = []
 
         await ctx.trigger_typing()
-        code_list = sorted([f'{language.title()} – `{code}`\n' for language, code in GT_LANGCODES.items()])
+        code_list = sorted(
+            [f'{language.title()} – `{code}`\n' for language, code in GT_LANGCODES.items()])
         joined_list = ['']
         i = 1
 
@@ -225,7 +232,8 @@ class Utility(commands.Cog):
 
             await ctx.trigger_typing()
             try:
-                translation = self.translator.translate(query, dest=destination, src=source)
+                translation = self.translator.translate(
+                    query, dest=destination, src=source)
             except TypeError:
                 await ctx.send('Something went wrong while translating.')
                 return
@@ -259,7 +267,8 @@ class Utility(commands.Cog):
         if amount >= SPAM_LIMIT:
             raise exceptions.SpamError
 
-        output = '\n'.join([f'**{random.randint(1, faces)}**' for _ in range(amount)])
+        output = '\n'.join(
+            [f'**{random.randint(1, faces)}**' for _ in range(amount)])
         await ctx.send(output)
 
     @roll.error
@@ -301,13 +310,15 @@ class Utility(commands.Cog):
             path = f'{query.replace(" ", "_")}#{language.title().replace(" ", "_")}'
             url = f'https://en.wiktionary.org/wiki/{path}'
 
-            pronunciation = '\n'.join(['• ' + x for x in result['pronunciations']['text']]) or None
+            pronunciation = '\n'.join(
+                ['• ' + x for x in result['pronunciations']['text']]) or None
             etymology = result['etymology'] or None
 
             for definition in result['definitions']:
                 headword = f'{definition["text"][0]}\n'
                 filler = '\xa0' * 4
-                definitions = [f'{filler}{j + 1}. {line}' for j, line in enumerate(definition['text'][1:])]
+                definitions = [f'{filler}{j + 1}. {line}' for j,
+                               line in enumerate(definition['text'][1:])]
                 joined = headword + '\n'.join(definitions)
 
                 part_of_speech = definition['partOfSpeech'].title() or 'Definitions'
@@ -315,15 +326,17 @@ class Utility(commands.Cog):
                 embed = discord.Embed(title=query, url=url, colour=COLOUR)
 
                 if pronunciation:
-                    embed.add_field(name='Pronunciation', value=pronunciation, inline=False)
+                    embed.add_field(name='Pronunciation',
+                                    value=pronunciation, inline=False)
 
                 if etymology:
-                    embed.add_field(name='Etymology', value=etymology[:500], inline=False)
+                    embed.add_field(name='Etymology',
+                                    value=etymology[:500], inline=False)
 
-                embed.add_field(name=part_of_speech, value=joined[:1000], inline=False)
+                embed.add_field(name=part_of_speech,
+                                value=joined[:1000], inline=False)
 
-                embed.set_footer(text=f'Requested by {ctx.author.display_name} | '
-                                      f'Page {i}/{page_number} | Powered by Wiktionary',
+                embed.set_footer(text=f'Requested by {ctx.author.display_name} | Page {i}/{page_number} | Powered by Wiktionary',
                                  icon_url=ctx.author.avatar_url)
 
                 page_list.append(embed)
@@ -342,7 +355,8 @@ class Utility(commands.Cog):
         i = 1
 
         for result in results:
-            embed = discord.Embed(title=result['title'], url=f'https://youtu.be/{result["id"]}', colour=COLOUR)
+            embed = discord.Embed(
+                title=result['title'], url=f'https://youtu.be/{result["id"]}', colour=COLOUR)
 
             if result['long_desc']:
                 embed.description = result['long_desc']

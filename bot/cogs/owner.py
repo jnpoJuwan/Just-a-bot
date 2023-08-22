@@ -13,11 +13,11 @@ class Owner(commands.Cog, command_attrs=dict(hidden=True)):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(name='quit', aliases=['die', 'logout', 'sleep'])
+    @commands.command(name='quit')
     @checks.is_bot_owner()
     async def _quit(self, ctx):
         """Logout from Discord."""
-        await ctx.send('**change da world**\n**my final message. Goodb ye**')
+        await ctx.send('Quiting bot...')
         await self.bot.logout()
 
     @staticmethod
